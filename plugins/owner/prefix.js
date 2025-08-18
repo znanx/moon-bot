@@ -1,7 +1,7 @@
 module.exports = {
    help: ['+prefix', '-prefix'],
    use: 'symbol',
-   tags: ['owner'],
+   tags: 'owner',
    run: async (m, {
       conn,
       args,

@@ -2,11 +2,12 @@ const { readFileSync: read, unlinkSync: remove } = require('fs')
 const path = require('path')
 const { exec } = require('child_process')
 const { tmpdir } = require('os')
+
 module.exports = {
    help: ['toimg'],
-   command: ['toimage'],
+   aliases: ['toimage'],
    use: 'reply sticker',
-   tags: ['converter'],
+   tags: 'converter',
    run: async (m, {
       conn,
       Func
@@ -14,7 +15,7 @@ module.exports = {
       try {
          if (!m.quoted) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply to sticker you want to convert to an image/photo (not supported for sticker animation).`), m)
          if (m.quoted.mimetype != 'image/webp') return conn.reply(m.chat, Func.texted('bold', `🚩 Reply to sticker you want to convert to an image/photo (not supported for sticker animation).`), m)
-         m.react('🕒')
+         conn.sendReact(m.chat, '🕒', m.key)
          let media = await conn.downloadAndSaveMediaMessage(m.quoted)
          let file = Func.filename('png')
          let isFile = path.join(tmpdir(), file)
@@ -29,5 +30,6 @@ module.exports = {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

@@ -1,12 +1,13 @@
 const moment = require('moment-timezone')
+
 module.exports = {
-   usage: ['couple'],
-   tags: ['group'],
+   help: ['couple'],
+   tags: 'group',
    run: async (m, {
       conn,
       participants
    }) => {
-      let member = participants.map(u => u.id)
+      let member = participants.map(u => u.jid || u.id)
       let now = new Date * 1
       var tag1 = member[Math.floor(member.length * Math.random())]
       var tag2 = member[Math.floor(member.length * Math.random())]
@@ -21,5 +22,6 @@ module.exports = {
       }
       conn.reply(m.chat, `Random Best Couple : @${tag1.replace(/@.+/, '')} 💞 @${tag2.replace(/@.+/, '')}, New couple of the day may be chosen at _${moment(now).format('DD/MM/YYYY HH:mm')}._`)
    },
-   group: true
+   group: true,
+   error: false
 }

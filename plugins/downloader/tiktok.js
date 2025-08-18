@@ -1,8 +1,8 @@
 module.exports = {
    help: ['tiktok', 'tikmp3', 'tikwm'],
-   command: ['tt'],
+   aliases: ['tt'],
    use: 'link',
-   tags: ['downloader'],
+   tags: 'downloader',
    run: async (m, {
       conn,
       usedPrefix,
@@ -10,15 +10,15 @@ module.exports = {
       args,
       Func
    }) => {
-      if (!args[0]) return m.reply(Func.example(usedPrefix, command, 'https://www.tiktok.com/@cikaseiska/video/7379107227363200261?is_from_webapp=1&sender_device=pc&web_id=7330639260519974418'))
-      if (!args[0].match('tiktok.com')) return m.reply(status.invalid)
-      m.react('🕒')
-      let old = new Date()
       try {
-         var json = await Api.get('api/tiktok', {
+         if (!args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'https://www.tiktok.com/@cikaseiska/video/7379107227363200261?is_from_webapp=1&sender_device=pc&web_id=7330639260519974418'), m)
+         if (!args[0].match('tiktok.com')) return conn.reply(m.chat, global.status.invalid, m)
+         conn.sendReact(m.chat, '🕒', m.key)
+         let old = new Date()
+         const json = await Api.get('/tiktok', {
             url: args[0]
          })
-         if (!json.status) return m.reply(Func.jsonFormat(json))
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
          let teks = `乂  *T I K T O K*\n\n`
          teks += `   ∘  *Author* : ${json.author.nickname}\n`
          teks += `   ∘  *Like* : ${Func.formatNumber(json.stats.likes)}\n`
@@ -41,8 +41,9 @@ module.exports = {
          } else if (command == 'tikwm') return conn.sendFile(m.chat, json.data.find(v => v.type == 'watermark').url, Func.filename('mp4'), teks, m)
          else if (command == 'tikmp3') return conn.sendFile(m.chat, json.music_info.url, Func.filename('mp3'), '', m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

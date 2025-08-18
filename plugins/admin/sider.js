@@ -1,7 +1,7 @@
 module.exports = {
    help: ['sider'],
    use: '(option)',
-   tags: ['admin'],
+   tags: 'admin',
    run: async (m, {
       conn,
       usedPrefix,
@@ -48,5 +48,6 @@ module.exports = {
       }
    },
    group: true,
-   admin: true
+   admin: true,
+   error: false
 }

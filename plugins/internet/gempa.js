@@ -1,6 +1,6 @@
 module.exports = {
    help: ['gempa'],
-   tags: ['internet'],
+   tags: 'internet',
    run: async (m, {
       conn,
       usedPrefix,
@@ -10,25 +10,26 @@ module.exports = {
       Func
    }) => {
       try {
-         const json = await Api.get('api/gempa', {})
-         if (!json.status) return m.reply(Func.jsonFormat(json))
-         m.react('🕒')
-         let teks = `乂  *G E M P A*\n\n`
-         teks += `   ◦  *Date* : ${json.data.Tanggal}\n`
-         teks += `   ◦  *At* : ${json.data.Jam}\n`
-         teks += `   ◦  *Magnitude* : ${json.data.Magnitude}\n`
-         teks += `   ◦  *Coordinate* : ${json.data.Coordinates}\n`
-         teks += `   ◦  *Latitude* : ${json.data.Lintang}\n`
-         teks += `   ◦  *Longitude* : ${json.data.Bujur}\n`
-         teks += `   ◦  *Depth* : ${json.data.Kedalaman}\n`
-         teks += `   ◦  *Region* : ${json.data.Wilayah}\n`
-         teks += `   ◦  *Potential* : ${json.data.Potensi}\n`
-         teks += `   ◦  *Sensed* : ${json.data.Dirasakan}\n\n`
-         teks += global.footer
-         conn.sendFile(m.chat, json.data.Shakemap, '', teks, m)
+         const json = await Api.get('/gempa', {})
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         conn.sendReact(m.chat, '🕒', m.key)
+         let txt = `乂  *G E M P A*\n\n`
+         txt += `   ◦  *Date* : ${json.data.Tanggal}\n`
+         txt += `   ◦  *At* : ${json.data.Jam}\n`
+         txt += `   ◦  *Magnitude* : ${json.data.Magnitude}\n`
+         txt += `   ◦  *Coordinate* : ${json.data.Coordinates}\n`
+         txt += `   ◦  *Latitude* : ${json.data.Lintang}\n`
+         txt += `   ◦  *Longitude* : ${json.data.Bujur}\n`
+         txt += `   ◦  *Depth* : ${json.data.Kedalaman}\n`
+         txt += `   ◦  *Region* : ${json.data.Wilayah}\n`
+         txt += `   ◦  *Potential* : ${json.data.Potensi}\n`
+         txt += `   ◦  *Sensed* : ${json.data.Dirasakan}\n\n`
+         txt += global.footer
+         conn.sendFile(m.chat, json.data.Shakemap, '', txt, m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
    limit: true,
+   error: false
 }

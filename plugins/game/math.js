@@ -1,35 +1,42 @@
-let handler = async (m, {
-   conn,
-   usedPrefix,
-   command,
-   args,
-   Func
-}) => {
-   conn.math = conn.math ? conn.math : {}
-   if (args.length < 1) return m.reply(`Mode : ${Object.keys(modes).join(' | ')}\n\nContoh penggunaan : ${usedPrefix}math medium`)
-   let mode = args[0].toLowerCase()
-   if (!(mode in modes)) return m.reply(`Mode : ${Object.keys(modes).join(' | ')}\n\nContoh penggunaan : ${usedPrefix}math medium`)
-   let id = m.chat
-   if (id in conn.math) return conn.reply(m.chat, '^ Masih ada soal belum terjawab di chat ini', conn.math[id][0])
-   let math = genMath(mode)
-   let p = `乂  *M A T H*\n\n`
-   p += `Berapa hasil dari *${math.str}*\n\n`
-   p += `Waktu : [ *${(math.time / 60 / 1000)} menit* ]\n`
-   p += `Balas pesan ini untuk menjawab.`
-   conn.math[id] = [
-      await conn.reply(m.chat, p, m),
-      math,
-      4,
-      setTimeout(() => {
-         if (conn.math[id]) conn.reply(m.chat, `*Waktu habis!*`, conn.math[id][0])
-         delete conn.math[id]
-      }, math.time),
-   ]
+module.exports = {
+   help: ['math'],
+   tags: 'game',
+   run: async (m, {
+      conn,
+      usedPrefix,
+      command,
+      text,
+      Func
+   }) => {
+      try {
+         conn.math = conn.math ? conn.math : {}
+         if (text.length < 1) return conn.reply(m.chat, `Mode : ${Object.keys(modes).join(' | ')}\n\nExample : ${usedPrefix}math medium`, m)
+         let mode = text.toLowerCase()
+         if (!(mode in modes)) return conn.reply(m.chat, `Mode : ${Object.keys(modes).join(' | ')}\n\nExample : ${usedPrefix}math medium`, m)
+         let id = m.chat
+         if (id in conn.math) return conn.reply(m.chat, '^ There are still unanswered questions in this chat.', conn.math[id][0])
+         let math = genMath(mode)
+         let p = `乂  *M A T H*\n\n`
+         p += `What is the result of *${math.str}*\n\n`
+         p += `Time : [ *${(math.time / 60 / 1000)} minute* ]\n`
+         p += `Reply to this message to answer the question..`
+         conn.math[id] = [
+            await conn.reply(m.chat, p, m),
+            math,
+            4,
+            setTimeout(() => {
+               if (conn.math[id]) conn.reply(m.chat, `*Time's up!*`, conn.math[id][0])
+               delete conn.math[id]
+            }, math.time),
+         ]
+      } catch (e) {
+         console.error(e)
+      }
+   },
+   limit: true,
+   group: true,
+   error: false
 }
-handler.help = ['math']
-handler.tags = ['game']
-handler.limit = handler.game = handler.group = handler.register = true
-module.exports = handler
 
 let modes = {
    noob: [-3, 3, -3, 3, '+-', 15000, 10],

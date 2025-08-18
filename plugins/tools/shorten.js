@@ -1,8 +1,8 @@
 module.exports = {
    help: ['shortner'],
-   command: ['shortlink', 'shorten'],
+   aliases: ['shortlink', 'shorten'],
    use: 'link',
-   tags: ['tools'],
+   tags: 'tools',
    run: async (m, {
       conn,
       usedPrefix,
@@ -13,8 +13,8 @@ module.exports = {
    }) => {
       try {
          if (!args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'http://google.com'), m)
-         m.react('🕒')
-         let json = await Api.get('api/shorten', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         let json = await Api.get('/shorten', {
             url: args[0]
          })
          if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)

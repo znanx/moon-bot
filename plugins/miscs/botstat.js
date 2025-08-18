@@ -1,11 +1,14 @@
 const moment = require('moment-timezone')
+
 module.exports = {
    help: ['botstat'],
-   command: ['stat', 'status'],
-   tags: ['miscs'],
+   aliases: ['stat', 'status'],
+   tags: 'miscs',
    run: async (m, {
       conn,
       blockList,
+      setting,
+      plugins,
       Func
    }) => {
       try {
@@ -25,18 +28,19 @@ module.exports = {
             banned: users.filter(([_, v]) => v.banned).length,
             blocked: blockList.length,
             premium: users.filter(([_, v]) => v.premium).length,
+            cmd: plugins.size,
             hitstat: sum.total('hitstat') != 0 ? sum.total('hitstat') : 0,
-            uptime: Func.toTime(process.uptime() * 1000)
+            uptime: Func.toTime(process.uptime() * 1000),
          }
-         const system = global.db.setting
-         conn.sendMessageModify(m.chat, statistic(Func, stats, system), m, {
+         conn.sendMessageModify(m.chat, statistic(Func, stats, setting), m, {
             largeThumb: true,
-            thumbnail: system.cover
+            thumbnail: setting.cover
          })
       } catch (e) {
          conn.reply(m.chat, Func.jsonFormat(e), m)
       }
-   }
+   },
+   error: false
 }
 
 const statistic = (Func, stats, system) => {
@@ -49,12 +53,15 @@ const statistic = (Func, stats, system) => {
    ◦  ${Func.texted('bold', Func.formatNumber(stats.blocked))} Users Blocked
    ◦  ${Func.texted('bold', Func.formatNumber(stats.premium))} Premium Users
    ◦  ${Func.texted('bold', Func.formatNumber(stats.hitstat))} Commands Hit
+   ◦  ${Func.texted('bold', Func.formatter(stats.cmd))} Commands Hit
    ◦  Runtime : ${Func.texted('bold', stats.uptime)}
 
 乂  *S Y S T E M*
 
    ◦  ${Func.texted('bold', system.antispam ? '[ √ ]' : '[ × ]')}  Anti Spam
    ◦  ${Func.texted('bold', system.anticall ? '[ √ ]' : '[ × ]')}  Anti Call
+   ◦  ${Func.texted('bold', system.autobackup ? '[ √ ]' : '[ × ]')}  Auto Backup
+   ◦  ${Func.texted('bold', system.autodownload ? '[ √ ]' : '[ × ]')}  Auto Download
    ◦  ${Func.texted('bold', system.debug ? '[ √ ]' : '[ × ]')}  Debug Mode
    ◦  ${Func.texted('bold', system.groupmode ? '[ √ ]' : '[ × ]')}  Group Mode
    ◦  ${Func.texted('bold', system.privatemode ? '[ √ ]' : '[ × ]')}  Private Mode

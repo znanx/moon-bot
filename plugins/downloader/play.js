@@ -2,7 +2,7 @@ const yts = require('yt-search')
 module.exports = {
    help: ['play'],
    use: 'query',
-   tags: ['downloader'],
+   tags: 'downloader',
    run: async (m, {
       conn,
       usedPrefix,
@@ -14,14 +14,14 @@ module.exports = {
    }) => {
       try {
          if (!text) return m.reply(Func.example(usedPrefix, command, 'Dewi'))
-         m.react('🕒')
-         var ys = await (await yts(text)).all
-         var yt = ys.filter(p => p.type == 'video')
-         var json = await Api.get('api/yta', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const ys = await (await yts(text)).all
+         const yt = ys.filter(p => p.type == 'video')
+         const json = await Api.get('/yta', {
             url: yt[0].url
          })
          if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
-         var caption = `乂  *Y T - P L A Y*\n\n`
+         let caption = `乂  *Y T - P L A Y*\n\n`
          caption += `   ∘  *Title* : ` + json.title + `\n`
          caption += `   ∘  *Size* : ` + json.data.size + `\n`
          caption += `   ∘  *Duration* : ` + json.duration + `\n`
@@ -40,8 +40,9 @@ module.exports = {
             })
          })
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

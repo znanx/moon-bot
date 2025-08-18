@@ -1,8 +1,8 @@
 module.exports = {
    help: ['noiseremover'],
-   command: ['noise'],
+   aliases: ['noise'],
    use: 'reply audio',
-   tags: ['tools'],
+   tags: 'tools',
    run: async (m, {
       conn,
       usedPrefix,
@@ -15,13 +15,13 @@ module.exports = {
          let mime = (q.msg || q).mimetype || ''
          if (!mime) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply audio.`), m)
          if (!/audio\/(mpeg|vn)/.test(mime)) return conn.reply(m.chat, Func.texted('bold', `🚩 Only for audio.`), m)
-         m.react('🕒')
+         conn.sendReact(m.chat, '🕒', m.key)
          let audio = await q.download()
          let result = await Scraper.uploader(audio)
-         const json = await Api.get('api/noise-remover', {
+         const json = await Api.get('/noise-remover', {
             audio: result.data.url
          })
-         if (!json.status) return m.reply(Func.jsonFormat(json))
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
          conn.sendFile(m.chat, json.data.url, '', '', m)
       } catch (e) {
          return conn.reply(m.chat, Func.jsonFormat(e), m)

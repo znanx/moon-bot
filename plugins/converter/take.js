@@ -1,8 +1,8 @@
 module.exports = {
    help: ['take'],
-   command: ['wm'],
+   aliases: ['wm'],
    use: 'packname | author',
-   tags: ['converter'],
+   tags: 'converter',
    run: async (m, {
       conn,
       text,
@@ -25,5 +25,7 @@ module.exports = {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   premium: true
+   limit: true,
+   premium: true,
+   error: false
 }

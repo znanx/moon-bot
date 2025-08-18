@@ -1,7 +1,7 @@
 module.exports = {
    help: ['promptgen'],
    use: 'query',
-   tags: ['ai'],
+   tags: 'ai',
    run: async (m, {
       conn,
       usedPrefix,
@@ -12,12 +12,12 @@ module.exports = {
    }) => {
       try {
          if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'white cat'), m)
-         m.react('🕒')
-         var result = await Api.get('api/prompt-generator', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/prompt-generator', {
             q: text
          })
-         if (!result.status) return conn.reply(m.chat, `🚩 ${json.msg}`, m)
-         conn.reply(m.chat, result.data[0].content.parts[0].text, m)
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         conn.reply(m.chat, json.data[0].content.parts[0].text, m)
       } catch (e) {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }

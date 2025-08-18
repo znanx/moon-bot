@@ -1,7 +1,8 @@
 module.exports = {
-   help: ['text2vid'],
+   help: ['txt2vid'],
+   aliases: ['text2video'],
    use: 'prompt | model',
-   tags: ['ai'],
+   tags: 'ai',
    run: async (m, {
       conn,
       usedPrefix,
@@ -11,10 +12,9 @@ module.exports = {
    }) => {
       try {
          if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'cat'), m)
-         m.react('🕒')
-         let old = new Date()
-         let [prompt, model] = text.split` | `
-         var json = await Api.post('api/text2vid', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         let [prompt, model] = text.split` | `, old = new Date()
+         const json = await Api.post('/text2vid', {
             prompt, model
          })
          if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
@@ -23,6 +23,7 @@ module.exports = {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true,
-   premium: true
+   limit: 3,
+   premium: true,
+   error: false
 }

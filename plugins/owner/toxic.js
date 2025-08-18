@@ -1,7 +1,7 @@
 module.exports = {
    help: ['+toxic', '-toxic'],
    use: 'word',
-   tags: ['owner'],
+   tags: 'owner',
    run: async (m, {
       conn,
       usedPrefix,

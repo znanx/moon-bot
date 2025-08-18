@@ -1,7 +1,7 @@
 module.exports = {
    help: ['setlink'],
    use: 'link',
-   tags: ['owner'],
+   tags: 'owner',
    run: async (m, {
       conn,
       usedPrefix,

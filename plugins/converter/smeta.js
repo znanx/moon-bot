@@ -1,12 +1,13 @@
 module.exports = {
    help: ['smeta'],
    use: 'query / reply media',
-   tags: ['converter'],
+   tags: 'converter',
    run: async (m, {
       conn,
       usedPrefix,
       command,
       text,
+      setting,
       Func
    }) => {
       try {
@@ -19,7 +20,7 @@ module.exports = {
          if (!/webp/.test(mime)) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply to the sticker you want to make into a meta sticker.`), m)
          let img = await q.download()
          if (!img) return conn.reply(m.chat, global.status.wrong, m)
-         stiker = await addExif(img, packname || global.db.setting.sk_pack, author || global.db.setting.sk_author)
+         stiker = await addExif(img, packname || setting.sk_pack, author || setting.sk_author)
       } catch (e) {
          console.error(e)
          if (Buffer.isBuffer(e)) stiker = e
@@ -32,7 +33,8 @@ module.exports = {
          else return conn.reply(m.chat, Func.texted('bold', `🚩 Conversion failed.`), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }
 
 const { Image } = require('node-webpmux')

@@ -1,7 +1,7 @@
 module.exports = {
    help: ['pornhub', 'marvelstudio', 'marvelstudio2', 'glitchtiktok', 'deadpool', '8bittext', 'thorlogo', 'captainamerica', 'amongus2'],
    use: 'text | text',
-   tags: ['text maker'],
+   tags: 'text maker',
    run: async (m, {
       conn,
       usedPrefix,
@@ -13,7 +13,7 @@ module.exports = {
          if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'moon | bot'), m)
          let [text1, text2] = text.split('|')
          if (text1.length > 10 || text2.length > 10) return conn.reply(m.chat, Func.texted('bold', '🚩 Max 10 character'), m)
-         m.react('🕒')
+         conn.sendReact(m.chat, '🕒', m.key)
          let old = new Date(), link
          /** text pro */
          if (/pornhub/.test(command)) link = 'https://textpro.me/generate-a-free-logo-in-pornhub-style-online-977.html'
@@ -27,7 +27,7 @@ module.exports = {
          if (/captainamerica/.test(command)) link = 'https://en.ephoto360.com/create-a-cinematic-captain-america-text-effect-online-715.html'
          if (/amongus2/.test(command)) link = 'https://en.ephoto360.com/create-a-banner-game-among-us-with-your-name-763.html'
          if (/latestspace/.test(command)) link = 'https://en.ephoto360.com/latest-space-3d-text-effect-online-559.html'
-         let json = await Api.get('api/textmaker2', {
+         let json = await Api.get('/textmaker2', {
             url: link, text1, text2
          })
          if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
@@ -36,5 +36,6 @@ module.exports = {
          conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

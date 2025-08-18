@@ -1,7 +1,7 @@
 module.exports = {
    help: ['howgay', 'howpintar', 'howcantik', 'howganteng', 'howgabut', 'howgila', 'howlesbi', 'howstress', 'howbucin', 'howjones', 'howsadboy'],
    use: 'text',
-   tags: ['random'],
+   tags: 'random',
    run: async (m, {
       conn,
       command,

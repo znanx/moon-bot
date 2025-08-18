@@ -1,7 +1,7 @@
 module.exports = {
    help: ['afk'],
    use: 'reason (optional)',
-   tags: ['group'],
+   tags: 'group',
    run: async (m, {
       conn,
       text,
@@ -17,5 +17,6 @@ module.exports = {
          conn.reply(m.chat, global.status.error, m)
       }
    },
-   group: true
+   group: true,
+   error: false
 }

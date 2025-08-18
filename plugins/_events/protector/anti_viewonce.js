@@ -1,11 +1,11 @@
 module.exports = {
-   async before(m, {
+   run: async (m, {
       conn,
       body,
       isOwner,
       groupSet,
       Func
-   }) {
+   }) => {
       try {
          if (m.msg && m.msg.viewOnce && !isOwner && groupSet.viewonce) {
             let media = await conn.downloadMediaMessage(m.msg)
@@ -16,9 +16,9 @@ module.exports = {
             }
          }
       } catch (e) {
-         console.log(e)
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   group: true
+   group: true,
+   error: false
 }

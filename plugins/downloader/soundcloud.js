@@ -1,1 +1,65 @@
-const _0x409ca3=_0x297b;function _0x297b(_0x2d5df7,_0x3c0d6e){const _0x376a99=_0x376a();return _0x297b=function(_0x297bd2,_0x2b2052){_0x297bd2=_0x297bd2-0x1d8;let _0x9eb5e6=_0x376a99[_0x297bd2];return _0x9eb5e6;},_0x297b(_0x2d5df7,_0x3c0d6e);}function _0x376a(){const _0x4d33ff=['results','downloader','match','24vXEsPw','Example','exports','key','push','api/soundcloud-dl','scdl','bold','*.\x20','🚩\x20Your\x20session\x20has\x20expired\x20/\x20does\x20not\x20exist,\x20do\x20another\x20search\x20using\x20the\x20keywords\x20you\x20want.','url','status','api/soundcloud','4fVhviv','10075086UpfBwd','\x20https://soundcloud.com/kharisma-silvia-339865762/komang-raim-laode','sendFile','get','permalink_url','\x20-\x20','msg','fetchBuffer','chat','soundcloud.com','10827552pzaQPH','username','map','◦\x20*Link*\x20:\x20','texted','\x20number*\x0a','5523042HdFFGn','created_at','sendReact','title','*Example*\x20:\x20','1259915dawgOx','5206664VPOziI','footer','log','find','thumbnail','60cAbews','sender','2844952DYayjE','.mp3','\x201\x0a\x0a','data','jid','reply','length','🚩\x20','🚩\x20Exceed\x20amount\x20of\x20data.','soundcloud','18XQmpVn','query\x20/\x20link','145881jVidum'];_0x376a=function(){return _0x4d33ff;};return _0x376a();}(function(_0xb79ff2,_0x2688b4){const _0x284e50=_0x297b,_0x393172=_0xb79ff2();while(!![]){try{const _0x3c5464=-parseInt(_0x284e50(0x203))/0x1*(parseInt(_0x284e50(0x207))/0x2)+parseInt(_0x284e50(0x1ea))/0x3+-parseInt(_0x284e50(0x1d9))/0x4*(-parseInt(_0x284e50(0x1ef))/0x5)+parseInt(_0x284e50(0x1e4))/0x6+-parseInt(_0x284e50(0x1da))/0x7+parseInt(_0x284e50(0x1f0))/0x8*(-parseInt(_0x284e50(0x201))/0x9)+parseInt(_0x284e50(0x1f5))/0xa*(parseInt(_0x284e50(0x1f7))/0xb);if(_0x3c5464===_0x2688b4)break;else _0x393172['push'](_0x393172['shift']());}catch(_0x1f7029){_0x393172['push'](_0x393172['shift']());}}}(_0x376a,0xe9d95),module[_0x409ca3(0x209)]={'help':[_0x409ca3(0x200)],'command':[_0x409ca3(0x20d)],'use':_0x409ca3(0x202),'tags':[_0x409ca3(0x205)],'run':async(_0x607ec8,{conn:_0x1bb745,text:_0x4a78d2,usedPrefix:_0x541f7d,command:_0xf9b9fb,env:_0x500043,Func:_0x66fe3b})=>{const _0xd28ae7=_0x409ca3;try{_0x1bb745[_0xd28ae7(0x200)]=_0x1bb745[_0xd28ae7(0x200)]?_0x1bb745[_0xd28ae7(0x200)]:[];const _0x296d8e=_0x1bb745['soundcloud'][_0xd28ae7(0x1f3)](_0x3ca9e9=>_0x3ca9e9[_0xd28ae7(0x1fb)]==_0x607ec8[_0xd28ae7(0x1f6)]);if(!_0x4a78d2)return _0x1bb745[_0xd28ae7(0x1fc)](_0x607ec8[_0xd28ae7(0x1e2)],'•\x20'+_0x66fe3b[_0xd28ae7(0x1e8)](_0xd28ae7(0x20e),_0xd28ae7(0x208))+'\x20:\x0a\x0a'+(_0x541f7d+_0xf9b9fb)+'\x20tak\x20ingin\x20usai\x0a'+(_0x541f7d+_0xf9b9fb)+_0xd28ae7(0x1db),_0x607ec8);_0x1bb745[_0xd28ae7(0x1ec)](_0x607ec8['chat'],'🕒',_0x607ec8[_0xd28ae7(0x20a)]);if(_0x4a78d2[_0xd28ae7(0x206)](_0xd28ae7(0x1e3))){const _0x3c9e35=await Api['get'](_0xd28ae7(0x20c),{'url':_0x4a78d2});if(!_0x3c9e35[_0xd28ae7(0x212)])return _0x1bb745[_0xd28ae7(0x1fc)](_0x607ec8[_0xd28ae7(0x1e2)],_0xd28ae7(0x1fe)+_0x3c9e35['msg'],_0x607ec8);_0x1bb745[_0xd28ae7(0x1dc)](_0x607ec8[_0xd28ae7(0x1e2)],_0x3c9e35['data']['url'],_0x3c9e35[_0xd28ae7(0x1fa)][_0xd28ae7(0x1ed)]+_0xd28ae7(0x1df)+_0x3c9e35[_0xd28ae7(0x1fa)][_0xd28ae7(0x1e5)]+'.mp3','',_0x607ec8,{'document':!![]},{'contextInfo':{'externalAdReply':{'title':_0x3c9e35[_0xd28ae7(0x1fa)][_0xd28ae7(0x1ed)],'body':_0x3c9e35[_0xd28ae7(0x1fa)][_0xd28ae7(0x1eb)],'mediaType':0x1,'previewType':0x0,'sourceUrl':_0x3c9e35[_0xd28ae7(0x1fa)][_0xd28ae7(0x1de)],'renderLargerThumbnail':!![],'thumbnail':await _0x66fe3b['fetchBuffer'](_0x3c9e35[_0xd28ae7(0x1fa)][_0xd28ae7(0x1f4)]),'thumbnailUrl':_0x3c9e35[_0xd28ae7(0x1fa)]['thumbnail']}}});}else{if(!_0x296d8e&&!isNaN(_0x4a78d2))return _0x607ec8[_0xd28ae7(0x1fc)](_0x66fe3b[_0xd28ae7(0x1e8)]('bold',_0xd28ae7(0x210)));if(_0x296d8e&&!isNaN(_0x4a78d2)){if(Number(_0x4a78d2)>_0x296d8e[_0xd28ae7(0x204)][_0xd28ae7(0x1fd)])return _0x607ec8[_0xd28ae7(0x1fc)](_0x66fe3b['texted'](_0xd28ae7(0x20e),_0xd28ae7(0x1ff)));_0x1bb745[_0xd28ae7(0x1ec)](_0x607ec8[_0xd28ae7(0x1e2)],'🕒',_0x607ec8[_0xd28ae7(0x20a)]);const _0x47d8df=await Api[_0xd28ae7(0x1dd)]('api/soundcloud-dl',{'url':_0x296d8e[_0xd28ae7(0x204)][Number(_0x4a78d2)-0x1]});if(!_0x47d8df[_0xd28ae7(0x212)])return _0x1bb745[_0xd28ae7(0x1fc)](_0x607ec8[_0xd28ae7(0x1e2)],_0xd28ae7(0x1fe)+_0x47d8df['msg'],_0x607ec8);_0x1bb745[_0xd28ae7(0x1dc)](_0x607ec8[_0xd28ae7(0x1e2)],_0x47d8df[_0xd28ae7(0x1fa)][_0xd28ae7(0x211)],_0x47d8df[_0xd28ae7(0x1fa)][_0xd28ae7(0x1ed)]+'\x20-\x20'+_0x47d8df[_0xd28ae7(0x1fa)][_0xd28ae7(0x1e5)]+_0xd28ae7(0x1f8),'',_0x607ec8,{'document':!![]},{'contextInfo':{'externalAdReply':{'title':_0x47d8df[_0xd28ae7(0x1fa)][_0xd28ae7(0x1ed)],'body':_0x47d8df[_0xd28ae7(0x1fa)][_0xd28ae7(0x1eb)],'mediaType':0x1,'previewType':0x0,'sourceUrl':_0x47d8df[_0xd28ae7(0x1fa)]['permalink_url'],'renderLargerThumbnail':!![],'thumbnail':await _0x66fe3b[_0xd28ae7(0x1e1)](_0x47d8df[_0xd28ae7(0x1fa)][_0xd28ae7(0x1f4)]),'thumbnailUrl':_0x47d8df[_0xd28ae7(0x1fa)][_0xd28ae7(0x1f4)]}}});}else{_0x1bb745[_0xd28ae7(0x1ec)](_0x607ec8['chat'],'🕒',_0x607ec8[_0xd28ae7(0x20a)]);const _0x1537b0=await Api['get'](_0xd28ae7(0x1d8),{'q':_0x4a78d2});if(!_0x1537b0[_0xd28ae7(0x212)])return _0x1bb745[_0xd28ae7(0x1fc)](_0x607ec8['chat'],_0xd28ae7(0x1fe)+_0x1537b0[_0xd28ae7(0x1e0)],_0x607ec8);if(!_0x296d8e)_0x1bb745[_0xd28ae7(0x200)][_0xd28ae7(0x20b)]({'jid':_0x607ec8[_0xd28ae7(0x1f6)],'results':_0x1537b0['data'][_0xd28ae7(0x1e6)](_0x53d8d5=>_0x53d8d5[_0xd28ae7(0x211)]),'created_at':new Date()*0x1});else _0x296d8e['results']=_0x1537b0[_0xd28ae7(0x1fa)][_0xd28ae7(0x1e6)](_0x2714b8=>_0x2714b8[_0xd28ae7(0x211)]);let _0x13ce70='To\x20download\x20use\x20this\x20command\x20*'+(_0x541f7d+_0xf9b9fb)+_0xd28ae7(0x1e9);_0x13ce70+=_0xd28ae7(0x1ee)+(_0x541f7d+_0xf9b9fb)+_0xd28ae7(0x1f9),_0x1537b0['data']['map']((_0x3c8e06,_0x2a6c5a)=>{const _0x16d11f=_0xd28ae7;_0x13ce70+='*'+(_0x2a6c5a+0x1)+_0x16d11f(0x20f)+_0x3c8e06['title']+'\x0a',_0x13ce70+=_0x16d11f(0x1e7)+_0x3c8e06['url']+'\x0a\x0a';})['join']('\x0a\x0a'),_0x13ce70+=global[_0xd28ae7(0x1f1)],_0x1bb745[_0xd28ae7(0x1fc)](_0x607ec8[_0xd28ae7(0x1e2)],_0x13ce70,_0x607ec8);}}setInterval(async()=>{const _0x223ef4=_0xd28ae7,_0x72c9ec=_0x1bb745['soundcloud'][_0x223ef4(0x1f3)](_0x342c1b=>_0x342c1b['jid']==_0x607ec8[_0x223ef4(0x1f6)]);_0x72c9ec&&new Date()-_0x72c9ec[_0x223ef4(0x1eb)]>_0x500043['timer']&&_0x66fe3b['removeItem'](_0x1bb745[_0x223ef4(0x200)],_0x72c9ec);},0xea60);}catch(_0x2521da){return console[_0xd28ae7(0x1f2)](_0x2521da),_0x1bb745[_0xd28ae7(0x1fc)](_0x607ec8[_0xd28ae7(0x1e2)],_0x66fe3b['jsonFormat'](_0x2521da),_0x607ec8);}},'limit':!![]});
+module.exports = {
+   help: ['soundcloud'],
+   use: 'query / link',
+   tags: 'downloader',
+   run: async (m, {
+      conn,
+      usedPrefix,
+      command,
+      text,
+      Func
+   }) => {
+      try {
+         conn.soundcloud = conn.soundcloud ? conn.soundcloud : {}
+         if (/^\d+$/.test(text)) {
+            if (typeof conn.soundcloud?.[m.chat] === 'undefined') return conn.reply(m.chat, `🚩 The data has expired, please search again with *${usedPrefix + command}*.`, m)
+            let idx = parseInt(text) - 1
+            let data = conn.soundcloud[m.chat].list
+            if (isNaN(idx) || !data[idx]) return conn.reply(m.chat, '🚩 Invalid Number!', m)
+            const { url } = data[idx]
+            conn.sendReact(m.chat, '🕒', m.key)
+            const json = await Api.get('/soundcloud-dl', {
+               url: url
+            })
+            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            conn.sendFile(m.chat, json.data.url, json.data.title + ' - ' + json.data.username + '.mp3', '', m, {
+               document: true
+            })
+         } else if (/https?:\/\/(open\.)?spotify\.com\//i.test(text)) {
+            conn.sendReact(m.chat, '🕒', m.key)
+            const json = await Api.get('/soundcloud-dl', {
+               url: text
+            })
+            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            conn.sendFile(m.chat, json.data.url, json.data.title + ' - ' + json.data.username + '.mp3', '', m, {
+               document: true
+            })
+         } else {
+            if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'demi kau dan si buah hati'), m)
+            conn.sendReact(m.chat, '🕒', m.key)
+            const json = await Api.get('/spotify', {
+               q: text
+            })
+            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            conn.soundcloud[m.chat] = {
+               list: json.data.map(v => ({ url: v.url })),
+               timer: setTimeout(() => {
+                  delete conn.soundcloud[m.chat]
+               }, 2 * 60 * 1000) // 2 minutes
+            }
+            let txt = `乂  *S P O T I F Y*\n\n`
+            json.data.map((v, i) => {
+               txt += `*${i + 1}*. ${v.title} - ${v.artist || 'unknown'}\n`
+               txt += `◦ *Channel* : ${v.channel || 'Unknown'}\n`
+               txt += `◦ *Link* : ${v.url}\n\n`
+            }).join('\n\n')
+            txt += `Type a number ( 1 - 10 ) to see details.`
+            conn.reply(m.chat, txt, m)
+         }
+      } catch (e) {
+         conn.reply(m.chat, Func.jsonFormat(e), m)
+      }
+   },
+   limit: true,
+   error: false
+}

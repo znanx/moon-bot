@@ -1,8 +1,8 @@
 module.exports = {
    help: ['translate'],
-   command: ['tr'],
+   aliases: ['tr'],
    use: 'lang text',
-   tags: ['tools'],
+   tags: 'tools',
    run: async (m, {
       conn,
       usedPrefix,
@@ -12,12 +12,12 @@ module.exports = {
       Func
    }) => {
       if (!text) return m.reply(Func.example(usedPrefix, command, 'id Love You'))
-      m.react('🕒')
+      conn.sendReact(m.chat, '🕒', m.key)
       if (text && m.quoted && m.quoted.text) {
          let lang = text.slice(0, 2)
          try {
             let data = m.quoted.text
-            const result = await Api.get('api/translate', {
+            const result = await Api.get('/translate', {
                text: data,
                iso: lang
             })
@@ -29,7 +29,7 @@ module.exports = {
          let lang = text.slice(0, 2)
          try {
             let data = text.substring(2).trim()
-            const result = await Api.get('api/translate', {
+            const result = await Api.get('/translate', {
                text: data,
                iso: lang
             })

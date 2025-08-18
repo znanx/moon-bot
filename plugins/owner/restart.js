@@ -1,9 +1,9 @@
-const { Mongo, Postgre } = new (require('@moonr/utils'))
+const { Mongo, Postgre } = new (require('@znan/wabot'))
 const env = require('../../config.json')
 const database = /mongo/.test(process.env.DATABASE_URL) ? new Mongo(process.env.DATABASE_URL, env.database) : /postgres/.test(process.env.DATABASE_URL) ? new Postgre(process.env.DATABASE_URL, env.database) : new (require('../../lib/system/localdb'))(env.database)
 module.exports = {
    help: ['restart'],
-   tags: ['owner'],
+   tags: 'owner',
    run: async (m, {
       conn,
       Func

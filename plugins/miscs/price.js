@@ -1,6 +1,6 @@
 module.exports = {
    help: ['premium'],
-   tags: ['miscs'],
+   tags: 'miscs',
    run: async (m, {
       conn,
       usedPrefix

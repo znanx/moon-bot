@@ -1,28 +1,28 @@
 module.exports = {
    help: ['setwelcome', 'setbye'],
    use: 'text',
-   tags: ['admin'],
+   tags: 'admin',
    run: async (m, {
       conn,
       usedPrefix,
       command,
       text,
-      participants,
+      groupSet,
       Func
    }) => {
-      let setup = global.db.groups[m.chat]
       if (command == 'setwelcome') {
          if (!text) return conn.reply(m.chat, formatWel(usedPrefix, command), m)
-         setup.sWelcome = text
+         groupSet.sWelcome = text
          await conn.reply(m.chat, Func.texted('bold', `🚩 Successfully set.`), m)
       } else if (/set(out|left)/i.test(command)) {
          if (!text) return conn.reply(m.chat, formatLef(usedPrefix, command), m)
-         setup.sBye = text
+         groupSet.sBye = text
          await conn.reply(m.chat, Func.texted('bold', `🚩 Successfully set.`), m)
       }
    },
    group: true,
-   admin: true
+   admin: true,
+   error: false
 }
 
 const formatWel = (prefix, command) => {

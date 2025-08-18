@@ -1,9 +1,10 @@
 const moment = require('moment-timezone')
 moment.tz.setDefault(process.env.TZ).locale('id')
+
 module.exports = {
    help: ['groups'],
-   command: ['grouplist'],
-   tags: ['miscs'],
+   aliases: ['grouplist'],
+   tags: 'miscs',
    run: async (m, {
       conn,
       usedPrefix,
@@ -18,20 +19,19 @@ module.exports = {
             if (!v) {
                global.db.groups[x.id] = {
                   activity: new Date * 1,
-                  isBanned: false,
-                  welcome: false,
-                  sWelcome: '',
-                  sBye: '',
-                  detect: false,
-                  sPromote: '',
-                  sDemote: '',
+                  mute: false,
+                  welcome: true,
+                  left: true,
+                  autodetect: false,
+                  autosticker: false,
                   antidelete: false,
                   antilink: false,
                   antivirtex: false,
                   antisticker: false,
-                  autosticker: false,
-                  viewonce: false,
-                  filter: false,
+                  antitagsw: false,
+                  antiporn: false,
+                  antiviewonce: false,
+                  antitoxic: false,
                   member: {},
                   expired: 0,
                   stay: false
@@ -43,9 +43,10 @@ module.exports = {
             caption += `${v.stay ? '   FOREVER' : (v.expired == 0 ? '   NOT SET' : '   ' + Func.timeReverse(v.expired - new Date() * 1))} | ${x.participants.length} | ${(v.mute ? 'OFF' : 'ON')} | ${moment(v.activity).format('DD/MM/YY HH:mm:ss')}\n\n`
          })
          caption += `${global.footer}`
-         m.reply(caption)
+         conn.reply(m.chat, caption, m)
       } catch (e) {
-         console.log(e)
+         conn.reply(m.chat, Func.jsonFormat(e), m)
       }
-   }
+   },
+   error: false
 }

@@ -1,7 +1,7 @@
 const { writeFileSync, readFileSync } = require('fs')
 module.exports = {
    help: ['backup'],
-   tags: ['owner'],
+   tags: 'owner',
    run: async (m, {
       conn,
       database,
@@ -9,7 +9,7 @@ module.exports = {
       Func
    }) => {
       try {
-         m.react('🕒')
+         conn.sendReact(m.chat, '🕒', m.key)
          await database.save(global.db)
          writeFileSync(env.database + '.json', JSON.stringify(global.db, null, 3), 'utf-8')
          await conn.sendFile(m.chat, readFileSync('./' + env.database + '.json'), env.database + '.json', '', m)

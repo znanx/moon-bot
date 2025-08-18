@@ -1,7 +1,7 @@
 module.exports = {
    help: ['dokter'],
    use: 'query',
-   tags: ['ai'],
+   tags: 'ai',
    run: async (m, {
       conn,
       usedPrefix,
@@ -12,12 +12,12 @@ module.exports = {
    }) => {
       try {
          if (!text) return m.reply(Func.example(usedPrefix, command, 'masuk angin'))
-         m.react('🕒')
-         var result = await Api.get('api/ai-dokter', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/ai-dokter', {
             text: text
          })
-         if (!result.status) return m.reply(Func.jsonFormat(json))
-         conn.reply(m.chat, result.data.content, m)
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         conn.reply(m.chat, json.data.content, m)
       } catch (e) {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }

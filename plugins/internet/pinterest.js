@@ -1,8 +1,8 @@
 module.exports = {
    help: ['pin'],
-   command: ['pinterest'],
+   aliases: ['pinterest'],
    use: 'query',
-   tags: ['internet'],
+   tags: 'internet',
    run: async (m, {
       conn,
       usedPrefix,
@@ -13,11 +13,11 @@ module.exports = {
    }) => {
       try {
          if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'red moon'), m)
-         m.react('🕒')
-         let json = await Api.get('api/pinterest', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/pinterest', {
             q: text
          })
-         if (!json.status) return m.reply(Func.jsonFormat(json))
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
          let old = new Date()
          let medias = []
          for (let i = 0; i < 5; i++) {
@@ -31,5 +31,6 @@ module.exports = {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

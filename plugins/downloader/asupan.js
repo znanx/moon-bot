@@ -1,7 +1,7 @@
 module.exports = {
    help: ['asupan'],
    use: 'username (optional)',
-   tags: ['downloader'],
+   tags: 'downloader',
    run: async (m, {
       conn,
       usedPrefix,
@@ -12,11 +12,11 @@ module.exports = {
       try {
          conn.sendReact(m.chat, '🕒', m.key)
          let old = new Date()
-         let json = await Api.get('api/tiktok-post', {
+         const json = await Api.get('/tiktok-post', {
             q: args[0] || Func.random(['_hanna4yours', 'moodaaii', 'imnotnoncakeithh', 'athaw041', 'jacquelinesndr', 'joanne_flute', 'auwa___', 'aikolovesushi', 'liayuhuuu_', 'mrchellacty', 'michellechristoo', 'nauraurelia0', 'kharisma_ptw', 'avcdchs_'])
          })
          if (!json.status) return conn.reply(m.chat, `🚩 ${json.msg}`, m)
-         let result = await Func.random(json.data)
+         const result = await Func.random(json.data)
          let capt = '乂  *A S U P A N*\n\n'
          capt += `   ◦  *Views* : ${Func.formatNumber(result.stats.views)}\n`
          capt += `   ◦  *Likes* : ${Func.formatNumber(result.stats.likes)}\n`
@@ -41,5 +41,6 @@ module.exports = {
       }
    },
    limit: true,
-   premium: true
+   premium: true,
+   error: false
 }

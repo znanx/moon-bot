@@ -1,7 +1,7 @@
 module.exports = {
    help: ['owner'],
-   command: ['creator'],
-   tags: ['miscs'],
+   aliases: ['creator'],
+   tags: 'miscs',
    run: async (m, {
       conn,
       env

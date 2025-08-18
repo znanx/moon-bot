@@ -1,8 +1,8 @@
 module.exports = {
    help: ['mathsolver'],
-   command: ['mathresolver'],
+   aliases: ['mathresolver'],
    use: 'expression',
-   tags: ['ai'],
+   tags: 'ai',
    run: async (m, {
       conn,
       usedPrefix,
@@ -12,16 +12,16 @@ module.exports = {
    }) => {
       try {
          if (!text) return m.reply(Func.example(usedPrefix, command, '1 + 1'))
-         m.react('🕒')
-         const json = await Api.get('api/ai-mathsolver', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/ai-mathsolver', {
             q: text
          })
-         if (!json.status) return m.reply(Func.jsonFormat(json))
-         m.reply(json.data.answer)
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         conn.reply(m.chat, json.data.answer, m)
       } catch (e) {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
    limit: true,
-   premium: true,
+   error: false
 }

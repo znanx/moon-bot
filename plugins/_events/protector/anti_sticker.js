@@ -1,5 +1,5 @@
 module.exports = {
-   async before(m, {
+   run: async(m, {
       conn,
       body,
       isOwner,
@@ -7,7 +7,7 @@ module.exports = {
       setting,
       isBotAdmin,
       Func
-   }) {
+   }) => {
       if (m.isGroup && groupSet.antisticker && /stickerMessage/.test(m.mtype)) {
          conn.sendMessage(m.chat, {
             delete: {
@@ -19,5 +19,7 @@ module.exports = {
          })
       }
    },
+   error: false,
+   group: true,
    error: false
 }

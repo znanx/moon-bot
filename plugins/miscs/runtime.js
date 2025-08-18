@@ -1,7 +1,7 @@
 module.exports = {
    help: ['runtime'],
-   command: ['run', 'uptime'],
-   tags: ['miscs'],
+   aliases: ['run', 'uptime'],
+   tags: 'miscs',
    run: async (m, {
       conn,
       Func

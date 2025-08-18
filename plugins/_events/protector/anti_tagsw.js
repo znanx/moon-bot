@@ -1,10 +1,10 @@
 module.exports = {
-   async before(m, {
+   run: async (m, {
       conn,
       groupSet,
       isAdmin,
       Func
-   }) {
+   }) => {
       try {
          if (groupSet.antitagsw && !isAdmin && /groupStatusMentionMessage/.test(m.mtype)) return conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove').then(() => conn.sendMessage(m.chat, {
             delete: {
@@ -20,5 +20,6 @@ module.exports = {
    },
    error: false,
    group: true,
-   botAdmin: true
+   botAdmin: true,
+   error: false
 }

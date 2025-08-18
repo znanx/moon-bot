@@ -1,8 +1,8 @@
 module.exports = {
    help: ['facebook'],
-   command: ['fb'],
+   aliases: ['fb'],
    use: 'link',
-   tags: ['downloader'],
+   tags: 'downloader',
    run: async (m, {
       conn,
       usedPrefix,
@@ -11,14 +11,14 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!args[0]) return m.reply(Func.example(usedPrefix, command, 'https://www.facebook.com/share/r/1WCkXg8fsT/'))
-         if (!args[0].match(/(?:https?:\/\/(web\.|www\.|m\.)?(facebook|fb)\.(com|watch)\S+)?$/)) return m.reply(status.invalid)
-         m.react('🕒')
-         let json = await Api.get('api/fb', {
+         if (!args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'https://www.facebook.com/share/r/1WCkXg8fsT/'), m)
+         if (!args[0].match(/(?:https?:\/\/(web\.|www\.|m\.)?(facebook|fb)\.(com|watch)\S+)?$/)) return conn.reply(m.chat, status.invalid, m)
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/fb', {
             url: args[0]
          })
-         if (!json.status) return conn.reply(m.chat, `🚩 ${json.msg}`, m)
-         let result = json.data.find(v => v.quality == 'HD') || json.data.find(v => v.quality == 'SD')
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         const result = json.data.find(v => v.quality == 'HD') || json.data.find(v => v.quality == 'SD')
          if (result) {
             conn.sendFile(m.chat, result.url, Func.filename(result.quality === 'jpeg' ? 'jpeg' : 'mp4'), `◦ *Quality* : ${result.quality}`, m)
          } else {
@@ -31,6 +31,6 @@ module.exports = {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   error: false,
-   limit: true
+   limit: true,
+   error: false
 }

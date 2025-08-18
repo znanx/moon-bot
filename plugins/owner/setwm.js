@@ -1,7 +1,7 @@
 module.exports = {
    help: ['setwm'],
    use: 'packname | author',
-   tags: ['owner'],
+   tags: 'owner',
    run: async (m, {
       conn,
       usedPrefix,

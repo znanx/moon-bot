@@ -1,7 +1,7 @@
 const os = require('os')
 module.exports = {
    help: ['server'],
-   tags: ['miscs'],
+   tags: 'miscs',
    run: async (m, {
       conn,
       Func

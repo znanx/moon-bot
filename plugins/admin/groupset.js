@@ -1,7 +1,7 @@
 module.exports = {
    help: ['setdesc', 'setname'],
    use: 'text',
-   tags: ['admin'],
+   tags: 'admin',
    run: async (m, {
       conn,
       usedPrefix,
@@ -22,5 +22,6 @@ module.exports = {
    },
    group: true,
    admin: true,
-   botAdmin: true
+   botAdmin: true,
+   error: false
 }

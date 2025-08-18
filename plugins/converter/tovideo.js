@@ -1,8 +1,8 @@
 module.exports = {
    help: ['tovideo'],
-   command: ['togif'],
+   aliases: ['togif'],
    use: 'reply gif sticker',
-   tags: ['converter'],
+   tags: 'converter',
    run: async (m, {
       conn,
       Scraper,
@@ -14,18 +14,16 @@ module.exports = {
          let q = m.quoted ? m.quoted : m
          let mime = (q.msg || q).mimetype || ''
          if (!/webp/.test(mime)) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply to gif sticker.`), m)
-         let buffer = await q.download()
-         const file = await Scraper.uploader(buffer)
-         if (!file.status) return m.reply(Func.jsonFormat(file))
-         let old = new Date()
-         m.react('🕒')
-         const json = await Api.get('api/webp-convert', {
-            url: file.data.url, action: 'webp-to-mp4'
+         const image = await (await Scraper.uploader(await q.download())).data.url, old = new Date()
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/webp-convert', {
+            url: image, action: 'webp-to-mp4'
          })
          conn.sendFile(m.chat, json.data.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
       } catch (e) {
          return conn.reply(m.chat, global.status.error, m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

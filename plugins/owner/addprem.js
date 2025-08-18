@@ -1,8 +1,8 @@
 module.exports = {
    help: ['+prem'],
-   command: ['addprem'],
+   aliases: ['addprem'],
    use: 'mention or reply',
-   tags: ['owner'],
+   tags: 'owner',
    run: async (m, {
       conn,
       usedPrefix,

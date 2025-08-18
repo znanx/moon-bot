@@ -1,8 +1,8 @@
 module.exports = {
    help: ['instagram'],
-   command: ['ig'],
+   aliases: ['ig'],
    use: 'link',
-   tags: ['downloader'],
+   tags: 'downloader',
    run: async (m, {
       conn,
       usedPrefix,
@@ -14,8 +14,8 @@ module.exports = {
          if (!args || !args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'https://www.instagram.com/p/CK0tLXyAzEI'), m)
          if (!args[0].match(/(https:\/\/www.instagram.com)/gi)) return conn.reply(m.chat, global.status.invalid, m)
          let old = new Date()
-         m.react('🕒')
-         var json = await Api.get('api/ig', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/ig', {
             url: args[0]
          })
          if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
@@ -24,8 +24,9 @@ module.exports = {
             await Func.delay(1500)
          }
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

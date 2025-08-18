@@ -1,12 +1,12 @@
 module.exports = {
-   async before(m, {
+   run: async (m, {
       conn,
       body,
       isOwner,
       groupSet,
       setting,
       Func
-   }) {
+   }) => {
       try {
          if (groupSet.autosticker && /video|image/.test(m.mtype)) {
             let mime = m.msg.mimetype
@@ -28,9 +28,9 @@ module.exports = {
             }
          }
       } catch (e) {
-         console.log(e)
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   group: true
+   group: true,
+   error: false
 }

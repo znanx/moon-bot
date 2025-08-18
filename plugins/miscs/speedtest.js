@@ -3,8 +3,8 @@ let { promisify } = require('util')
 let exec = promisify(cp.exec).bind(cp)
 module.exports = {
    help: ['speedtest'],
-   command: ['speed'],
-   tags: ['miscs'],
+   aliases: ['speed'],
+   tags: 'miscs',
    run: async (m, {
       conn,
       Func

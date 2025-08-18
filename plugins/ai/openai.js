@@ -1,8 +1,8 @@
 module.exports = {
    help: ['openai'],
-   command: ['ai'],
+   aliases: ['ai'],
    use: 'query',
-   tags: ['ai'],
+   tags: 'ai',
    run: async (m, {
       conn,
       usedPrefix,
@@ -13,15 +13,16 @@ module.exports = {
    }) => {
       try {
          if (!text) return m.reply(Func.example(usedPrefix, command, 'moonbot'))
-         m.react('🕒')
-         var result = await Api.get('api/openai', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/openai', {
             prompt: text
          })
-         if (!result.status) return m.reply(Func.jsonFormat(result))
-         conn.reply(m.chat, result.data.content, m)
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         conn.reply(m.chat, json.data.content, m)
       } catch (e) {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
    limit: true,
+   error: false
 }

@@ -1,7 +1,7 @@
 module.exports = {
    help: ['pindl'],
    use: 'link',
-   tags: ['downloader'],
+   tags: 'downloader',
    run: async (m, {
       conn,
       usedPrefix,
@@ -13,11 +13,11 @@ module.exports = {
          if (!args[0]) return m.reply(Func.example(usedPrefix, command, 'https://pin.it/1wu7KDR9a'))
          if (!args[0].match(/pin(?:terest)?(?:\.it|\.com)/)) return conn.reply(m.chat, global.status.invalid, m)
          let old = new Date()
-         m.react('🕒')
-         var json = await Api.get('api/pin-dl', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/pin-dl', {
             url: args[0]
          })
-         if (!json.status) return m.reply(Func.jsonFormat(json))
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
          json.data.map(v => {
             if (v.type == 'image') return conn.sendFile(m.chat, v.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
             if (v.type == 'video') return conn.sendFile(m.chat, v.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
@@ -26,9 +26,9 @@ module.exports = {
             })
          })
       } catch (e) {
-         console.log(e)
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

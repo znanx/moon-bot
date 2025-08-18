@@ -1,8 +1,8 @@
 module.exports = {
    help: ['upload'],
-   command: ['tourl'],
+   aliases: ['tourl'],
    use: 'reply media',
-   tags: ['tools'],
+   tags: 'tools',
    run: async (m, {
       conn,
       Scraper,
@@ -12,7 +12,7 @@ module.exports = {
          let q = m.quoted ? m.quoted : m
          let mime = (q.msg || q).mimetype || ''
          if (!mime) return conn.reply(m.chat, Func.texted('bold', '🚩 Send or reply to the media you want to upload.'), m)
-         m.react('🕒')
+         conn.sendReact(m.chat, '🕒', m.key)
          let media = await q.download()
          //let isMedia = /image\/(png|jpe?g|gif)|video\/mp4\/webp/.test(mime)
          //let json = await (isMedia ? Scraper.imgbb : Scraper.uploader)(media)

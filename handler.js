@@ -1,50 +1,48 @@
-const { Functions: Func, Scraper, Print, Queque, Config: env } = new (require('@moonr/utils'))
+const { Function: Func, Scraper, Spam, Config: env } = new (require('@znan/wabot'))
+const path = require('path')
 const cron = require('node-cron')
-const cooldownMap = new Map()
-const COOLDOWN_MS = env.cooldown * 1000
+
+const isSpam = new Spam({
+   mode: env.spam.mode, /** command || msg || all */
+   messageLimit: env.spam.limit,
+   timeWindowSeconds: env.spam.time_window,
+   cooldownSeconds: env.time_ban,
+   maxBanTimes: env.max_ban,
+   commandCooldownSeconds: env.spam.cooldown
+})
 
 module.exports = async (conn, ctx, database) => {
-   var { m, chatUpdate, store, match, body, command, args, _args, text, plugins, prefix, usedPrefix, prefixes } = ctx
+   var { store, m, body, prefix, plugins, plugFiles, loadCmd, loadEvt, commands, args, command, text, prefixes, core, isCommand } = ctx
    try {
-      conn.msgqueque = conn.msgqueque || new Queque()
       require('./lib/system/schema')(m, env)
-      const users = global.db.users[m.sender]
-      const groupSet = global.db.groups[m.chat]
-      const chats = global.db.chats[m.chat]
-      const setting = global.db.setting
-      const isOwner = [conn.decodeJid(conn.user.id).replace(/@.+/, ''), env.owner, ...setting.owners].map(v => v + '@s.whatsapp.net').includes(m.sender)
-      const isPrems = users.premium || isOwner
-      const groupMetadata = m.isGroup ? await conn.groupMetadata(m.chat) : {}
-      const participants = m.isGroup ? groupMetadata ? groupMetadata.participants : [] : [] || []
-      const adminList = m.isGroup ? await conn.groupAdmin(m.chat) : [] || []
-      const isAdmin = m.isGroup ? adminList.includes(m.sender) : false
-      const isBotAdmin = m.isGroup ? adminList.includes((conn.user.id.split`:`[0]) + '@s.whatsapp.net') : false
-      const blockList = typeof await (await conn.fetchBlocklist()) != 'undefined' ? await (await conn.fetchBlocklist()) : []
-      /** Queque */
-      if (process.argv.includes('--queque') && m.text && !m.fromMe && !(isPrems)) {
-         const id = m.id
-         conn.msgqueque.add(id)
-         await conn.msgqueque.waitQueue(id)
-      }
+      let groupSet = global.db.groups[m.chat]
+      let chats = global.db.chats[m.chat]
+      let users = global.db.users[m.sender]
+      let setting = global.db.setting
+      let isOwner = [conn.decodeJid(conn.user.id).replace(/@.+/, ''), env.owner, ...setting.owners].map(v => v + '@s.whatsapp.net').includes(m.sender)
+      let isPrem = users && users.premium || isOwner
+      let groupMetadata = m.isGroup ? await conn.getGroupMetadata(m.chat) : {}
+      let participants = m.isGroup ? groupMetadata ? conn.fixLid(groupMetadata.participants) : [] : [] || []
+      let adminList = m.isGroup ? participants?.filter(i => i.admin === 'admin' || i.admin === 'superadmin')?.map(i => i.id) || [] : []
+      let isAdmin = m.isGroup ? adminList.includes(m.sender) : false
+      let isBotAdmin = m.isGroup ? adminList.includes((conn.user.id.split`:`[0]) + '@s.whatsapp.net') : false
+      let blockList = typeof await (await conn.fetchBlocklist()) != 'undefined' ? await (await conn.fetchBlocklist()) : []
+
+      const spam = isSpam.check(conn, m, users, isCommand, command, setting)
+
       if (!setting.online) conn.sendPresenceUpdate('unavailable', m.chat)
       if (setting.online) {
          conn.sendPresenceUpdate('available', m.chat)
          conn.readMessages([m.key])
       }
-      if (!users || typeof users.limit === undefined) return global.db.users = {
-         jid: m.sender,
-         banned: false,
-         limit: env.limit,
-         hit: 0,
-         spam: 0
-      }
+      if (!setting.multiprefix) setting.noprefix = false
       if (setting.debug && !m.fromMe && isOwner) conn.reply(m.chat, Func.jsonFormat(m), m)
       if (m.isGroup && !groupSet.stay && (new Date * 1) >= groupSet.expired && groupSet.expired != 0) {
          return conn.reply(m.chat, Func.texted('italic', '🚩 Bot time has expired and will leave from this group, thank you.', null, {
             mentions: participants.map(v => v.id)
          })).then(async () => {
             groupSet.expired = 0
-            await Func.delay(2000).then(() => conn.groupLeave(m.chat))
+            await Func.delay(15_000).then(() => conn.groupLeave(m.chat))
          })
       }
       if (users && (new Date * 1) >= users.expired && users.expired != 0) {
@@ -56,205 +54,129 @@ module.exports = async (conn, ctx, database) => {
       }
       if (m.isGroup) groupSet.activity = new Date() * 1
       if (users) {
-         users.name = m.name
+         if (!users.lid) {
+            const { lid } = await conn.getUserId(m.sender)
+            if (lid) users.lid = lid
+         }
+         users.name = m.pushName
          users.lastseen = new Date() * 1
-         users.role = Func.role(users.level).name
       }
       if (chats) {
          chats.chat += 1
          chats.lastseen = new Date * 1
       }
-      if (m.isGroup && !m.isBot && users && users.afk > -1) {
-         conn.reply(m.chat, `You are back online after being offline for : ${Func.texted('bold', Func.toTime(new Date - users.afk))}\n\n• ${Func.texted('bold', 'Reason')}: ${users.afkReason ? users.afkReason : '-'}`, m)
+      if (m.isGroup && !m.isBot && users?.afk > -1) {
+         conn.reply(m.chat, `You are back online after being offline for : ${Func.texted('bold', Func.toTime(new Date - users.afk))}\n\n◦ ${Func.texted('bold', 'Reason')}: ${users?.afkReason || '-'}`, m)
          users.afk = -1
          users.afkReason = ''
          users.afkObj = {}
       }
-      cron.schedule('00 00 * * *', () => {
-         setting.lastReset = Date.now()
+      cron.schedule('00 00 * * *', async () => {
+         setting.lastReset = new Date * 1
          Object.values(global.db.users).filter(v => v.limit < env.limit && !v.premium).map(v => v.limit = env.limit)
-         Object.entries(global.db.stats).map(([_, prop]) => prop.today = 0)
+         Object.entries(global.db.statistic).map(([_, prop]) => prop.today = 0)
       }, {
          scheduled: true,
          timezone: process.env.TZ
       })
       if (m.isGroup && !m.fromMe) {
          let now = new Date() * 1
+         const { lid } = await conn.getUserId(m.sender)
          if (!groupSet.member[m.sender]) {
             groupSet.member[m.sender] = {
+               lid: lid,
+               chat: 1,
                lastseen: now,
                warning: 0
             }
          } else {
             groupSet.member[m.sender].lastseen = now
+            groupSet.member[m.sender].lid = lid
          }
       }
-      for (let name in plugins) {
-         let plugin
-         if (typeof plugins[name].run === 'function') {
-            let ai = plugins[name]
-            plugin = ai.run
-            for (let prop in ai) {
-               if (prop !== 'run') {
-                  plugin[prop] = ai[prop]
-               }
-            }
-         } else {
-            plugin = plugins[name]
+      if (spam) return
+      // if (body && !setting.self && core.prefix != setting.onlyprefix && commands.includes(core.command) && !setting.multiprefix && !env.evaluate_chars.includes(core.command)) return conn.reply(m.chat, `🚩 *Prefix needed!*, this bot uses prefix : *[ ${setting.onlyprefix} ]*\n\n➠ ${setting.onlyprefix + core.command} ${text || ''}`, m)
+      const matcher = await Func.matcher(command, commands)
+         .filter(v => v.accuracy >= 60)
+         .sort((a, b) => b.accuracy - a.accuracy)
+         .slice(0, 3) /** max 3 */
+      if (prefix && !commands.includes(command) && matcher.length > 0) {
+         if (!m.isGroup || (m.isGroup && !groupSet.mute)) {
+            return conn.reply(m.chat, `🚩 Command you are using is wrong, try the following recommendations :\n\n${matcher.map(v => '➠ *' + (prefix ? prefix : '') + v.string + '* (' + v.accuracy.toFixed(2) + '%)').join('\n')}`, m)
          }
-         if (!plugin) continue
-         if (typeof plugin.all === 'function') {
-            if (plugin.owner && !isOwner) continue
-            if (plugin.group && !m.isGroup) continue
-            if (plugin.private && m.isGroup) continue
-            if (plugin.admin && !isAdmin) continue
-            if (plugin.botAdmin && !isBotAdmin) continue
-            if (plugin.premium && !isPrems) continue
-            if (plugin.disabled || setting.pluginDisable.includes(name.split('/').pop())) continue
-            try {
-               await plugin.all.call(conn, m, chatUpdate)
-            } catch (e) {
-               console.error(e)
-            }
-         }
-         if (typeof plugin.before === 'function') {
-            if (plugin.owner && !isOwner) continue
-            if (plugin.group && !m.isGroup) continue
-            if (plugin.private && m.isGroup) continue
-            if (plugin.admin && !isAdmin) continue
-            if (plugin.botAdmin && !isBotAdmin) continue
-            if (plugin.premium && !isPrems) continue
-            if (plugin.disabled || setting.pluginDisable.includes(name.split('/').pop())) continue
-
-            if (m.isBot || m.chat.endsWith('broadcast')) continue
-            const isBlocked = await plugin.before.call(this, m, {
-               match, body, store, blockList, conn: conn, command, prefixes, plugins,
-               participants, groupMetadata, isOwner, isAdmin,
-               isBotAdmin, isPrems, users, groupSet, chats, setting, chatUpdate,
-               database, Func, Scraper, env
-            })
-            if (isBlocked) continue
-         }
-         if (typeof plugin !== 'function') continue
-         if (match || setting.noprefix) {
-            let isAccept = ((Array.isArray(plugin.command) && plugin.command.includes(command)) || (Array.isArray(plugin.help) && plugin.help.includes(command)))
-            if (!isAccept) continue
-
-            /** cooldown per command */
-            let lastUsed = cooldownMap.get(m.sender) || 0
-            if (Date.now() - lastUsed < COOLDOWN_MS) {
-               continue
-            }
-            cooldownMap.set(m.sender, Date.now())
-
-            m.plugin = name
-            m.isCommand = true
+      }
+      if (isCommand) {
+         const plugin = loadCmd.get(command)
+         if (!plugin) return
+         if (commands.includes(command)) {
             users.hit += 1
-            users.usebot = Date.now()
+            users.usebot = new Date() * 1
+            Func.hitstat(command)
+         }
+         const name = path.parse(plugin.filePath).name
+         if (!m.isGroup && env.blocks.some(no => m.sender.startsWith(no))) return conn.updateBlockStatus(m.sender, 'block')
+         if (setting.pluginDisable?.includes(name)) return
+         if (setting.error?.includes(command)) return conn.reply(m.chat, Func.texted('bold', `🚩 Command _${(prefix ? prefix : '') + command}_ disabled.`), m)
+         if ((m.fromMe && m.isBot) || /broadcast|newsletter/.test(m.chat) || /Edit/.test(m.mtype)) return
+         if (setting.self && !isOwner && !m.fromMe) return
+         if (m.isGroup && groupSet && groupSet.adminonly && !isAdmin && !['groupinfo', 'link', 'me'].includes(name)) return
+         if (!m.isGroup && !['owner', 'anonymous', 'anonymous-send_contact'].includes(name) && chats && !isPrem && !isOwner && !users.banned && setting.groupmode) return conn.sendMessageModify(m.chat, `⚠️ The bot is currently in group mode. To use it in private chats, please join the group first or upgrade to the premium package by sending *${prefixes[0]}premium.*`, m, {
+            largeThumb: true,
+            thumbnail: 'https://telegra.ph/file/0b32e0a0bb3b81fef9838.jpg',
+            url: setting.link
+         }).then(() => chats.lastchat = new Date() * 1)
+         if (!['me', 'owner', 'exec'].includes(name) && users && (users.banned || new Date - users.ban_temporary < env.timeout)) return
+         if (m.isGroup && !['activation', 'groupinfo'].includes(name) && groupSet.mute) return
 
-            if (setting.error.includes(command)) return m.reply(Func.texted('bold', `🚩 Command _${usedPrefix + command}_ disabled.`))
-            if (plugin.disabled || setting.pluginDisable.includes(name.split('/').pop())) return
+         if (plugin.owner && !isOwner) return conn.reply(m.chat, global.status.owner, m)
+         if (plugin.restrict && !isPrem && !isOwner && text && new RegExp('\\b' + setting.toxic.join('\\b|\\b') + '\\b').test(text.toLowerCase())) {
+            return conn.reply(m.chat, `⚠️ You have violated the *Terms and Conditions* of bot usage by using prohibited keywords. As punishment for your violation, your account has been banned.`, m).then(() => {
+               users.banned = true
+               conn.updateBlockStatus(m.sender, 'block')
+            })
+         }
+         if (plugin.limit && !plugin.game && users.limit > 0) {
+            const limit = plugin.limit === 'Boolean' ? 1 : plugin.limit
+            if (users.limit >= limit) {
+               users.limit -= limit
+            } else {
+               return conn.reply(m.chat, `⚠️ Your limit isn't enough to use this feature.`, m)
+            }
+         }
+         if (plugin.limit && users.limit < 1) return conn.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plans.`, m)
+         if (plugin.premium && !isPrem) return conn.reply(m.chat, global.status.premium, m)
+         if (plugin.group && !m.isGroup) return conn.reply(m.chat, global.status.group, m)
+         if (plugin.botAdmin && !isBotAdmin) return conn.reply(m.chat, global.status.botAdmin, m)
+         if (plugin.admin && !isAdmin) return conn.reply(m.chat, global.status.admin, m)
+         if (plugin.private && m.isGroup) return conn.reply(m.chat, global.status.private, m)
+         await plugin.run(m, { ctx, conn, store, body, usedPrefix: prefix, plugins, plugFiles, commands, args, command, text, prefixes, core, isCommand, database, env, groupSet, chats, users, setting, isOwner, isPrem, groupMetadata, participants, isAdmin, isBotAdmin, blockList, Func, Scraper })
+      } else {
+         for (const event of loadEvt) {
+            const name = path.parse(event.filePath).name
+            if ((m.fromMe && m.isBot) || /broadcast|newsletter/.test(m.chat) || /pollUpdate/.test(m.mtype)) continue
             if (!m.isGroup && env.blocks.some(no => m.sender.startsWith(no))) return conn.updateBlockStatus(m.sender, 'block')
-            if (m.isBot || m.chat.endsWith('broadcast') || /Edited/.test(m.mtype)) continue
-            if (setting.self && !isOwner && !m.fromMe) continue
-            if (setting.privatemode && !isOwner && !m.fromMe && m.isGroup) continue
-            if (!m.isGroup && !['owner.js', 'price.js', 'reg.js', 'menfess.js', 'menfess_ev.js'].includes(name.split('/').pop()) && chats && !isPrems && !users.banned && new Date() * 1 - chats.lastchat < env.timeout) continue
-            if (!m.isGroup && !['owner.js', 'price.js', 'reg.js', 'menfess.js', 'menfess_ev.js'].includes(name.split('/').pop()) && chats && !isPrems && !users.banned && setting.groupmode) {
-               conn.sendMessageModify(m.chat, `⚠️ Using bot in private chat only for premium user, want to upgrade to premium plan ? send *${usedPrefix}premium* to see benefit and prices.`, m, {
-                  largeThumb: true,
-                  thumbnail: 'https://telegra.ph/file/0b32e0a0bb3b81fef9838.jpg',
-                  url: setting.link
-               }).then(() => chats.lastchat = new Date() * 1)
-               continue
-            }
-            if (!['me.js'].includes(name.split('/').pop()) && users && (users.banned || new Date - users.ban_temporary < env.timeout)) continue
-            if (m.isGroup && !['unbanned.js', 'groupinfo.js'].includes(name.split('/').pop()) && groupSet.isBanned) continue
-
-            if (plugin.owner && !isOwner) {
-               m.reply(global.status.owner)
-               continue
-            } else if (plugin.premium && !isPrems) {
-               m.reply(global.status.premium)
-               continue
-            } else if (plugin.group && !m.isGroup) {
-               m.reply(global.status.group)
-               continue
-            } else if (plugin.botAdmin && !isBotAdmin) {
-               m.reply(global.status.botAdmin)
-               continue
-            } else if (plugin.admin && !isAdmin) {
-               m.reply(global.status.admin)
-               continue
-            } else if (plugin.private && m.isGroup) {
-               m.reply(global.status.private)
-               continue
-            } else if (plugin.error) {
-               m.reply(global.status.errorF)
-               continue
-            } else if (plugin.register && !users.registered) {
-               m.reply(global.status.register)
-               continue
-            } else if (plugin.game && !setting.game) {
-               m.reply(global.status.game)
-               continue
-            } else if (plugin.limit && users.limit < plugin.limit * 1) {
-               conn.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plans.`, m)
-               continue
-            } else if (plugin.limit && users.limit > 0) {
-               const limit = plugin.limit == 'Boolean' ? 1 : plugin.limit
-               if (users.limit >= limit) {
-                  users.limit -= limit
-               } else {
-                  conn.reply(m.chat, Func.texted('bold', `⚠️ Your limit is not enough to use this feature.`), m)
-                  continue
-               }
-            } else if (plugin.level > users.level) {
-               conn.reply(m.chat, `⚠️ level *${plugin.level}* is required to use conn command. Your level *${users.level}*`, m)
-               continue
-            }
-            let extra = { match, body, blockList, usedPrefix, _args, args, command, text, conn: conn, store, database, plugins, participants, groupMetadata, isOwner, isAdmin, isBotAdmin, isPrems, users, groupSet, chats, setting, chatUpdate, Func, Scraper, env }
-            try {
-               await plugin.call(conn, m, extra)
-            } catch (e) {
-               m.error = e
-               console.error(e)
-               if (e) {
-                  let text = Func.jsonFormat(e)
-                  conn.reply(env.owner + '@s.whatsapp.net', `*Plugin:* ${m.plugin}\n*Sender:* ${m.sender}\n*Chat:* ${m.chat}\n*Command:* ${usedPrefix}${command} ${args.join(' ')}\n\n\`\`\`${text}\`\`\``.trim(), m)
-                  m.reply(text)
-               }
-            } finally {
-               if (typeof plugin.after === 'function') {
-                  try {
-                     await plugin.after.call(conn, m, extra)
-                  } catch (e) {
-                     console.error(e)
-                  }
-               }
-            }
-            break
+            if (m.isGroup && groupSet && groupSet.adminonly && !isAdmin && !['anti_link', 'anti_porn', 'anti_sticker', 'anti_tagsw', 'anti_toxic', 'anti_viewonce', 'anti_virtex'].includes(name)) continue
+            if (setting.self && !['anti_link', 'anti_porn', 'anti_sticker', 'anti_tagsw', 'anti_toxic', 'anti_viewonce', 'anti_virtex'].includes(name) && !isOwner && !m.fromMe) continue
+            if (!['anti_link', 'anti_porn', 'anti_sticker', 'anti_tagsw', 'anti_toxic', 'anti_viewonce', 'anti_virtex'].includes(name) && users && (users.banned || new Date - users.ban_temporary < env.timeout)) continue
+            if (!['anti_link', 'anti_porn', 'anti_sticker', 'anti_tagsw', 'anti_toxic', 'anti_viewonce', 'anti_virtex'].includes(name) && groupSet && groupSet.mute) continue
+            if (!m.isGroup && setting.groupmode && !['anonymous_chat', 'chatbot'].includes(name) && !isPrem) return conn.sendMessageModify(m.chat, `⚠️ The bot is currently in group mode. To use it in private chats, please join the group first or upgrade to the premium package by sending *${prefixes[0]}premium.*`, m, {
+               largeThumb: true,
+               thumbnail: 'https://telegra.ph/file/0b32e0a0bb3b81fef9838.jpg',
+               url: setting.link
+            }).then(() => chats.lastchat = new Date() * 1)
+            if (event.error) continue
+            if (event.owner && !isOwner) continue
+            if (event.group && !m.isGroup) continue
+            if (event.limit && users.limit < 1 && body && Func.generateLink(body) && Func.generateLink(body).some(v => Func.socmed(v))) return conn.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plan.`, m)
+            if (event.botAdmin && !isBotAdmin) continue
+            if (event.admin && !isAdmin) continue
+            if (event.private && m.isGroup) continue
+            if (event.download && body && Func.socmed(body) && !setting.autodownload && Func.generateLink(body) && Func.generateLink(body).some(v => Func.socmed(v))) continue
+            await event.run(m, { ctx, conn, store, body, plugins, plugFiles, prefixes, core, isCommand, database, env, groupSet, chats, users, setting, isOwner, isPrem, groupMetadata, participants, isAdmin, isBotAdmin, blockList, Func, Scraper })
          }
       }
    } catch (e) {
       console.error(e)
-   } finally {
-      let stats = (global.db && global.db.stats) || {}
-      if (m) {
-         if (m.plugin) {
-            let now = +new Date()
-            let pluginName = m.plugin.split('/').pop().replace('.js', '')
-            let stat = stats[pluginName] || { hitstat: 0, today: 0, lasthit: 0 }
-            stat.hitstat += 1
-            stat.today += 1
-            stat.lasthit = now
-            stats[pluginName] = stat
-         }
-      }
-      try {
-         Print(m, conn)
-      } catch (e) {
-         console.log(m, m.quoted, e)
-      }
    }
-   Func.updateFile(require.resolve(__filename))
-}
+   Func.reload(require.resolve(__filename))
+} 

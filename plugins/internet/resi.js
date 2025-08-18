@@ -1,7 +1,7 @@
 module.exports = {
    help: ['cekresi'],
    use: 'kurir | resi',
-   tags: ['internet'],
+   tags: 'internet',
    run: async (m, {
       conn,
       usedPrefix,
@@ -13,7 +13,7 @@ module.exports = {
          if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'jnt | 842748402'), m)
          conn.sendReact(m.chat, '🕒', m.key)
          let [kurir, resi] = text.split` | `
-         let json = await Api.get('api/resicheck', {
+         const json = await Api.get('/resicheck', {
             kurir, resi
          })
          if (!json.status) return conn.reply(m.chat, `🚩 ${json.msg}`, m)
@@ -29,8 +29,9 @@ module.exports = {
          })
          conn.reply(m.chat, p, m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

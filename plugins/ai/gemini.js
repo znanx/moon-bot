@@ -1,7 +1,7 @@
 module.exports = {
    help: ['gemini', 'bard'],
    use: 'query',
-   tags: ['ai'],
+   tags: 'ai',
    run: async (m, {
       conn,
       usedPrefix,
@@ -10,31 +10,31 @@ module.exports = {
       Scraper,
       Func
    }) => {
-      if (!text) return m.reply(Func.example(usedPrefix, command, 'moonbot'))
-      m.react('🕒')
-      let q = m.quoted ? m.quoted : m
-      let mime = (q.msg || q).mimetype || ''
       try {
+         if (!text) return m.reply(Func.example(usedPrefix, command, 'moonbot'))
+         conn.sendReact(m.chat, '🕒', m.key)
+         let q = m.quoted ? m.quoted : m
+         let mime = (q.msg || q).mimetype || ''
          if (/image\/(jpe?g|png)/.test(mime)) {
-            var p = await q.download()
-            var respon = await Scraper.uploader(p)
-            var json = await Api.get('api/func-chat', {
+            let img = await (await Scraper.uploader(await q.download())).data.url
+            const json = await Api.get('/func-chat', {
                model: 'gemini',
                system: text,
-               image: respon.data.url
+               image: img
             })
-            if (!json.status) return m.reply(Func.jsonFormat(json))
-            m.reply(json.data.content)
+            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            conn.reply(m.chat, json.data.content, m)
          } else if (text) {
-            var result = await Api.get('api/ai-gemini', {
+            const json = await Api.get('/ai-gemini', {
                q: text
             })
-            if (!result.status) return m.reply(Func.jsonFormat(json))
-            conn.reply(m.chat, result.data.content, m)
+            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            conn.reply(m.chat, json.data.content, m)
          }
       } catch (e) {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
    limit: true,
+   error: false
 }

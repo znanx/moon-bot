@@ -1,7 +1,7 @@
 module.exports = {
    help: ['tts'],
    use: 'iso text',
-   tags: ['converter'],
+   tags: 'converter',
    run: async (m, {
       conn,
       usedPrefix,
@@ -19,13 +19,15 @@ module.exports = {
          }
          if (!text && m.quoted && m.quoted.text) text = m.quoted.text
          conn.sendPresenceUpdate('recording', m.chat)
-         let json = await Api.get('api/tts', {
+         const json = await Api.get('/tts', {
             text: text, iso: args[0]
          })
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
          conn.sendFile(m.chat, json.data.url, 'audio.mp3', '', m)
       } catch (e) {
          return conn.reply(m.chat, Func.texted('bold', `🚩 Language code not supported.`), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

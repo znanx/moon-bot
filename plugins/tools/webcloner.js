@@ -1,7 +1,7 @@
 module.exports = {
    help: ['webcloner'],
    use: 'link',
-   tags: ['tools'],
+   tags: 'tools',
    run: async (m, {
       conn,
       usedPrefix,
@@ -12,11 +12,11 @@ module.exports = {
       try {
          if (!args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'https://google.com'), m)
          if (!/^https?:\/\//.test(args[0])) return conn.reply(m.chat, global.status.invalid, m)
-         m.react('🕒')
-         const json = await Api.get('api/web-cloner', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/web-cloner', {
             url: args[0]
          })
-         if (!json.status) return m.reply(Func.jsonFormat(json))
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
          conn.sendFile(m.chat, json.data.url, '', '', m)
       } catch (e) {
          console.log(e)

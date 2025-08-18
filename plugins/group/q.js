@@ -1,20 +1,21 @@
 module.exports = {
    help: ['q'],
-   command: ['quoted'],
+   aliases: ['quoted'],
    use: 'reply chat',
-   tags: ['group'],
+   tags: 'group',
    run: async (m, {
       conn,
+      store,
       Func
    }) => {
       try {
-         if (!m.quoted) return conn.reply(m.chat, `Reply to message that contain quoted.`, m)
-         let q = await m.getQuotedObj()
-         if (!q.quoted) return conn.reply(m.chat, `Message does not contain quoted.`, m)
-         await q.quoted.copyNForward(m.chat, true)
+         if (!m.quoted) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply to message that contain quoted.`), m)
+         const msg = await store.loadMessage(m.chat, m.quoted.id)
+         if (msg.quoted === null) return conn.reply(m.chat, Func.texted('bold', `🚩 Message does not contain quoted.`), m)
+         return conn.copyNForward(m.chat, msg.quoted.fakeObj)
       } catch (e) {
-         console.log(e)
-         conn.reply(m.chat, `Can't load message.`, m)
+         conn.reply(m.chat, `🚩 Can't load message.`, m)
       }
-   }
+   },
+   error: false
 }

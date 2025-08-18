@@ -1,7 +1,7 @@
 module.exports = {
    help: ['profile'],
    use: 'mention or reply',
-   tags: ['user'],
+   tags: 'user',
    run: async (m, {
       conn,
       text,
@@ -32,7 +32,6 @@ module.exports = {
          let caption = `乂  *U S E R - P R O F I L E*\n\n`
          caption += `   ◦  *Name* : ${target.name}\n`
          caption += `   ◦  *Exp* : ${Func.formatNumber(target.exp)}\n`
-         caption += `   ◦  *Money* : ${Func.formatNumber(target.money)}\n`
          caption += `   ◦  *Limit* : ${Func.formatNumber(target.limit)}\n`
          caption += `   ◦  *Hitstat* : ${Func.formatNumber(target.hit)}\n`
          caption += `   ◦  *Warning* : ${((m.isGroup) ? (typeof global.db.groups[m.chat].member[user] != 'undefined' ? global.db.groups[m.chat].member[user].warning : 0) + ' / 5' : target.warning + ' / 5')}\n\n`
@@ -41,13 +40,13 @@ module.exports = {
          caption += `   ◦  *Banned* : ${(new Date - target.ban_temporary < env.timer) ? Func.toTime(new Date(target.ban_temporary + env.timeout) - new Date()) + ' (' + ((env.timeout / 1000) / 60) + ' min)' : target.banned ? '√' : '×'}\n`
          caption += `   ◦  *Use In Private* : ${(Object.keys(global.db.chats).includes(user) ? '√' : '×')}\n`
          caption += `   ◦  *Premium* : ${(target.premium ? '√' : '×')}\n`
-         caption += `   ◦  *Expired* : ${target.expired == 0 ? '-' : Func.timeReverse(target.expired - new Date() * 1)}\n`
-         caption += `   ◦  *Verified* : ${(target.registered ? '√' : '×')}\n\n`
+         caption += `   ◦  *Expired* : ${target.expired == 0 ? '-' : Func.timeReverse(target.expired - new Date() * 1)}\n\n`
          caption += global.footer
          conn.sendMessageModify(m.chat, caption, m, {
             largeThumb: true,
             thumbnail: pic
          })
       }
-   }
+   },
+   error: false
 }

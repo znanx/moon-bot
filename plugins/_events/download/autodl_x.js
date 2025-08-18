@@ -1,7 +1,14 @@
 module.exports = {
-   async before(m, { conn, users, isPrems, setting, body, Func }) {
+   run: async (m, {
+      conn,
+      users,
+      isPrem,
+      setting,
+      body,
+      Func
+   }) => {
       try {
-         if (setting.autodownload && isPrems) {
+         if (setting.autodownload && isPrem) {
             const regex = /^(https?:\/\/)?(www\.)?twitter|x\.com\/(?:#!\/)?([a-zA-Z0-9_]+)\/status(es)?\/(\d+)$/;
             const links = body.match(regex)
             if (links && links.length > 0) {
@@ -10,11 +17,11 @@ module.exports = {
                   return conn.reply(m.chat, Func.texted('bold', '🚩 Your limit is not enough to use this feature'), m)
                }
                users.limit -= limitCost
-               m.react('🕒')
+               conn.sendReact(m.chat, '🕒', m.key)
                let old = new Date()
-               for (const link of links) {
+               for (let link of links) {
                   try {
-                     let json = await Api.get('api/twitter', {
+                     const json = await Api.get('/twitter', {
                         url: link
                      })
                      console.log(link)
@@ -30,6 +37,7 @@ module.exports = {
       } catch (e) {
          conn.reply(m.chat, Func.jsonFormat(e), m)
       }
-      return !0
-   }
+   },
+   download: true,
+   error: false
 }

@@ -1,46 +1,33 @@
+const path = require('path')
+
 module.exports = {
-   help: ['plugen', 'plugdis'],
+   help: ['plugdis', 'plugen'],
    use: 'plugin name',
-   tags: ['owner'],
+   tags: 'owner',
    run: async (m, {
       conn,
-      usedPrefix,
-      command,
       args,
+      command,
+      usedPrefix,
       plugins: plugs,
-      setting,
       Func
    }) => {
+      let pluginDisable = global.db.setting.pluginDisable
       if (!args || !args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'tiktok'), m)
-      const pluginName = args[0].toLowerCase()
-      const pluginFile = Object.keys(plugs).find((key) => {
-         const fileName = key.split('/').pop().replace('.js', '').toLowerCase()
-         return fileName === pluginName
-      })
-      if (!pluginFile) return conn.reply(m.chat, Func.texted('bold', `🚩 Plugin ${pluginName}.js not found.`), m)
-      const fileName = pluginFile.split('/').pop()
-      if (setting.pluginDisable.includes(fileName)) {
-         if (command === 'plugdis') {
-            return conn.reply(m.chat, Func.texted('bold', `🚩 Plugin ${fileName} is already disabled.`), m)
-         }
-      }
+      let allPluginFiles = [...new Set([...plugs.values()].map(p => path.parse(p.filePath).name))]
+      if (!allPluginFiles.includes(args[0])) return conn.reply(m.chat, Func.texted('bold', `🚩 Plugin ${args[0]}.js not found.`), m)
+      let plugin = [...plugs.values()].find(p => path.parse(p.filePath).name === args[0])
+      let actualFilename = path.basename(plugin.filePath)
       if (command === 'plugdis') {
-         if (!setting.pluginDisable.includes(fileName)) {
-            setting.pluginDisable.push(fileName)
-            global.db.setting.pluginDisable = setting.pluginDisable
-            conn.reply(m.chat, Func.texted('bold', `🚩 Plugin ${fileName} successfully disabled.`), m)
-         } else {
-            return conn.reply(m.chat, Func.texted('bold', `🚩 Plugin ${fileName} is already disabled.`), m)
-         }
+         if (pluginDisable.includes(args[0])) return conn.reply(m.chat, Func.texted('bold', `🚩 Plugin ${actualFilename}.js previously has been disabled.`), m)
+         pluginDisable.push(args[0])
+         conn.reply(m.chat, Func.texted('bold', `🚩 Plugin ${actualFilename} successfully disabled.`), m)
       } else if (command === 'plugen') {
-         if (setting.pluginDisable.includes(fileName)) {
-            setting.pluginDisable = setting.pluginDisable.filter(plugin => plugin !== fileName)
-            global.db.setting.pluginDisable = setting.pluginDisable
-            conn.reply(m.chat, Func.texted('bold', `🚩 Plugin ${fileName} successfully enabled.`), m)
-         } else {
-            return conn.reply(m.chat, Func.texted('bold', `🚩 Plugin ${fileName} is not disabled.`), m)
-         }
+         if (!pluginDisable.includes(args[0])) return conn.reply(m.chat, Func.texted('bold', `🚩 Plugin ${actualFilename} not found.`), m)
+         global.db.setting.pluginDisable = global.db.setting.pluginDisable.filter(v => v !== args[0])
+         conn.reply(m.chat, Func.texted('bold', `🚩 Plugin ${actualFilename} successfully enable.`), m)
       }
    },
-   owner: true
+   owner: true,
+   error: false
 }

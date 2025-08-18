@@ -1,8 +1,8 @@
 module.exports = {
    help: ['calculator'],
-   command: ['calc'],
+   aliases: ['calc'],
    use: 'expression',
-   tags: ['tools'],
+   tags: 'tools',
    run: async (m, {
       conn,
       usedPrefix,

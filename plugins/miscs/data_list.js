@@ -2,7 +2,7 @@ const moment = require('moment-timezone')
 moment.tz.setDefault('Asia/Jakarta')
 module.exports = {
    help: ['listprem', 'listban', 'listblock', 'listchat'],
-   tags: ['miscs'],
+   tags: 'miscs',
    run: async (m, {
       conn,
       command,

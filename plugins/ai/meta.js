@@ -1,36 +1,36 @@
 module.exports = {
    help: ['meta'],
-   use: 'prompt',
-   tags: ['ai'],
+   use: 'prompt / query',
+   tags: 'ai',
    run: async (m, {
       conn,
       usedPrefix,
       command,
       text,
-      Scraper,
       Func
    }) => {
       try {
          if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'mark itu orang atau alien'), m)
-         m.react('🕒')
-         var result = await Api.get('api/ai-meta', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/ai-meta', {
             prompt: text
          })
          var media = []
-         if (!result.status) return conn.reply(m.chat, `🚩 ${result.msg}`, m)
-         if (result.data.imagine_media.length != 0) {
-            result.data.imagine_media.map(async v => {
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (json.data.imagine_media.length != 0) {
+            json.data.imagine_media.map(async v => {
                media.push({
                   url: v.uri
                })
             })
             conn.sendAlbumMessage(m.chat, media, m)
          } else {
-            conn.reply(m.chat, result.data.content, m)
+            conn.reply(m.chat, json.data.content, m)
          }
       } catch (e) {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
    limit: true,
+   error: false
 }

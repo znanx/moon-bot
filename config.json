@@ -11,11 +11,18 @@
    "max_upload_free": 50,
    "timer": 180000,
    "timeout": 1800000,
-   "cooldown": 3,
+   "spam": {
+      "mode": "command",
+      "limit": 5,
+      "time_window": 5,
+      "time_ban": 30,
+      "max_ban": 3,
+      "cooldown": 5
+   },
    "blocks": ["994", "221", "263", "212"],
    "evaluate_chars": ["=>", ">", "$", "~>", "!", "+", "/", "#", "."],
    "pairing": {
-      "state": false,
-      "number": 0
+      "state": true,
+      "number": 6283866857978
    }
  }

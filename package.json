@@ -1,20 +1,21 @@
 {
    "name": "moon-bot",
    "version": "5.0-alpha",
-   "description": "Simple whatsapp bot",
+   "description": "Simple Whatsapp Bot",
    "keywords": [
-      "whatsapp-bot"
+      "whatsapp-bot",
+      "wabot"
    ],
-   "homepage": "https://github.com/rifnd/moon-bot#readme",
+   "homepage": "https://github.com/znanx/moon-bot#readme",
    "bugs": {
-      "url": "https://github.com/rifnd/moon-bot/issues"
+      "url": "https://github.com/znanx/moon-bot/issues"
    },
    "repository": {
       "type": "git",
-      "url": "git+https://github.com/rifnd/moon-bot.git"
+      "url": "git+https://github.com/znanx/moon-bot.git"
    },
    "license": "MIT",
-   "author": "rifnd",
+   "author": "znanx",
    "main": "index.js",
    "engines": {
       "node": ">= 20.x"
@@ -26,12 +27,15 @@
       "start": "node index.js --max-old-space-size=8192",
       "pm2": "pm2 start index.js --name moon-bot --max-memory-restart 8G -- --max-old-space-size=8192",
       "test": "node test.js",
-      "server": "node index.js --server",
-      "queque": "node index.js --queque"
+      "server": "node index.js --server"
    },
    "dependencies": {
-      "@moonr/utils": "^0.7.6",
+      "@database/mongo": "github:neoxr/database#mongo",
+      "@database/postgres": "github:neoxr/database#postgresql",
+      "@session/mongo": "github:neoxr/session#mongo",
+      "@session/postgres": "github:neoxr/session#postgresql",
       "@whiskeysockets/baileys": "npm:@neoxr/baileys",
+      "@znan/wabot": "^0.0.18",
       "archiver": "^7.0.1",
       "bytes": "^3.1.2",
       "cfonts": "^3.3.0",

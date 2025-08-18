@@ -1,8 +1,8 @@
 module.exports = {
    help: ['screenshot'],
-   command: ['ss'],
+   aliases: ['ss'],
    use: 'link',
-   tags: ['tools'],
+   tags: 'tools',
    run: async (m, {
       conn,
       usedPrefix,
@@ -15,8 +15,8 @@ module.exports = {
          if (!/^https?:\/\//.test(args[1])) return conn.reply(m.chat, Func.texted('bold', '🚩 Prefix the link with https:// or http://'), m)
          let old = new Date(), mode = args[0].toLowerCase(), url = args[1]
          if (!['mobile', 'desktop'].includes(mode)) return conn.reply(m.chat, Func.texted('bold', '🚩 Use mobile or desktop mode.'), m)
-         m.react('🕒')
-         const json = await Api.get('api/ssweb', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/ssweb', {
             url: url, mode: mode
          })
          if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)

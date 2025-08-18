@@ -1,7 +1,7 @@
 module.exports = {
    help: ['swm'],
    use: 'packname | author',
-   tags: ['converter'],
+   tags: 'converter',
    run: async (m, {
       conn,
       usedPrefix,
@@ -18,12 +18,12 @@ module.exports = {
             let img = await conn.downloadMediaMessage(q)
             if (/video/.test(type)) {
                if (q.seconds > 10) return conn.reply(m.chat, Func.texted('bold', `🚩 Maximum video duration is 10 seconds.`), m)
-               return await conn.sendSticker(m.chat, img, m, {
+               return conn.sendSticker(m.chat, img, m, {
                   packname: packname || '',
                   author: author || ''
                })
             } else if (/image/.test(type)) {
-               return await conn.sendSticker(m.chat, img, m, {
+               return conn.sendSticker(m.chat, img, m, {
                   packname: packname || '',
                   author: author || ''
                })
@@ -34,7 +34,7 @@ module.exports = {
             if (/image\/(jpe?g|png)/.test(mime)) {
                let img = await q.download()
                if (!img) return conn.reply(m.chat, global.status.wrong, m)
-               return await conn.sendSticker(m.chat, img, m, {
+               return conn.sendSticker(m.chat, img, m, {
                   packname: packname || '',
                   author: author || ''
                })
@@ -42,7 +42,7 @@ module.exports = {
                if ((q.msg || q).seconds > 10) return conn.reply(m.chat, Func.texted('bold', `🚩 Maximum video duration is 10 seconds.`), m)
                let img = await q.download()
                if (!img) return conn.reply(m.chat, global.status.wrong, m)
-               return await conn.sendSticker(m.chat, img, m, {
+               return conn.sendSticker(m.chat, img, m, {
                   packname: packname || '',
                   author: author || ''
                })
@@ -52,5 +52,6 @@ module.exports = {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

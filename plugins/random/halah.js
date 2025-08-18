@@ -1,7 +1,7 @@
 module.exports = {
    help: ['halah', 'huluh', 'hilih', 'heleh', 'holoh'],
    use: 'text',
-   tags: ['random'],
+   tags: 'random',
    run: async (m, {
       conn,
       command,
@@ -15,5 +15,6 @@ module.exports = {
       } catch (e) {
          console.log(e)
       }
-   }
+   },
+   error: false
 }

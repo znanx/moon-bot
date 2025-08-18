@@ -1,30 +1,30 @@
+
 module.exports = {
-   help: ['+command', '-command'],
+   help: ['disable', 'enable'],
    use: 'command',
-   tags: ['owner'],
+   tags: 'owner',
    run: async (m, {
       conn,
-      usedPrefix,
-      command,
       args,
+      command,
+      usedPrefix,
+      setting: cmd,
       plugins,
       Func
    }) => {
-      let cmd = global.db.setting
       if (!args || !args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'tiktok'), m)
-      let commands = Func.arrayJoin(Object.values(Object.fromEntries(Object.entries(plugins).filter(([name, prop]) => prop.help))).map(v => v.help))
-      if (!commands.includes(args[0])) return conn.reply(m.chat, Func.texted('bold', `🚩 Command ${usedPrefix + args[0]} does not exist.`), m)
-      if (command == '-command') {
-         if (cmd.error.includes(args[0])) return conn.reply(m.chat, Func.texted('bold', `🚩 ${usedPrefix + args[0]} command was previously disabled.`), m)
-         cmd.error.push(args[0])
-         conn.reply(m.chat, Func.texted('bold', `🚩 Command ${usedPrefix + args[0]} disabled successfully.`), m)
-      } else if (command == '+command') {
-         if (!cmd.error.includes(args[0])) return conn.reply(m.chat, Func.texted('bold', `🚩 Command ${usedPrefix + args[0]} does not exist.`), m)
-         cmd.error.forEach((data, index) => {
-            if (data === args[0]) cmd.error.splice(index, 1)
-         })
-         conn.reply(m.chat, Func.texted('bold', `🚩 Command ${usedPrefix + args[0]} successfully activated.`), m)
+      let commands = args[0]?.toLowerCase()
+      if (!plugins.has(commands)) return conn.reply(m.chat, Func.texted('bold', `🚩 Command ${usedPrefix + commands} does not exist.`), m)
+      if (command === 'disable') {
+         if (cmd.error.includes(commands)) return conn.reply(m.chat, Func.texted('bold', `🚩 ${usedPrefix + commands} command was previously disabled.`), m)
+         cmd.error.push(commands)
+         conn.reply(m.chat, Func.texted('bold', `✅ Command ${usedPrefix + commands} disabled successfully.`), m)
+      } else if (command === 'enable') {
+         if (!cmd.error.includes(commands)) return conn.reply(m.chat, Func.texted('bold', `🚩 Command ${usedPrefix + commands} does not exist.`), m)
+         cmd.error = cmd.error.filter(cmd => cmd !== commands)
+         await conn.reply(m.chat, `✅ Command *${usedPrefix}${commands}* successfully activated.`, m)
       }
    },
-   owner: true
+   owner: true,
+   error: false
 }

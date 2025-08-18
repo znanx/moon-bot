@@ -1,7 +1,7 @@
 module.exports = {
    help: ['emojito'],
    use: 'emoji',
-   tags: ['converter'],
+   tags: 'converter',
    run: async (m, {
       conn,
       usedPrefix,
@@ -12,8 +12,8 @@ module.exports = {
    }) => {
       try {
          if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, '😀'), m)
-         m.react('🕒')
-         let json = await Api.get('api/emojito', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/emojito', {
             emoji: text
          })
          if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
@@ -26,5 +26,5 @@ module.exports = {
       }
    },
    limit: true,
-   location: __filename
+   error: false
 }

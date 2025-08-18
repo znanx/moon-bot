@@ -1,7 +1,7 @@
 module.exports = {
    help: ['join'],
    use: 'group link',
-   tags: ['owner'],
+   tags: 'owner',
    run: async (m, {
       conn,
       usedPrefix,

@@ -1,11 +1,12 @@
 module.exports = {
    help: ['link'],
-   tags: ['group'],
+   tags: 'group',
    run: async (m, {
       conn
    }) => {
       await conn.reply(m.chat, 'https://chat.whatsapp.com/' + (await conn.groupInviteCode(m.chat)), m)
    },
    group: true,
-   botAdmin: true
+   botAdmin: true,
+   error: false
 }

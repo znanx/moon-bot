@@ -1,26 +1,40 @@
 const fs = require('fs')
+const path = require('path')
+
 module.exports = {
-   help: ['getplugin'],
-   command: ['gp', 'getfile'],
-   use: 'filename',
-   tags: ['owner'],
+   help: ['getfile'],
+   aliases: ['gf', 'gp'],
+   use: 'path/to/file.js',
+   tags: 'owner',
    run: async (m, {
       conn,
       usedPrefix,
       command,
       text,
-      plugins,
       Func
    }) => {
       try {
-         let ar = Object.keys(plugins)
-         let ar1 = ar.map(v => v.replace('.js', ''))
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'menu'), m)
-         if (!ar1.includes(text)) return conn.reply(m.chat, `'${text}' not found!\n\n${ar1.map(v => ' ' + v).join`\n`}`, m)
-         conn.reply(m.chat, fs.readFileSync('./plugins/' + text + '.js', 'utf-8'), m)
+         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'plugins/menu.js'), m)
+         const filePath = path.resolve(process.cwd(), text)
+         if (!fs.existsSync(filePath)) return conn.reply(m.chat, `🚩 File '${text}' not found.`, m)
+         if (fs.lstatSync(filePath).isDirectory()) {
+            const list = fs.readdirSync(filePath).map(v => '  ' + v).join('\n')
+            return conn.reply(m.chat, `📂 Directory listing for *${text}*:\n\n${list}`, m)
+         }
+         const content = fs.readFileSync(filePath, 'utf-8')
+         if (content.length > 4000) {
+            return conn.sendMessage(m.chat, {
+               document: fs.readFileSync(filePath),
+               fileName: path.basename(filePath),
+               mimetype: 'text/plain'
+            }, { quoted: m })
+         } else {
+            return conn.reply(m.chat, content, m)
+         }
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   owner: true
+   owner: true,
+   error: false
 }

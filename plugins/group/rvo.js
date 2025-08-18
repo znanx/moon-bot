@@ -6,7 +6,7 @@ const { tmpdir } = require('os')
 module.exports = {
    help: ['rvo'],
    use: 'reply viewonce',
-   tags: ['group'],
+   tags: 'group',
    run: async (m, {
       conn,
       Func
@@ -55,6 +55,7 @@ module.exports = {
          conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   group: true,
-   limit: true
+   group: false,
+   limit: true,
+   error: false
 }

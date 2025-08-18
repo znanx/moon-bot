@@ -1,9 +1,9 @@
 module.exports = {
-   async before(m, {
+   run: async (m, {
       conn,
       env,
       Func
-   }) {
+   }) => {
       try {
          setInterval(async () => {
             let day = 86400000 * 3, now = new Date() * 1

@@ -1,4 +1,4 @@
-const { Functions: Func } = new (require('@moonr/utils'))
+const { Function: Func } = new (require('@znan/wabot'))
 const http = require('http')
 const express = require('express')
 const app = express()

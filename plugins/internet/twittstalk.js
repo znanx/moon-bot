@@ -1,7 +1,7 @@
 module.exports = {
    help: ['twitstalk'],
    use: 'username',
-   tags: ['internet'],
+   tags: 'internet',
    run: async (m, {
       conn,
       usedPrefix,
@@ -10,9 +10,9 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(usedPrefix, command, 'Nando35_')
+         if (!text) return conn.reply(usedPrefix, command, 'elonmusk')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('api/twitter-stalk', {
+         const json = await Api.get('/twitter-stalk', {
             username: text
          })
          if (!json.status) return conn.reply(m.chat, `🚩 ${json.msg}`, m)
@@ -27,8 +27,9 @@ module.exports = {
          tek += global.footer
          conn.sendFile(m.chat, json.data.profile, '', tek, m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

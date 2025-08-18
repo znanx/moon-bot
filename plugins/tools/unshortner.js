@@ -1,8 +1,8 @@
 module.exports = {
    help: ['unshortner'],
-   command: ['unshort', 'unshortlink'],
+   aliases: ['unshort', 'unshortlink'],
    use: 'link',
-   tags: ['tools'],
+   tags: 'tools',
    run: async (m, {
       conn,
       usedPrefix,
@@ -13,8 +13,8 @@ module.exports = {
    }) => {
       try {
          if (!args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'http://gg.gg/1brt6s'), m)
-         m.react('🕒')
-         let json = await Api.get('api/unshortner', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         let json = await Api.get('/unshortner', {
             url: args[0]
          })
          if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)

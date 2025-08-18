@@ -1,7 +1,8 @@
 const { execSync } = require('child_process')
+
 module.exports = {
    help: ['update'],
-   tags: ['owner'],
+   tags: 'owner',
    run: async (m, {
       conn,
       usedPrefix,
@@ -21,5 +22,6 @@ module.exports = {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   owner: true
+   owner: true,
+   error: false
 }

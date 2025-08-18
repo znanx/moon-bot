@@ -2,7 +2,7 @@ const axios = require('axios')
 module.exports = {
    help: ['qc'],
    use: 'text',
-   tags: ['converter'],
+   tags: 'converter',
    run: async (m, {
       conn,
       usedPrefix,
@@ -11,10 +11,10 @@ module.exports = {
       setting,
       Func
    }) => {
-      if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'Hi!'), m)
       try {
+         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'Hi!'), m)
          var pic = await conn.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender, 'image') || 'https://i.ibb.co/NLJdrcJ/image.jpg'
-         m.react('🕒')
+         conn.sendReact(m.chat, '🕒', m.key)
          const json = {
             "type": "quote",
             "format": "png",
@@ -50,5 +50,6 @@ module.exports = {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

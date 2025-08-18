@@ -1,8 +1,8 @@
 module.exports = {
    help: ['nulis'],
-   command: ['magernulis'],
+   aliases: ['magernulis'],
    use: 'text',
-   tags: ['tools'],
+   tags: 'tools',
    run: async (m, {
       conn,
       usedPrefix,
@@ -13,11 +13,11 @@ module.exports = {
    }) => {
       try {
          if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'moon-bot'), m)
-         m.react('🕒')
-         const json = await Api.get('api/nulis', {
+         conn.sendReact(m.chat, '🕒', m.key)
+         const json = await Api.get('/nulis', {
             text
          })
-         if (!json.status) return m.reply(Func.jsonFormat(json))
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
          conn.sendFile(m.chat, json.data.url, '', ``, m)
       } catch (e) {
          return conn.reply(m.chat, Func.jsonFormat(e), m)

@@ -1,7 +1,7 @@
 module.exports = {
    help: ['google', 'gimage'],
    use: 'query',
-   tags: ['internet'],
+   tags: 'internet',
    run: async (m, {
       conn,
       usedPrefix,
@@ -10,23 +10,23 @@ module.exports = {
       Scraper,
       Func
    }) => {
-      if (!text) return m.reply(Func.example(usedPrefix, command, 'Cow'))
-      m.react('🕒')
       try {
+         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'Cow'), m)
+         conn.sendReact(m.chat, '🕒', m.key)
          if (command == 'google') {
-            let json = await Api.get('api/google', {
+            const json = await Api.get('/google', {
                q: text
             })
-            let teks = `乂  *G O O G L E*\n\n`
+            let txt = `乂  *G O O G L E*\n\n`
             json.data.map((v, i) => {
-               teks += `*` + (i + 1) + `.* ` + v.title + `\n`
-               teks += `  ∘  *Snippet* : ` + v.snippet + `\n`
-               teks += `  ∘  *Link* : ` + v.url + `\n\n`
+               txt += `*` + (i + 1) + `.* ` + v.title + `\n`
+               txt += `  ∘  *Snippet* : ` + v.snippet + `\n`
+               txt += `  ∘  *Link* : ` + v.url + `\n\n`
             })
-            m.reply(teks)
+            conn.reply(m.chat, txt, m)
          }
          if (command == 'gimage') {
-            let json = await Api.get('api/google-image', {
+            const json = await Api.get('/google-image', {
                q: text
             })
             for (let i = 0; i < 5; i++) {
@@ -40,8 +40,9 @@ module.exports = {
             }
          }
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
    limit: true,
+   error: false
 }

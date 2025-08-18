@@ -2,9 +2,9 @@ const fetch = require('node-fetch')
 const util = require('util')
 module.exports = {
    help: ['fetch'],
-   command: ['get'],
+   aliases: ['get'],
    use: 'url',
-   tags: ['tools'],
+   tags: 'tools',
    run: async (m, {
       conn,
       usedPrefix,

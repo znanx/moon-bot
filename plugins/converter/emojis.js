@@ -1,8 +1,8 @@
 module.exports = {
    help: ['emoji'],
-   command: ['semoji'],
+   aliases: ['semoji'],
    use: 'emo',
-   tags: ['converter'],
+   tags: 'converter',
    run: async (m, {
       conn,
       usedPrefix,
@@ -22,11 +22,13 @@ module.exports = {
             p += `\n\n${global.footer}`
             return conn.reply(m.chat, p, m)
          }
-         let json = await Api.get('api/emoji', { emo: data })
+         const json = await Api.get('/emoji', {
+            emo: data
+         })
          if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
-         let result = json.data[type.toLowerCase()]
-         if (!result) return conn.reply(m.chat, Func.texted('bold', 'Emoji style not found!'), m)
-         await conn.sendSticker(m.chat, result.image, m, {
+         const result = json.data[type.toLowerCase()]
+         if (!result) return conn.reply(m.chat, Func.texted('bold', '🚩 Emoji style not found!'), m)
+         conn.sendSticker(m.chat, result.image, m, {
             packname: setting.sk_pack,
             author: setting.sk_author
          })

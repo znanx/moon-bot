@@ -1,7 +1,7 @@
 module.exports = {
    help: ['douyin'],
    use: 'link',
-   tags: ['downloader'],
+   tags: 'downloader',
    run: async (m, {
       conn,
       usedPrefix,
@@ -9,16 +9,16 @@ module.exports = {
       args,
       Func
    }) => {
-      if (!args[0]) return m.reply(Func.example(usedPrefix, command, 'https://v.douyin.com/ieWfMQA1/'))
-      if (!args[0].match('douyin.com')) return m.reply(status.invalid)
-      m.react('🕒')
-      let old = new Date()
       try {
-         var json = await Api.get('api/douyin', {
+         if (!args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'https://v.douyin.com/ieWfMQA1/'), m)
+         if (!args[0].match('douyin.com')) return conn.reply(m.chat, global.status.invalid, m)
+         conn.sendReact(m.chat, '🕒', m.key)
+         let old = new Date()
+         const json = await Api.get('/douyin', {
             url: args[0]
          })
-         if (!json.status) return m.reply(Func.jsonFormat(json))
-         let result = json.data.find(v => v.type == 'video')
+         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         const result = json.data.find(v => v.type == 'video')
          if (!result) {
             json.data.map(x => {
                conn.sendFile(m.chat, x.url, Func.filename('jpg'), `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
@@ -30,5 +30,6 @@ module.exports = {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

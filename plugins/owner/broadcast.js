@@ -1,7 +1,7 @@
 module.exports = {
    help: ['bc', 'bcgc'],
    use: 'text or reply media',
-   tags: ['owner'],
+   tags: 'owner',
    run: async (m, {
       conn,
       usedPrefix,
@@ -16,7 +16,7 @@ module.exports = {
          let groupJid = Object.keys(global.db.groups)
          const id = command == 'bc' ? chatJid : groupJid
          if (id.length == 0) return conn.reply(m.chat, Func.texted('bold', `🚩 Error, ID does not exist.`), m)
-         m.react('🕒')
+         conn.sendReact(m.chat, '🕒', m.key)
          if (text) {
             for (let jid of id) {
                await Func.delay(1500)

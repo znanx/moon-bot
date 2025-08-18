@@ -1,10 +1,11 @@
-const { Converter } = new (require('@moonr/utils'))
+const { Converter } = new (require('@znan/wabot'))
 const fs = require('fs')
 const { exec } = require('child_process')
+
 module.exports = {
    help: ['bass', 'blown', 'chipmunk', 'deep', 'earrape', 'fast', 'fat', 'nightcore', 'reverse', 'robot', 'slow', 'smooth'],
    use: 'reply audio',
-   tags: ['voice changer'],
+   tags: 'voice changer',
    run: async (m, {
       conn,
       command,
@@ -52,5 +53,6 @@ module.exports = {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true
+   limit: true,
+   error: false
 }

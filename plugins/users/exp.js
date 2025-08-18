@@ -1,12 +1,12 @@
 module.exports = {
    help: ['exp'],
-   tags: ['user'],
+   tags: 'user',
    run: async (m, {
       conn,
+      users,
       Func
    }) => {
-      let user = global.db.users[m.sender]
-      if (user.exp < 1) return conn.reply(m.chat, `You have no exp.`, m)
-      conn.reply(m.chat, `Exp : [ ${Func.formatNumber(user.exp)} ]`, m)
+      if (users.exp < 1) return conn.reply(m.chat, `🚩 Your EXP on using bots is up.`, m)
+      conn.reply(m.chat, Func.texted('bold', `🍉 EXP : [ ${Func.formatNumber(users.exp)} ]`), m)
    }
 }
