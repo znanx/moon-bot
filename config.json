@@ -14,8 +14,8 @@
    "spam": {
       "mode": "command",
       "limit": 5,
-      "time_window": 5,
-      "time_ban": 30,
+      "time_window": 1,
+      "time_ban": 1800,
       "max_ban": 3,
       "cooldown": 5
    },

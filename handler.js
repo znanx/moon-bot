@@ -94,7 +94,12 @@ module.exports = async (conn, ctx, database) => {
             groupSet.member[m.sender].lid = lid
          }
       }
-      if (spam) return
+      if (setting.antispam && spam) {
+         if (spam.status === 'ban_active') return
+         if (spam.status === 'ban_temp') return conn.reply(m.chat, `🚩 [ ${spam.data.ban_times} / ${spam.data.max_ban} ] You are temporarily banned for *${spam.data.cooldown} seconds*.`, m)
+         if (spam.status === 'ban_permanent') return conn.reply(m.chat, `🚩 [ ${spam.data.ban_times} / ${spam.data.max_ban} ] You've been warned many times! *You are permanently banned!*`, m)
+         if (spam.status === 'cooldown') return // conn.reply(m.chat, Func.texted('italic', `🚩 Wait *${spam.data.remaining} seconds* before using *${prefix + spam.data.command}* again.`), m)
+      }
       // if (body && !setting.self && core.prefix != setting.onlyprefix && commands.includes(core.command) && !setting.multiprefix && !env.evaluate_chars.includes(core.command)) return conn.reply(m.chat, `🚩 *Prefix needed!*, this bot uses prefix : *[ ${setting.onlyprefix} ]*\n\n➠ ${setting.onlyprefix + core.command} ${text || ''}`, m)
       const matcher = await Func.matcher(command, commands)
          .filter(v => v.accuracy >= 60)
