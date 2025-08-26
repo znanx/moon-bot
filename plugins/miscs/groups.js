@@ -1,5 +1,6 @@
 const moment = require('moment-timezone')
-moment.tz.setDefault(process.env.TZ).locale('id')
+const { models } = require('../../lib/system/models')
+const init = new (require('../../lib/system/init'))
 
 module.exports = {
    help: ['groups'],
@@ -19,22 +20,7 @@ module.exports = {
             if (!v) {
                global.db.groups[x.id] = {
                   activity: new Date * 1,
-                  mute: false,
-                  welcome: true,
-                  left: true,
-                  autodetect: false,
-                  autosticker: false,
-                  antidelete: false,
-                  antilink: false,
-                  antivirtex: false,
-                  antisticker: false,
-                  antitagsw: false,
-                  antiporn: false,
-                  antiviewonce: false,
-                  antitoxic: false,
-                  member: {},
-                  expired: 0,
-                  stay: false
+                  ...(init.getModel(models?.groups || {}))
                }
                v = global.db.groups[x.id]
             }

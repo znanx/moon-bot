@@ -140,21 +140,26 @@ module.exports = async (conn, ctx, database) => {
                conn.updateBlockStatus(m.sender, 'block')
             })
          }
-         if (plugin.limit && !plugin.game && users.limit > 0) {
-            const limit = plugin.limit === 'Boolean' ? 1 : plugin.limit
-            if (users.limit >= limit) {
-               users.limit -= limit
-            } else {
-               return conn.reply(m.chat, `⚠️ Your limit isn't enough to use this feature.`, m)
-            }
-         }
-         if (plugin.limit && users.limit < 1) return conn.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plans.`, m)
          if (plugin.premium && !isPrem) return conn.reply(m.chat, global.status.premium, m)
          if (plugin.group && !m.isGroup) return conn.reply(m.chat, global.status.group, m)
          if (plugin.botAdmin && !isBotAdmin) return conn.reply(m.chat, global.status.botAdmin, m)
          if (plugin.admin && !isAdmin) return conn.reply(m.chat, global.status.admin, m)
          if (plugin.private && m.isGroup) return conn.reply(m.chat, global.status.private, m)
-         await plugin.run(m, { ctx, conn, store, body, usedPrefix: prefix, plugins, plugFiles, commands, args, command, text, prefixes, core, isCommand, database, env, groupSet, chats, users, setting, isOwner, isPrem, groupMetadata, participants, isAdmin, isBotAdmin, blockList, Func, Scraper })
+         try {
+            await plugin.run(m, { ctx, conn, store, body, usedPrefix: prefix, plugins, plugFiles, commands, args, command, text, prefixes, core, isCommand, database, env, groupSet, chats, users, setting, isOwner, isPrem, groupMetadata, participants, isAdmin, isBotAdmin, blockList, Func, Scraper })
+
+            if (plugin.limit && !plugin.game && users.limit > 0) {
+               const limit = plugin.limit === 'Boolean' ? 1 : plugin.limit
+               if (users.limit >= limit) {
+                  users.limit -= limit
+               } else {
+                  return conn.reply(m.chat, `⚠️ Your limit isn't enough to use this feature.`, m)
+               }
+            }
+            if (plugin.limit && users.limit < 1) return conn.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plans.`, m)
+         } catch (e) {
+            return conn.reply(m.chat, s.toString(), m)
+         }
       } else {
          for (const event of loadEvt) {
             const name = path.parse(event.filePath).name
@@ -172,12 +177,17 @@ module.exports = async (conn, ctx, database) => {
             if (event.error) continue
             if (event.owner && !isOwner) continue
             if (event.group && !m.isGroup) continue
-            if (event.limit && users.limit < 1 && body && Func.generateLink(body) && Func.generateLink(body).some(v => Func.socmed(v))) return conn.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plan.`, m)
             if (event.botAdmin && !isBotAdmin) continue
             if (event.admin && !isAdmin) continue
             if (event.private && m.isGroup) continue
             if (event.download && body && Func.socmed(body) && !setting.autodownload && Func.generateLink(body) && Func.generateLink(body).some(v => Func.socmed(v))) continue
-            await event.run(m, { ctx, conn, store, body, plugins, plugFiles, prefixes, core, isCommand, database, env, groupSet, chats, users, setting, isOwner, isPrem, groupMetadata, participants, isAdmin, isBotAdmin, blockList, Func, Scraper })
+            try {
+               await event.run(m, { ctx, conn, store, body, plugins, plugFiles, prefixes, core, isCommand, database, env, groupSet, chats, users, setting, isOwner, isPrem, groupMetadata, participants, isAdmin, isBotAdmin, blockList, Func, Scraper })
+               
+               if (event.limit && users.limit < 1 && body && Func.generateLink(body) && Func.generateLink(body).some(v => Func.socmed(v))) return conn.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plan.`, m)
+            } catch (e) {
+               return conn.reply(m.chat, e.toString(), m)
+            }
          }
       }
    } catch (e) {

@@ -1,5 +1,6 @@
 const moment = require('moment-timezone')
 moment.tz.setDefault(process.env.TZ).locale('id')
+
 module.exports = {
    help: ['hitstat', 'hitdaily'],
    tags: 'miscs',
@@ -10,7 +11,7 @@ module.exports = {
       setting,
       Func
    }) => {
-      const types = command == 'hitstat' ? global.db.stats : Object.fromEntries(Object.entries(global.db.stats).filter(([_, prop]) => moment(prop.lasthit).format('DDMMYY') == moment(new Date).format('DDMMYY')))
+      const types = command == 'hitstat' ? global.db.statistic : Object.fromEntries(Object.entries(global.db.statistic).filter(([_, prop]) => moment(prop.lasthit).format('DDMMYY') == moment(new Date).format('DDMMYY')))
       let stat = Object.keys(types)
       if (stat.length == 0) return conn.reply(true, Func.texted('bold', `🚩 No command used.`), m)
       class Hit extends Array {

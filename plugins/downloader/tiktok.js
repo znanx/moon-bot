@@ -11,14 +11,14 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'https://www.tiktok.com/@cikaseiska/video/7379107227363200261?is_from_webapp=1&sender_device=pc&web_id=7330639260519974418'), m)
-         if (!args[0].match('tiktok.com')) return conn.reply(m.chat, global.status.invalid, m)
+         if (!args[0]) throw Func.example(usedPrefix, command, 'https://www.tiktok.com/@cikaseiska/video/7379107227363200261?is_from_webapp=1&sender_device=pc&web_id=7330639260519974418')
+         if (!args[0].match('tiktok.com')) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
          let old = new Date()
          const json = await Api.get('/tiktok', {
             url: args[0]
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          let teks = `乂  *T I K T O K*\n\n`
          teks += `   ∘  *Author* : ${json.author.nickname}\n`
          teks += `   ∘  *Like* : ${Func.formatNumber(json.stats.likes)}\n`
@@ -41,7 +41,7 @@ module.exports = {
          } else if (command == 'tikwm') return conn.sendFile(m.chat, json.data.find(v => v.type == 'watermark').url, Func.filename('mp4'), teks, m)
          else if (command == 'tikmp3') return conn.sendFile(m.chat, json.music_info.url, Func.filename('mp3'), '', m)
       } catch (e) {
-         conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

@@ -20,7 +20,7 @@ module.exports = {
                return this.reduce((a, b) => a + (b[key] || 0), 0)
             }
          }
-         let sum = new Hit(...Object.values(global.db.stats))
+         let sum = new Hit(...Object.values(global.db.statistic))
          const stats = {
             users: users.length,
             chats: chats.filter(v => v.endsWith('.net')).length,
@@ -53,7 +53,7 @@ const statistic = (Func, stats, system) => {
    ◦  ${Func.texted('bold', Func.formatNumber(stats.blocked))} Users Blocked
    ◦  ${Func.texted('bold', Func.formatNumber(stats.premium))} Premium Users
    ◦  ${Func.texted('bold', Func.formatNumber(stats.hitstat))} Commands Hit
-   ◦  ${Func.texted('bold', Func.formatter(stats.cmd))} Commands Hit
+   ◦  ${Func.texted('bold', Func.formatter(stats.cmd))} Available Commands
    ◦  Runtime : ${Func.texted('bold', stats.uptime)}
 
 乂  *S Y S T E M*
