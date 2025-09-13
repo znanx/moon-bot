@@ -158,7 +158,7 @@ module.exports = async (conn, ctx, database) => {
             }
             if (plugin.limit && users.limit < 1) return conn.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plans.`, m)
          } catch (e) {
-            return conn.reply(m.chat, s.toString(), m)
+            return conn.reply(m.chat, e.toString(), m)
          }
       } else {
          for (const event of loadEvt) {
