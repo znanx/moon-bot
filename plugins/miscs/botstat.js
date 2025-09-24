@@ -34,7 +34,7 @@ module.exports = {
          }
          conn.sendMessageModify(m.chat, statistic(Func, stats, setting), m, {
             largeThumb: true,
-            thumbnail: setting.cover
+            thumbnail: Func.isUrl(setting.cover) ? setting.cover : Buffer.from(setting.cover, 'base64')
          })
       } catch (e) {
          conn.reply(m.chat, Func.jsonFormat(e), m)
