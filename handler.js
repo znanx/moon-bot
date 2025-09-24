@@ -52,7 +52,10 @@ module.exports = async (conn, ctx, database) => {
             users.limit = env.limit
          })
       }
-      if (m.isGroup) groupSet.activity = new Date() * 1
+      if (m.isGroup) {
+         groupSet.activity = new Date() * 1
+         groupSet.name = groupMetadata.subject || ''
+      }
       if (users) {
          if (!users.lid) {
             const { lid } = await conn.getUserId(m.sender)
@@ -147,7 +150,6 @@ module.exports = async (conn, ctx, database) => {
          if (plugin.private && m.isGroup) return conn.reply(m.chat, global.status.private, m)
          try {
             await plugin.run(m, { ctx, conn, store, body, usedPrefix: prefix, plugins, plugFiles, commands, args, command, text, prefixes, core, isCommand, database, env, groupSet, chats, users, setting, isOwner, isPrem, groupMetadata, participants, isAdmin, isBotAdmin, blockList, Func, Scraper })
-
             if (plugin.limit && !plugin.game && users.limit > 0) {
                const limit = plugin.limit === 'Boolean' ? 1 : plugin.limit
                if (users.limit >= limit) {
@@ -183,7 +185,6 @@ module.exports = async (conn, ctx, database) => {
             if (event.download && body && Func.socmed(body) && !setting.autodownload && Func.generateLink(body) && Func.generateLink(body).some(v => Func.socmed(v))) continue
             try {
                await event.run(m, { ctx, conn, store, body, plugins, plugFiles, prefixes, core, isCommand, database, env, groupSet, chats, users, setting, isOwner, isPrem, groupMetadata, participants, isAdmin, isBotAdmin, blockList, Func, Scraper })
-               
                if (event.limit && users.limit < 1 && body && Func.generateLink(body) && Func.generateLink(body).some(v => Func.socmed(v))) return conn.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plan.`, m)
             } catch (e) {
                return conn.reply(m.chat, e.toString(), m)

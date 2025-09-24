@@ -11,18 +11,18 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, '😀'), m)
+         if (!text) throw Func.example(usedPrefix, command, '😀')
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/emojito', {
             emoji: text
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.sendSticker(m.chat, await Func.fetchBuffer(json.data.url), m, {
             packname: setting.sk_pack,
             author: setting.sk_author
          })
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

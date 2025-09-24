@@ -11,7 +11,7 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return m.reply(Func.example(usedPrefix, command, 'moonbot'))
+         if (!text) throw Func.example(usedPrefix, command, 'moonbot')
          conn.sendReact(m.chat, '🕒', m.key)
          let q = m.quoted ? m.quoted : m
          let mime = (q.msg || q).mimetype || ''
@@ -22,17 +22,17 @@ module.exports = {
                system: text,
                image: img
             })
-            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            if (!json.status) throw Func.jsonFormat(json)
             conn.reply(m.chat, json.data.content, m)
          } else if (text) {
             const json = await Api.get('/ai-gemini', {
                q: text
             })
-            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            if (!json.status) throw Func.jsonFormat(json)
             conn.reply(m.chat, json.data.content, m)
          }
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

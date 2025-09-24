@@ -12,7 +12,7 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'Hi | Dude'), m)
+         if (!text) throw Func.example(usedPrefix, command, 'Hi | Dude')
          conn.sendReact(m.chat, '🕒', m.key)
          let [top, bottom] = text.split`|`
          if (m.quoted ? m.quoted.message : m.msg.viewOnce) {
@@ -26,12 +26,12 @@ module.exports = {
                   packname: setting.sk_pack,
                   author: setting.sk_author
                })
-            } else return conn.reply(m.chat, Func.texted('bold', `🚩 Media is not supported, can only be pictures and stickers.`), m)
+            } else throw Func.texted('bold', `🚩 Media is not supported, can only be pictures and stickers.`)
          } else {
             let q = m.quoted ? m.quoted : m
             let mime = (q.msg || q).mimetype || ''
-            if (!mime) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply photo.`), m)
-            if (!/webp|image\/(jpe?g|png)/.test(mime)) return conn.reply(m.chat, Func.texted('bold', `🚩 Media is not supported, can only be pictures and stickers.`), m)
+            if (!mime) throw Func.texted('bold', `🚩 Reply photo.`)
+            if (!/webp|image\/(jpe?g|png)/.test(mime)) throw Func.texted('bold', `🚩 Media is not supported, can only be pictures and stickers.`)
             const image = await (await Scraper.uploader(await q.download())).data.url
             const json = `https://api.memegen.link/images/custom/${encodeURIComponent(top ? top : ' ')}/${encodeURIComponent(bottom ? bottom : '')}.png?background=${image}`
             conn.sendSticker(m.chat, json, m, {
@@ -40,7 +40,7 @@ module.exports = {
             })
          }
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

@@ -11,16 +11,16 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'cat'), m)
+         if (!text) throw Func.example(usedPrefix, command, 'cat')
          conn.sendReact(m.chat, '🕒', m.key)
          let [prompt, model] = text.split` | `, old = new Date()
          const json = await Api.post('/text2vid', {
             prompt, model
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.sendFile(m.chat, json.data.output[0], '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: 3,

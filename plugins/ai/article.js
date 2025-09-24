@@ -10,16 +10,16 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return m.reply(Func.example(usedPrefix, command, 'hujan | Indonesian'))
+         if (!text) throw Func.example(usedPrefix, command, 'hujan | Indonesian')
          let [teks, iso] = text.split` | `
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/ai-article', {
             text: teks, lang: iso
          })
-         if (!json.status) return conn.reply(m.chat, json.msg, m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.reply(m.chat, json.data.content, m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

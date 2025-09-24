@@ -1,6 +1,6 @@
 module.exports = {
    help: ['sticker'],
-   aliases: ['s'],
+   aliases: ['s', 'stiker'],
    use: 'query / reply media',
    tags: 'converter',
    run: async (m, {
@@ -52,6 +52,6 @@ module.exports = {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
    },
-   limit: true,
+   limit: false,
    error: false
 }

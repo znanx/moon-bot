@@ -54,7 +54,7 @@ module.exports = {
          conn.sendMessageModify(m.chat, txt, m, {
             largeThumb: true,
             thumbnail: Func.isUrl(setting.cover) ? setting.cover : Buffer.from(setting.cover, 'base64'),
-            url: global.db.setting.url
+            url: setting.link
          })
       } else if (style === 2) {
          let tag = args.join(' ').toLowerCase()

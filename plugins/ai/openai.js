@@ -12,15 +12,15 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return m.reply(Func.example(usedPrefix, command, 'moonbot'))
+         if (!text) throw Func.example(usedPrefix, command, 'moonbot')
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/openai', {
             prompt: text
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.reply(m.chat, json.data.content, m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

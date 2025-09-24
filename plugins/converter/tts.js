@@ -11,7 +11,7 @@ module.exports = {
    }) => {
       const defaultLang = 'id'
       try {
-         if (!args[0]) return m.reply(Func.example(usedPrefix, command, 'id hello guys'))
+         if (!args[0]) throw Func.example(usedPrefix, command, 'id hello guys')
          let text = args.slice(1).join('')
          if ((args[0] || '').length !== 2) {
             lang = defaultLang
@@ -22,10 +22,10 @@ module.exports = {
          const json = await Api.get('/tts', {
             text: text, iso: args[0]
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.sendFile(m.chat, json.data.url, 'audio.mp3', '', m)
       } catch (e) {
-         return conn.reply(m.chat, Func.texted('bold', `🚩 Language code not supported.`), m)
+         throw Func.texted('bold', `🚩 Language code not supported.`)
       }
    },
    limit: true,

@@ -12,7 +12,7 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'Hi!'), m)
+         if (!text) throw Func.example(usedPrefix, command, 'Hi!')
          var pic = await conn.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender, 'image') || 'https://i.ibb.co/NLJdrcJ/image.jpg'
          conn.sendReact(m.chat, '🕒', m.key)
          const json = {
@@ -47,7 +47,7 @@ module.exports = {
             author: setting.sk_author
          })
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

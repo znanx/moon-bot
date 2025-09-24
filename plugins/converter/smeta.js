@@ -11,15 +11,15 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!m.quoted) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply sticker.`), m)
+         if (!m.quoted) throw Func.texted('bold', `🚩 Reply sticker.`)
          var stiker = false
          let [packname, ...author] = text.split`|`
          author = (author || []).join`|`
          let q = m.quoted ? m.quoted : m
          let mime = (q.msg || q).mimetype || ''
-         if (!/webp/.test(mime)) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply to the sticker you want to make into a meta sticker.`), m)
+         if (!/webp/.test(mime)) throw Func.texted('bold', `🚩 Reply to the sticker you want to make into a meta sticker.`)
          let img = await q.download()
-         if (!img) return conn.reply(m.chat, global.status.wrong, m)
+         if (!img) throw global.status.wrong
          stiker = await addExif(img, packname || setting.sk_pack, author || setting.sk_author)
       } catch (e) {
          console.error(e)
@@ -30,7 +30,7 @@ module.exports = {
          }, {
             quoted: m
          })
-         else return conn.reply(m.chat, Func.texted('bold', `🚩 Conversion failed.`), m)
+         else throw Func.texted('bold', `🚩 Conversion failed.`)
       }
    },
    limit: true,

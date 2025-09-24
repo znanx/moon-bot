@@ -11,15 +11,15 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return m.reply(Func.example(usedPrefix, command, '1 + 1'))
+         if (!text) throw Func.example(usedPrefix, command, '1 + 1')
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/ai-mathsolver', {
             q: text
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.reply(m.chat, json.data.answer, m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

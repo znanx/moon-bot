@@ -27,7 +27,7 @@ const connect = async () => {
       session: session ? session(process.env.DATABASE_URL, 'session') : 'session',
       online: true,
       bypass_ephemeral: true,
-      code: 'MOONXBOT'
+      code: ''
    }, {
       shouldIgnoreJid: jid => {
          return /(newsletter|bot)/.test(jid)
@@ -40,14 +40,19 @@ const connect = async () => {
       /** save db */
       await database.save(global.db)
       /** write log */
-      if (x && typeof x === 'object' && x.message) Func.logFile(x.message)
+      if (x && typeof x === 'object' && x.message) console.log(x.display, x.message)
    })
 
-   conn.once('error', x => {
-      if (x && typeof x === 'object' && x.message) Func.logFile(x.message)
+   conn.on('error', err => {
+      if (err.display) console.log(err.display, err.message)
+      else console.log(err.message)
+      if (err.message) Func.logFile(err.message)
    })
 
    conn.once('prepare', async x => {
+      /** write log */
+      console.log(x.display, x.message)
+
       /* auto restart if ram usage is over */
       const ramCheck = setInterval(() => {
          var ramUsage = process.memoryUsage().rss

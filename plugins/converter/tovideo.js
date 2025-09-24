@@ -10,10 +10,10 @@ module.exports = {
    }) => {
       try {
          let exif = global.db.setting
-         if (!m.quoted) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply to gif sticker.`), m)
+         if (!m.quoted) throw Func.texted('bold', `🚩 Reply to gif sticker.`)
          let q = m.quoted ? m.quoted : m
          let mime = (q.msg || q).mimetype || ''
-         if (!/webp/.test(mime)) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply to gif sticker.`), m)
+         if (!/webp/.test(mime)) throw Func.texted('bold', `🚩 Reply to gif sticker.`)
          const image = await (await Scraper.uploader(await q.download())).data.url, old = new Date()
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/webp-convert', {
@@ -21,7 +21,7 @@ module.exports = {
          })
          conn.sendFile(m.chat, json.data.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
       } catch (e) {
-         return conn.reply(m.chat, global.status.error, m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

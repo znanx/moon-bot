@@ -7,11 +7,12 @@ module.exports = {
    }) => {
       try {
          if (!m.fromMe && groupSet.antiporn && /image/.test(m.mtype) && !isAdmin) {
-            let media = await Scraper.uploader(await m.download())
-            let json = await Api.get('/detect-porn', {
-               image: media.data.url
+            const cdn = await Scraper.uploader(await m.download())
+            if (!cdn.status) throw new Error(cdn)
+            const json = await Api.get('/detect-porn', {
+               image: cdn.data.url
             })
-            if (!json.status) return console.error(json)
+            if (!json.status) throw new Error(json)
             if (json.data.isPorn) return conn.sendMessage(m.chat, {
                delete: {
                   remoteJid: m.chat,

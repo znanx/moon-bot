@@ -22,30 +22,31 @@ module.exports = {
                const json = await Api.get('/removebg', {
                   image: image
                })
-               if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+               if (!json.status) throw Func.jsonFormat(json)
                conn.sendSticker(m.chat, json.data.url, m, {
                   packname: setting.sk_pack,
                   author: setting.sk_author
                })
-            } else conn.reply(m.chat, Func.texted('bold', `🚩 Only for photo.`), m)
+            } else throw Func.texted('bold', `🚩 Only for photo.`)
          } else {
             let q = m.quoted ? m.quoted : m
             let mime = (q.msg || q).mimetype || ''
-            if (!mime) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply photo.`), m)
-            if (!/image\/(jpe?g|png)/.test(mime)) return conn.reply(m.chat, Func.texted('bold', `🚩 Only for photo.`), m)
+            if (!mime) throw Func.texted('bold', `🚩 Reply photo.`)
+            if (!/image\/(jpe?g|png)/.test(mime)) throw Func.texted('bold', `🚩 Only for photo.`)
             conn.sendReact(m.chat, '🕒', m.key)
-            const image = await (await Scraper.uploader(await q.download())).data.url
+            const cdn = await Scraper.uploader(await q.download())
+            if (!cdn.status) throw Func.jsonFormat(cdn)
             const json = await Api.get('/removebg', {
-               image: image
+               image: cdn.data.url
             })
-            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            if (!json.status) throw Func.jsonFormat(json)
             conn.sendSticker(m.chat, json.data.url, m, {
                packname: setting.sk_pack,
                author: setting.sk_author
             })
          }
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

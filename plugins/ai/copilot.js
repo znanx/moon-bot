@@ -10,15 +10,15 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'apa itu kucing'), m)
+         if (!text) throw Func.example(usedPrefix, command, 'apa itu kucing')
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/ai-copilot', {
             q: text
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.reply(m.chat, json.data.content, m)
       } catch (e) {
-         conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

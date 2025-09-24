@@ -10,13 +10,13 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'mark itu orang atau alien'), m)
+         if (!text) throw Func.example(usedPrefix, command, 'mark itu orang atau alien')
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/ai-meta', {
             prompt: text
          })
          var media = []
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          if (json.data.imagine_media.length != 0) {
             json.data.imagine_media.map(async v => {
                media.push({
@@ -28,7 +28,7 @@ module.exports = {
             conn.reply(m.chat, json.data.content, m)
          }
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

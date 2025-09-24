@@ -8,6 +8,7 @@ module.exports = {
       ctx,
       isOwner,
       Func,
+      store,
       participants,
       Scraper
    }) => {

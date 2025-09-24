@@ -20,7 +20,7 @@ module.exports = {
             const result = Func.filename('mp3')
             exec(`ffmpeg -i ${media} ${result}`, async (err, stderr, stdout) => {
                remove(media)
-               if (err) return conn.reply(m.chat, Func.texted('bold', `🚩 Conversion failed.`), m)
+               if (err) throw Func.texted('bold', `🚩 Conversion failed.`)
                let buff = read(result)
                if (/tomp3|toaudio/.test(command)) return conn.sendFile(m.chat, buff, 'audio.mp3', '', m).then(() => {
                   remove(result)
@@ -42,7 +42,7 @@ module.exports = {
                const result = Func.filename('mp3')
                exec(`ffmpeg -i ${media} ${result}`, async (err, stderr, stdout) => {
                   remove(media)
-                  if (err) return conn.reply(m.chat, Func.texted('bold', `🚩 Conversion failed.`), m)
+                  if (err) throw Func.texted('bold', `🚩 Conversion failed.`)
                   let buff = read(result)
                   if (/tomp3|toaudio/.test(command)) return conn.sendFile(m.chat, buff, 'audio.mp3', '', m).then(() => {
                      remove(result)
@@ -61,11 +61,11 @@ module.exports = {
                   ptt: true
                })
             } else {
-               conn.reply(m.chat, Func.texted('bold', `🚩 This feature only for audio / video.`), m)
+               throw Func.texted('bold', `🚩 This feature only for audio / video.`)
             }
          }
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,
