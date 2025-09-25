@@ -35,7 +35,7 @@
       "@session/mongo": "github:neoxr/session#mongo",
       "@session/postgres": "github:neoxr/session#postgresql",
       "@whiskeysockets/baileys": "npm:@neoxr/baileys@~8.2.18",
-      "@znan/wabot": "0.0.49",
+      "@znan/wabot": "0.0.51",
       "archiver": "^7.0.1",
       "bytes": "^3.1.2",
       "cfonts": "^3.3.0",

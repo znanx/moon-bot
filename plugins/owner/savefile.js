@@ -24,10 +24,10 @@ module.exports = {
          if (m.quoted.mimetype) {
             const buff = await m.quoted.download()
             fs.writeFileSync(filePath, buff)
-            conn.reply(m.chat, `✅ The document file has been successfully saved :\n*${text}*`, m)
+            conn.reply(m.chat, `✅ The document file has been successfully saved : *${text}*`, m)
          } else if (m.quoted.text) {
             fs.writeFileSync(filePath, m.quoted.text, 'utf-8')
-            conn.reply(m.chat, `✅ Code successfully saved :\n*${text}*`, m)
+            conn.reply(m.chat, `✅ Code successfully saved : *${text}*`, m)
          } else {
             conn.reply(m.chat, '🚩 Reply with text or document files!', m)
          }
