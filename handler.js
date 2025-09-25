@@ -54,7 +54,7 @@ module.exports = async (conn, ctx, database) => {
       }
       if (m.isGroup) {
          groupSet.activity = new Date() * 1
-         groupSet.name = groupMetadata.subject || ''
+         groupSet.name = groupMetadata?.subject ?? ''
       }
       if (users) {
          if (!users.lid) {
