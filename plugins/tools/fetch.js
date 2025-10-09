@@ -1,5 +1,5 @@
-const fetch = require('node-fetch')
 const util = require('util')
+
 module.exports = {
    help: ['fetch'],
    aliases: ['get'],

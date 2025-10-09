@@ -1,5 +1,5 @@
 const moment = require('moment-timezone')
-moment.tz.setDefault(process.env.TZ)
+
 module.exports = {
    help: ['sourcecode'],
    aliases: ['sc'],
@@ -9,22 +9,23 @@ module.exports = {
       Func
    }) => {
       try {
-         let json = await Func.fetchJson('https://api.github.com/repos/rifnd/moon-bot')
-         let capt = `乂  *S C R I P T*\n\n`
-         capt += `   ∘  *Name* : ${json.name}\n`
-         capt += `   ∘  *Size* : ${(json.size / 1024).toFixed(2)} MB\n`
-         capt += `   ∘  *Updated* : ${moment(json.updated_at).format('DD/MM/YY - HH:mm:ss')}\n`
-         capt += `   ∘  *Url* : ${json.html_url}\n`
-         capt += `   ∘  *Forks* : ${json.forks_count}\n`
-         capt += `   ∘  *Stars* : ${json.stargazers_count}\n`
-         capt += `   ∘  *Issues* : ${json.open_issues_count}\n\n`
-         capt += global.footer
-         conn.sendMessageModify(m.chat, capt, m, {
+         const json = await Func.fetchJson('https://api.github.com/repos/rifnd/moon-bot')
+         let txt = `乂  *S C R I P T*\n\n`
+         txt += `   ∘  *Name* : ${json.name}\n`
+         txt += `   ∘  *Size* : ${(json.size / 1024).toFixed(2)} MB\n`
+         txt += `   ∘  *Updated* : ${moment(json.updated_at).format('DD/MM/YY - HH:mm:ss')}\n`
+         txt += `   ∘  *Url* : ${json.html_url}\n`
+         txt += `   ∘  *Forks* : ${json.forks_count}\n`
+         txt += `   ∘  *Stars* : ${json.stargazers_count}\n`
+         txt += `   ∘  *Issues* : ${json.open_issues_count}\n\n`
+         txt += global.footer
+         conn.sendMessageModify(m.chat, txt, m, {
             largeThumb: true,
             url: 'https://github.com/rifnd/moon-bot'
          })
       } catch (e) {
-         console.log(e)
+         throw Func.jsonFormat(e)
       }
-   }
+   },
+   error: false
 }

@@ -1,4 +1,4 @@
-const { Converter } = new (require('@znan/wabot'))
+const { Converter } = require('@znan/wabot')
 const { readFileSync: read, unlinkSync: remove, writeFileSync: create } = require('fs')
 const path = require('path')
 const { exec } = require('child_process')

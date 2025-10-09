@@ -1,6 +1,6 @@
 const moment = require('moment-timezone')
-const { models } = require('../../lib/system/models')
-const init = new (require('../../lib/system/init'))
+const { models } = require('lib/system/models')
+const init = new (require('lib/system/init'))
 
 module.exports = {
    help: ['groups'],

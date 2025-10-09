@@ -7,14 +7,15 @@ module.exports = {
    run: async (m, {
       conn,
       participants,
+      groupMetadata,
       groupSet,
       Func
    }) => {
-      const meta = await (await conn.groupMetadata(m.chat))
-      const creator = (meta?.owner?.endsWith('lid') ? meta?.ownerJid : meta.owner)?.replace(/@.+/, '')
-      const admin = await conn.groupAdmin(m.chat)
+      const meta = groupMetadata
+      const creator = (meta?.owner?.endsWith('lid') ? meta?.ownerPn : meta.owner)?.replace(/@.+/, '')
+      const admin = await conn.getAdmin(participants)
       const member = participants.map(v => v.id)
-      let pic = await conn.profilePictureUrl(m.chat, 'image') || await Func.fetchBuffer('./src/image/default.jpg')
+      let pic = await conn.profilePictureUrl(m.chat, 'image').catch(async () => await Func.fetchBuffer('./src/image/default.jpg'))
       let txt = `乂  *G R O U P - I N F O*\n\n`
       txt += `   ◦  *Name* : ${meta.subject}\n`
       txt += `   ◦  *Member* : ${member.length}\n`
@@ -28,7 +29,6 @@ module.exports = {
       txt += `   ◦  ${Func.switcher(groupSet.antisticker, '[ √ ]', '[ × ]')} Anti Sticker\n`
       txt += `   ◦  ${Func.switcher(groupSet.antiporn, '[ √ ]', '[ × ]')} Anti Porn\n`
       txt += `   ◦  ${Func.switcher(groupSet.antitoxic, '[ √ ]', '[ × ]')} Anti Toxic\n`
-      txt += `   ◦  ${Func.switcher(groupSet.antiviewonce, '[ √ ]', '[ × ]')} Anti Viewonce\n`
       txt += `   ◦  ${Func.switcher(groupSet.antitagsw, '[ √ ]', '[ × ]')} Anti Tag Status\n`
       txt += `   ◦  ${Func.switcher(groupSet.autosticker, '[ √ ]', '[ × ]')} Auto Sticker\n`
       txt += `   ◦  ${Func.switcher(groupSet.autodetect, '[ √ ]', '[ × ]')} Auto Detect\n`
@@ -44,6 +44,5 @@ module.exports = {
          thumbnail: pic
       })
    },
-   group: true,
-   error: false
+   group: true
 }

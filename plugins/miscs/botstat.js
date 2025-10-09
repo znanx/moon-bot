@@ -6,12 +6,12 @@ module.exports = {
    tags: 'miscs',
    run: async (m, {
       conn,
-      blockList,
       setting,
       plugins,
       Func
    }) => {
       try {
+         const blockList = typeof await (await conn.fetchBlocklist()) != 'undefined' ? await (await conn.fetchBlocklist()) : []
          let users = Object.entries(global.db.users)
          let chats = Object.keys(global.db.chats)
          let groups = Object.keys(global.db.groups)
@@ -61,6 +61,7 @@ const statistic = (Func, stats, system) => {
    ◦  ${Func.texted('bold', system.antispam ? '[ √ ]' : '[ × ]')}  Anti Spam
    ◦  ${Func.texted('bold', system.anticall ? '[ √ ]' : '[ × ]')}  Anti Call
    ◦  ${Func.texted('bold', system.autobackup ? '[ √ ]' : '[ × ]')}  Auto Backup
+   ◦  ${Func.texted('bold', system.notifier ? '[ √ ]' : '[ × ]')}  Notification
    ◦  ${Func.texted('bold', system.autodownload ? '[ √ ]' : '[ × ]')}  Auto Download
    ◦  ${Func.texted('bold', system.debug ? '[ √ ]' : '[ × ]')}  Debug Mode
    ◦  ${Func.texted('bold', system.groupmode ? '[ √ ]' : '[ × ]')}  Group Mode

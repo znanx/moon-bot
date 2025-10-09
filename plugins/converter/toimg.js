@@ -1,7 +1,6 @@
 const { readFileSync: read, unlinkSync: remove } = require('fs')
 const path = require('path')
 const { exec } = require('child_process')
-const { tmpdir } = require('os')
 
 module.exports = {
    help: ['toimg'],
@@ -16,9 +15,9 @@ module.exports = {
          if (!m.quoted) throw Func.texted('bold', `🚩 Reply to sticker you want to convert to an image/photo (not supported for sticker animation).`)
          if (m.quoted.mimetype != 'image/webp') throw Func.texted('bold', `🚩 Reply to sticker you want to convert to an image/photo (not supported for sticker animation).`)
          conn.sendReact(m.chat, '🕒', m.key)
-         let media = await conn.downloadAndSaveMediaMessage(m.quoted)
+         let media = await conn.saveMediaMessage(m.quoted)
          let file = Func.filename('png')
-         let isFile = path.join(tmpdir(), file)
+         let isFile = path.join('./tmp/', file)
          exec(`ffmpeg -i ${media} ${isFile}`, (err, stderr, stdout) => {
             remove(media)
             if (err) throw Func.texted('bold', `🚩 Conversion failed.`)
@@ -30,6 +29,5 @@ module.exports = {
          throw Func.jsonFormat(e)
       }
    },
-   limit: true,
-   error: false
+   limit: true
 }

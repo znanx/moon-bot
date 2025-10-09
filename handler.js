@@ -1,4 +1,4 @@
-const { Function: Func, Scraper, Spam, Config: env } = new (require('@znan/wabot'))
+const { Function: Func, Scraper, Spam, Config: env } = require('@znan/wabot')
 const path = require('path')
 const cron = require('node-cron')
 
@@ -12,7 +12,7 @@ const isSpam = new Spam({
 })
 
 module.exports = async (conn, ctx, database) => {
-   var { store, m, body, prefix, plugins, plugFiles, loadCmd, loadEvt, commands, args, command, text, prefixes, core, isCommand } = ctx
+   var { store, m, body, prefix, plugins, loadCmd, loadEvt, commands, args, command, text, prefixes, core, isCommand } = ctx
    try {
       require('./lib/system/schema')(m, env)
       let groupSet = global.db.groups[m.chat]
@@ -22,11 +22,10 @@ module.exports = async (conn, ctx, database) => {
       let isOwner = [conn.decodeJid(conn.user.id).replace(/@.+/, ''), env.owner, ...setting.owners].map(v => v + '@s.whatsapp.net').includes(m.sender)
       let isPrem = users && users.premium || isOwner
       let groupMetadata = m.isGroup ? await conn.getGroupMetadata(m.chat) : {}
-      let participants = m.isGroup ? groupMetadata ? conn.fixLid(groupMetadata.participants) : [] : [] || []
+      let participants = m.isGroup ? groupMetadata ? conn.resolveLid(groupMetadata.participants) : [] : [] || []
       let adminList = m.isGroup ? participants?.filter(i => i.admin === 'admin' || i.admin === 'superadmin')?.map(i => i.id) || [] : []
       let isAdmin = m.isGroup ? adminList.includes(m.sender) : false
       let isBotAdmin = m.isGroup ? adminList.includes((conn.user.id.split`:`[0]) + '@s.whatsapp.net') : false
-      let blockList = typeof await (await conn.fetchBlocklist()) != 'undefined' ? await (await conn.fetchBlocklist()) : []
 
       const spam = isSpam.check(conn, m, users, isCommand, command, setting)
 
@@ -37,21 +36,6 @@ module.exports = async (conn, ctx, database) => {
       }
       if (!setting.multiprefix) setting.noprefix = false
       if (setting.debug && !m.fromMe && isOwner) conn.reply(m.chat, Func.jsonFormat(m), m)
-      if (m.isGroup && !groupSet.stay && (new Date * 1) >= groupSet.expired && groupSet.expired != 0) {
-         return conn.reply(m.chat, Func.texted('italic', '🚩 Bot time has expired and will leave from this group, thank you.', null, {
-            mentions: participants.map(v => v.id)
-         })).then(async () => {
-            groupSet.expired = 0
-            await Func.delay(15_000).then(() => conn.groupLeave(m.chat))
-         })
-      }
-      if (users && (new Date * 1) >= users.expired && users.expired != 0) {
-         return conn.reply(m.chat, Func.texted('italic', '🚩 Your premium package has expired, thank you for buying and using our service.')).then(async () => {
-            users.premium = false
-            users.expired = 0
-            users.limit = env.limit
-         })
-      }
       if (m.isGroup) {
          groupSet.activity = new Date() * 1
          groupSet.name = groupMetadata?.subject ?? ''
@@ -136,6 +120,7 @@ module.exports = async (conn, ctx, database) => {
          if (!['me', 'owner', 'exec'].includes(name) && users && (users.banned || new Date - users.ban_temporary < env.timeout)) return
          if (m.isGroup && !['activation', 'groupinfo'].includes(name) && groupSet.mute) return
 
+         if (plugin.error) return conn.reply(m.chat, global.status.errorF, m)
          if (plugin.owner && !isOwner) return conn.reply(m.chat, global.status.owner, m)
          if (plugin.restrict && !isPrem && !isOwner && text && new RegExp('\\b' + setting.toxic.join('\\b|\\b') + '\\b').test(text.toLowerCase())) {
             return conn.reply(m.chat, `⚠️ You have violated the *Terms and Conditions* of bot usage by using prohibited keywords. As punishment for your violation, your account has been banned.`, m).then(() => {
@@ -144,12 +129,15 @@ module.exports = async (conn, ctx, database) => {
             })
          }
          if (plugin.premium && !isPrem) return conn.reply(m.chat, global.status.premium, m)
+         if (plugin.limit && users.limit < 1) return conn.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plans.`, m)
          if (plugin.group && !m.isGroup) return conn.reply(m.chat, global.status.group, m)
          if (plugin.botAdmin && !isBotAdmin) return conn.reply(m.chat, global.status.botAdmin, m)
          if (plugin.admin && !isAdmin) return conn.reply(m.chat, global.status.admin, m)
          if (plugin.private && m.isGroup) return conn.reply(m.chat, global.status.private, m)
+         if (plugin.game && !setting.game) return conn.reply(m.chat, global.status.gameInactive, m)
+         if (plugin.register && !users.registered) return conn.reply(m.chat, `To use this command, please register first with the command *${prefix}reg gender + age*`, m)
          try {
-            await plugin.run(m, { ctx, conn, store, body, usedPrefix: prefix, plugins, plugFiles, commands, args, command, text, prefixes, core, isCommand, database, env, groupSet, chats, users, setting, isOwner, isPrem, groupMetadata, participants, isAdmin, isBotAdmin, blockList, Func, Scraper })
+            await plugin.run(m, { ctx, conn, store, body, usedPrefix: prefix, plugins, commands, args, command, text, prefixes, core, isCommand, database, env, groupSet, chats, users, setting, isOwner, isPrem, groupMetadata, participants, isAdmin, isBotAdmin, Func, Scraper })
             if (plugin.limit && !plugin.game && users.limit > 0) {
                const limit = plugin.limit === 'Boolean' ? 1 : plugin.limit
                if (users.limit >= limit) {
@@ -158,7 +146,6 @@ module.exports = async (conn, ctx, database) => {
                   return conn.reply(m.chat, `⚠️ Your limit isn't enough to use this feature.`, m)
                }
             }
-            if (plugin.limit && users.limit < 1) return conn.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plans.`, m)
          } catch (e) {
             return conn.reply(m.chat, e.toString(), m)
          }
@@ -182,9 +169,11 @@ module.exports = async (conn, ctx, database) => {
             if (event.botAdmin && !isBotAdmin) continue
             if (event.admin && !isAdmin) continue
             if (event.private && m.isGroup) continue
+            if (event.game && !setting.game) continue
+            if (event.register && !users.registered) continue
             if (event.download && body && Func.socmed(body) && !setting.autodownload && Func.generateLink(body) && Func.generateLink(body).some(v => Func.socmed(v))) continue
             try {
-               await event.run(m, { ctx, conn, store, body, plugins, plugFiles, prefixes, core, isCommand, database, env, groupSet, chats, users, setting, isOwner, isPrem, groupMetadata, participants, isAdmin, isBotAdmin, blockList, Func, Scraper })
+               await event.run(m, { ctx, conn, store, body, plugins, prefixes, core, isCommand, database, env, groupSet, chats, users, setting, isOwner, isPrem, groupMetadata, participants, isAdmin, isBotAdmin, Func, Scraper })
                if (event.limit && users.limit < 1 && body && Func.generateLink(body) && Func.generateLink(body).some(v => Func.socmed(v))) return conn.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plan.`, m)
             } catch (e) {
                return conn.reply(m.chat, e.toString(), m)

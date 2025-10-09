@@ -1,6 +1,6 @@
 {
    "name": "moon-bot",
-   "version": "5.0-alpha",
+   "version": "5.0-beta",
    "description": "Simple Whatsapp Bot",
    "keywords": [
       "whatsapp-bot",
@@ -30,22 +30,13 @@
       "server": "node index.js --server"
    },
    "dependencies": {
-      "@database/mongo": "github:neoxr/database#mongo",
-      "@database/postgres": "github:neoxr/database#postgresql",
-      "@session/mongo": "github:neoxr/session#mongo",
-      "@session/postgres": "github:neoxr/session#postgresql",
-      "@whiskeysockets/baileys": "npm:@neoxr/baileys@~8.2.18",
-      "@znan/wabot": "0.0.51",
+      "@whiskeysockets/baileys": "^6.7.20",
+      "@znan/wabot": "^0.0.60",
       "archiver": "^7.0.1",
-      "bytes": "^3.1.2",
       "cfonts": "^3.3.0",
       "express": "^4.21.2",
       "ignore": "^7.0.0",
-      "jimp": "^0.22.12",
       "node-cron": "^3.0.0",
       "yt-search": "^2.10.4"
-   },
-   "devDependencies": {
-      "css-select": "5.1.0"
    }
 }

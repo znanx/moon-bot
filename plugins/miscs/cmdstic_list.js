@@ -1,5 +1,4 @@
 const moment = require('moment-timezone')
-moment.tz.setDefault(process.env.TZ)
 
 module.exports = {
    help: ['cmdstic'],

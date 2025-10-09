@@ -9,6 +9,7 @@ module.exports = {
       isOwner,
       Func,
       store,
+      groupMetadata,
       participants,
       Scraper
    }) => {

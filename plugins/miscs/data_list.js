@@ -6,7 +6,6 @@ module.exports = {
    run: async (m, {
       conn,
       command,
-      blockList,
       isOwner,
       Func
    }) => {
@@ -32,6 +31,7 @@ module.exports = {
                largeThumb: true
             })
          } else if (command == 'listblock') {
+            const blockList = typeof await (await conn.fetchBlocklist()) != 'undefined' ? await (await conn.fetchBlocklist()) : []
             if (blockList.length < 1) return m.reply(Func.texted('bold', `🚩 Data empty.`))
             let text = `乂 *L I S T - B L O C K*\n\n`
             text += blockList.map((v, i) => {

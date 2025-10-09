@@ -13,7 +13,7 @@ module.exports = {
          txt += `   ◦  *Limit* : (${json.data.limit} / ${json.data.total})\n`
          txt += `   ◦  *Premium* : ${json.data.premium ? '√' : '×'}\n`
          txt += `   ◦  *Expired* : ${new Date(json.data.expired_at).toLocaleDateString('id-ID')}\n`
-         txt += `   ◦  *Joinded* : ${new Date(json.data.joined_at).toLocaleDateString('id-ID')}\n\n`
+         txt += `   ◦  *Joined* : ${new Date(json.data.joined_at).toLocaleDateString('id-ID')}\n\n`
          txt += global.footer
          conn.reply(m.chat, txt, m)
       } catch (e) {

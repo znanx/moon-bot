@@ -1,6 +1,7 @@
 module.exports = {
    run: async (m, {
       conn,
+      groupMetadata,
       Func
    }) => {
       try {
@@ -13,7 +14,7 @@ module.exports = {
             let reason = is_user.afkReason || ''
             if (!m.fromMe) {
                conn.reply(m.chat, `*Away From Keyboard* : @${jid.split('@')[0]}\n• *Reason* : ${reason ? reason : '-'}\n• *During* : [ ${Func.toTime(new Date - afkTime)} ]`, m).then(async () => {
-                  conn.reply(jid, `Someone from *${await (await conn.groupMetadata(m.chat)).subject}*'s group, tagged or mention you.\n\n• *Sender* : @${m.sender.split('@')[0]}`, m).then(async () => {
+                  conn.reply(jid, `Someone from *${groupMetadata.subject}*'s group, tagged or mention you.\n\n• *Sender* : @${m.sender.split('@')[0]}`, m).then(async () => {
                      await conn.copyNForward(jid, m)
                   })
                })

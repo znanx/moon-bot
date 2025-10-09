@@ -1,4 +1,4 @@
-const { Converter } = new (require('@znan/wabot'))
+const { Converter } = require('@znan/wabot')
 const fs = require('fs')
 const { exec } = require('child_process')
 

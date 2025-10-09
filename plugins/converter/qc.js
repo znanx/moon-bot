@@ -1,4 +1,5 @@
 const axios = require('axios')
+
 module.exports = {
    help: ['qc'],
    use: 'text',
@@ -13,7 +14,7 @@ module.exports = {
    }) => {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'Hi!')
-         var pic = await conn.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender, 'image') || 'https://i.ibb.co/NLJdrcJ/image.jpg'
+         let pic = await conn.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender, 'image').catch(() => 'https://cdn.moonx.my.id/ea776b1d721a28b6213150d64d87a193')
          conn.sendReact(m.chat, '🕒', m.key)
          const json = {
             "type": "quote",
@@ -50,6 +51,5 @@ module.exports = {
          throw Func.jsonFormat(e)
       }
    },
-   limit: true,
-   error: false
+   limit: true
 }
