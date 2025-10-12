@@ -15,32 +15,31 @@ module.exports = {
             let q = m.quoted ? m.quoted.message[type] : m.msg
             if (/image/.test(type)) {
                conn.sendReact(m.chat, '🕒', m.key)
-               let img = await conn.downloadMediaMessage(q)
-               let image = await Scraper.uploader(img)
+               const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
+               if (!cdn.status) throw Func.jsonFormat(cdn)
                const json = await Api.get('/face-detect', {
-                  image: image.data.url
+                  image: cdn.data.url
                })
-               if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+               if (!json.status) throw Func.jsonFormat(json)
                conn.reply(m.chat, `Gender : ${json.data.gender}\nAge : ${json.data.age}`, m)
             } else conn.reply(m.chat, 'Only for photo.', m)
          } else {
             let q = m.quoted ? m.quoted : m
             let mime = (q.msg || q).mimetype || ''
-            if (!mime) return conn.reply(m.chat, `Reply photo with command ${usedPrefix + command}.`, m)
-            if (!/image\/(jpe?g|png)/.test(mime)) return conn.reply(m.chat, 'Only for photo.', m)
+            if (!mime) throw `Reply photo with command ${usedPrefix + command}.`
+            if (!/image\/(jpe?g|png)/.test(mime)) throw 'Only for photo.'
             conn.sendReact(m.chat, '🕒', m.key)
-            let img = await q.download()
-            let image = await Scraper.uploader(img)
+            const cdn = await Scraper.uploader(await q.download())
+            if (!cdn.status) throw Func.jsonFormat(cdn)
             const json = await Api.get('/face-detect', {
-               image: image.data.url
+               image: cdn.data.url
             })
-            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            if (!json.status) throw Func.jsonFormat(json)
             conn.reply(m.chat, `Gender : ${json.data.gender}\nAge : ${json.data.age}`, m)
          }
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
-   limit: true,
-   premium: true
+   limit: true
 }

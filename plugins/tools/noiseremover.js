@@ -13,18 +13,18 @@ module.exports = {
       try {
          let q = m.quoted ? m.quoted : m
          let mime = (q.msg || q).mimetype || ''
-         if (!mime) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply audio.`), m)
-         if (!/audio\/(mpeg|vn)/.test(mime)) return conn.reply(m.chat, Func.texted('bold', `🚩 Only for audio.`), m)
+         if (!mime) throw Func.texted('bold', `🚩 Reply audio.`)
+         if (!/audio\/(mpeg|vn)/.test(mime)) throw Func.texted('bold', `🚩 Only for audio.`)
          conn.sendReact(m.chat, '🕒', m.key)
-         let audio = await q.download()
-         let result = await Scraper.uploader(audio)
+         const cdn = await Scraper.uploader(await q.download())
+         if (!cdn.status) throw Func.jsonFormat(cdn)
          const json = await Api.get('/noise-remover', {
-            audio: result.data.url
+            audio: cdn.data.url
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.sendFile(m.chat, json.data.url, '', '', m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true

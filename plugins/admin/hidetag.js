@@ -10,10 +10,8 @@ module.exports = {
       participants,
       Func
    }) => {
-      let txt = m.quoted ? m.quoted.text : text 
-      let users = participants.map(v => v.id)
-      await conn.reply(m.chat, txt, null, {
-         mentions: users
+      conn.reply(m.chat, m.quoted ? m.quoted.text : text, null, {
+         mentions: participants.map(v => v.id)
       })
    },
    group: true,

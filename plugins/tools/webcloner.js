@@ -10,19 +10,17 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'https://google.com'), m)
-         if (!/^https?:\/\//.test(args[0])) return conn.reply(m.chat, global.status.invalid, m)
+         if (!args[0]) throw Func.example(usedPrefix, command, 'https://google.com')
+         if (!/^https?:\/\//.test(args[0])) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/web-cloner', {
             url: args[0]
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.sendFile(m.chat, json.data.url, '', '', m)
       } catch (e) {
-         console.log(e)
-         return m.reply(Func.jsonFormat(e))
+         throw Func.jsonFormat(e)
       }
    },
-   limit: true,
-   premium: true
+   limit: true
 }

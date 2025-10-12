@@ -14,7 +14,7 @@ module.exports = {
    }) => {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'Hi!')
-         let pic = await conn.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender, 'image').catch(() => 'https://cdn.moonx.my.id/ea776b1d721a28b6213150d64d87a193')
+         let pic = await conn.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender, 'image').catch(() => 'https://cdn.moonx.site/ea776b1d721a28b6213150d64d87a193')
          conn.sendReact(m.chat, '🕒', m.key)
          const json = {
             "type": "quote",

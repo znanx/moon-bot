@@ -15,7 +15,7 @@ module.exports = {
          const json = await Api.get('/tiktok-post', {
             q: args[0] || Func.random(['_hanna4yours', 'moodaaii', 'imnotnoncakeithh', 'athaw041', 'jacquelinesndr', 'joanne_flute', 'auwa___', 'aikolovesushi', 'liayuhuuu_', 'mrchellacty', 'michellechristoo', 'nauraurelia0', 'kharisma_ptw', 'avcdchs_'])
          })
-         if (!json.status) return conn.reply(m.chat, `🚩 ${json.msg}`, m)
+         if (!json.status) throw `🚩 ${json.msg}`
          const result = await Func.random(json.data)
          let capt = '乂  *A S U P A N*\n\n'
          capt += `   ◦  *Views* : ${Func.formatNumber(result.stats.views)}\n`
@@ -37,7 +37,7 @@ module.exports = {
          capt += global.footer
          conn.sendFile(m.chat, result.data[0].url, '', capt, m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

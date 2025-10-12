@@ -12,7 +12,7 @@ module.exports = {
       Func
    }) => {
       const meta = groupMetadata
-      const creator = (meta?.owner?.endsWith('lid') ? meta?.ownerPn : meta.owner)?.replace(/@.+/, '')
+      const creator = (meta?.owner?.endsWith('lid') ? meta?.ownerPn || meta.ownerJid : meta.owner)?.replace(/@.+/, '')
       const admin = await conn.getAdmin(participants)
       const member = participants.map(v => v.id)
       let pic = await conn.profilePictureUrl(m.chat, 'image').catch(async () => await Func.fetchBuffer('./src/image/default.jpg'))

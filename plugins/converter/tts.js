@@ -18,7 +18,6 @@ module.exports = {
             text = args.join(' ')
          }
          if (!text && m.quoted && m.quoted.text) text = m.quoted.text
-         conn.sendPresenceUpdate('recording', m.chat)
          const json = await Api.get('/tts', {
             text: text, iso: args[0]
          })

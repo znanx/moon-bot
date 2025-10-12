@@ -11,7 +11,7 @@ module.exports = {
    }) => {
       try {
          const json = await Api.get('/gempa', {})
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.sendReact(m.chat, '🕒', m.key)
          let txt = `乂  *G E M P A*\n\n`
          txt += `   ◦  *Date* : ${json.data.Tanggal}\n`
@@ -27,7 +27,7 @@ module.exports = {
          txt += global.footer
          conn.sendFile(m.chat, json.data.Shakemap, '', txt, m)
       } catch (e) {
-         conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

@@ -10,13 +10,15 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'moon'), m)
+         if (!text) throw Func.example(usedPrefix, command, 'moon')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/shio', { q: text })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         const json = await Api.get('/shio', {
+            q: text
+         })
+         if (!json.status) throw Func.jsonFormat(json)
          m.reply(json.data.result)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

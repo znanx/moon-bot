@@ -12,15 +12,15 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'http://gg.gg/1brt6s'), m)
+         if (!args[0]) throw Func.example(usedPrefix, command, 'http://gg.gg/1brt6s')
          conn.sendReact(m.chat, '🕒', m.key)
-         let json = await Api.get('/unshortner', {
+         const json = await Api.get('/unshortner', {
             url: args[0]
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.reply(m.chat, Func.jsonFormat(json.data), m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true

@@ -16,11 +16,12 @@ module.exports = {
          let q = m.quoted ? m.quoted : m
          let mime = (q.msg || q).mimetype || ''
          if (/image\/(jpe?g|png)/.test(mime)) {
-            let img = await (await Scraper.uploader(await q.download())).data.url
+            const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
+            if (!cdn.status) throw Func.jsonFormat(cdn)
             const json = await Api.get('/func-chat', {
                model: 'gemini',
                system: text,
-               image: img
+               image: cdn.data.url
             })
             if (!json.status) throw Func.jsonFormat(json)
             conn.reply(m.chat, json.data.content, m)

@@ -10,13 +10,13 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'jnt | 842748402'), m)
+         if (!text) throw Func.example(usedPrefix, command, 'jnt | 842748402')
          conn.sendReact(m.chat, '🕒', m.key)
          let [kurir, resi] = text.split` | `
          const json = await Api.get('/resicheck', {
             kurir, resi
          })
-         if (!json.status) return conn.reply(m.chat, `🚩 ${json.msg}`, m)
+         if (!json.status) throw `🚩 ${json.msg}`
          let p = '◦  *Code* : ' + json.data.detail.code + '\n'
          p += '◦  *Status* : ' + json.data.detail.status + '\n'
          p += '◦  *Shipment* : ' + json.data.detail.shipment ? json.data.detail.shipment : '-' + '\n'

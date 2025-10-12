@@ -12,15 +12,15 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'moon-bot'), m)
+         if (!text) throw Func.example(usedPrefix, command, 'moon-bot')
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/nulis', {
             text
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.sendFile(m.chat, json.data.url, '', ``, m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

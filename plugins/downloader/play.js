@@ -13,14 +13,14 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return m.reply(Func.example(usedPrefix, command, 'Dewi'))
+         if (!text) throw Func.example(usedPrefix, command, 'Dewi')
          conn.sendReact(m.chat, '🕒', m.key)
          const ys = await (await yts(text)).all
          const yt = ys.filter(p => p.type == 'video')
          const json = await Api.get('/yta', {
             url: yt[0].url
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          let caption = `乂  *Y T - P L A Y*\n\n`
          caption += `   ∘  *Title* : ` + json.title + `\n`
          caption += `   ∘  *Size* : ` + json.data.size + `\n`
@@ -29,7 +29,7 @@ module.exports = {
          caption += global.footer
          const chSize = Func.sizeLimit(json.data.size, users.premium ? env.max_upload : env.max_upload_free)
          const isOver = users.premium ? `💀 File size (${json.data.size}) exceeds the maximum limit.` : `⚠️ File size (${json.data.size}), you can only download files with a maximum size of ${env.max_upload_free} MB and for premium users a maximum of ${env.max_upload} MB.`
-         if (chSize.oversize) return conn.reply(m.chat, isOver, m)
+         if (chSize.oversize) throw isOver
          conn.sendMessageModify(m.chat, caption, m, {
             largeThumb: true,
             thumbnail: json.thumbnail,
@@ -40,7 +40,7 @@ module.exports = {
             })
          })
       } catch (e) {
-         conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

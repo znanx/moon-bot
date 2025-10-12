@@ -19,17 +19,17 @@ module.exports = {
             if (args[0] > (jids - 1) || args[0] < 1) return m.reply(Func.texted('bold', `🚩 An error occurred, please check the group data list again.`))
             const select = (args[0]).trim()
             const jid = ((m.quoted.text).split('💳* :')[select].split`\n`[0] + '@g.us').trim()
-            const group = groups.find(v => v.jid == jid)
+            const group = groups[jid]
             if (!group) return m.reply(Func.texted('bold', `🚩 Data group does not exist in the database.`))
             const groupMetadata = await (await conn.groupMetadata(jid))
             const groupName = groupMetadata ? groupMetadata.subject : ''
-            const adminList = conn.getAdmin(conn.lidParser(groupMetadata.participants))
+            const adminList = conn.getAdmin(conn.resolveLid(groupMetadata.participants))
             const admin = adminList.includes(conn.decodeJid(conn.user.id))
             const useOpt = (args && args[1]) ? true : false
             const option = useOpt ? (args[1]).toLowerCase() : false
             const time = group.stay ? 'FOREVER' : (group.expired == 0 ? 'NOT SET' : Func.timeReverse(group.expired - new Date() * 1))
             const member = groupMetadata.participants.map(u => u.id).length
-            const picture = await conn.profilePicture(jid)
+            const pic = await conn.profilePictureUrl(jid, 'image').catch(async () => await Func.fetchBuffer('./src/image/default.jpg'))
             let data = {
                name: groupName,
                member,
@@ -39,7 +39,7 @@ module.exports = {
             }
             if (!useOpt) return conn.sendMessageModify(m.chat, steal(Func, data) + '\n\n' + global.footer, m, {
                largeThumb: true,
-               thumbnail: picture
+               thumbnail: pic
             })
             if (option == 'open') {
                if (!admin) return conn.reply(m.chat, Func.texted('bold', `🚩 Can't open ${groupName} group link because the bot is not an admin.`), m)
@@ -69,27 +69,34 @@ module.exports = {
                   mentions: groupMetadata.participants.map(v => v.id)
                }).then(() => {
                   conn.groupLeave(jid).then(() => {
-                     groups.find(v => v.jid == jid).expired = 0
-                     groups.find(v => v.jid == jid).stay = false
+                     groups[jid].expired = 0
+                     groups[jid].stay = false
                      return conn.reply(m.chat, Func.texted('bold', `🚩 Successfully leave from ${groupName} group.`), m)
                   })
                })
             } else if (option == 'reset') {
-               groups.find(v => v.jid == jid).expired = 0
-               groups.find(v => v.jid == jid).stay = false
+               groups[jid].expired = 0
+               groups[jid].stay = false
                conn.reply(m.chat, Func.texted('bold', `🚩 Configuration of bot in the ${groupName} group has been successfully reseted to default.`), m)
             } else if (option == 'forever') {
                group.expired = 0
                group.stay = true
                conn.reply(m.chat, Func.texted('bold', `🚩 Successfully set bot to stay forever in ${groupName} group.`), m)
-            } else if (option.endsWith('d')) {
+            } else if (/(d|h|m)/gi.test(option)) {
                let now = new Date() * 1
-               let day = 86400000 * parseInt(option.replace('d', ''))
-               group.expired += (group.expired == 0) ? (now + day) : day
+               let duration = 0
+               if (/d/gi.test(option)) {
+                  duration = 86400000 * parseInt(option.replace('d', ''))   // day
+               } else if (/h/gi.test(option)) {
+                  duration = 3600000 * parseInt(option.replace('h', ''))    // hour
+               } else if (/m/gi.test(option)) {
+                  duration = 60000 * parseInt(option.replace('m', ''))      // minute
+               }
+               group.expired += (group.expired == 0) ? (now + duration) : duration
                group.stay = false
-               conn.reply(m.chat, Func.texted('bold', `🚩 Bot duration is successfully set to stay for ${option.replace('d', ' days')} in ${groupName} group.`), m)
-            } else return m.reply(explain(isPrefix, command))
-         } else return m.reply(explain(isPrefix, command))
+               conn.reply(m.chat, Func.texted('bold', `🚩 Bot duration is successfully set to stay for ${option.replace('d', ' day').replace('m', ' minute').replace('h', ' hours')} in ${groupName} group.`), m)
+            } else return m.reply(explain(usedPrefix, command))
+         } else return m.reply(explain(usedPrefix, command))
       } catch (e) {
          console.log(e)
          m.reply(Func.jsonFormat(e))

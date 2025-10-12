@@ -12,16 +12,16 @@ module.exports = {
       try {
          conn.spotify = conn.spotify ? conn.spotify : {}
          if (/^\d+$/.test(text)) {
-            if (typeof conn.spotify?.[m.chat] === 'undefined') return conn.reply(m.chat, `🚩 The data has expired, please search again with *${usedPrefix + command}*.`, m)
+            if (typeof conn.spotify?.[m.chat] === 'undefined') throw `🚩 The data has expired, please search again with *${usedPrefix + command}*.`
             let idx = parseInt(text) - 1
             let data = conn.spotify[m.chat].list
-            if (isNaN(idx) || !data[idx]) return conn.reply(m.chat, '🚩 Invalid Number!', m)
+            if (isNaN(idx) || !data[idx]) throw '🚩 Invalid Number!'
             const { url } = data[idx]
             conn.sendReact(m.chat, '🕒', m.key)
             const json = await Api.get('/spotify-dl', {
                url: url
             })
-            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            if (!json.status) throw Func.jsonFormat(json)
             let txt = `乂  *S P O T I F Y*\n\n`
             txt += `   ◦  *Title* : ${json.data.title}\n`
             txt += `   ◦  *Artist* : ${json.data.artist}\n`
@@ -42,7 +42,7 @@ module.exports = {
             const json = await Api.get('/spotify-dl', {
                url: text
             })
-            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            if (!json.status) throw Func.jsonFormat(json)
             let txt = `乂  *S P O T I F Y*\n\n`
             txt += `   ◦  *Title* : ${json.data.title}\n`
             txt += `   ◦  *Artist* : ${json.data.artist}\n`
@@ -59,12 +59,12 @@ module.exports = {
                })
             })
          } else {
-            if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'demi kau dan si buah hati'), m)
+            if (!text) throw Func.example(usedPrefix, command, 'demi kau dan si buah hati')
             conn.sendReact(m.chat, '🕒', m.key)
             const json = await Api.get('/spotify', {
                q: text
             })
-            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            if (!json.status) throw Func.jsonFormat(json)
             conn.spotify[m.chat] = {
                list: json.data.map(v => ({ url: v.url })),
                timer: setTimeout(() => {
@@ -82,7 +82,7 @@ module.exports = {
             conn.reply(m.chat, txt, m)
          }
       } catch (e) {
-         conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

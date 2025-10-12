@@ -1,6 +1,7 @@
-let cp = require('child_process')
-let { promisify } = require('util')
-let exec = promisify(cp.exec).bind(cp)
+const cp = require('child_process')
+const { promisify } = require('util')
+const exec = promisify(cp.exec).bind(cp)
+
 module.exports = {
    help: ['speedtest'],
    aliases: ['speed'],

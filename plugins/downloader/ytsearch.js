@@ -13,7 +13,7 @@ const ytsO = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'Oasis'), m)
+         if (!text) throw Func.example(usedPrefix, command, 'Oasis')
          conn.sendReact(m.chat, '🕒', m.key)
          const json = (await ytsearch(text)).all.filter(p => p.type === 'video')
          let txt = '乂  *Y T - S E A R C H*\n\n'
@@ -28,7 +28,7 @@ const ytsO = {
          txt += global.footer
          conn.reply(m.chat, txt, m)
       } catch (e) {
-         conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

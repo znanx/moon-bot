@@ -11,7 +11,7 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return m.reply(Func.example(usedPrefix, command, 'masuk angin'))
+         if (!text) throw Func.example(usedPrefix, command, 'masuk angin')
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/ai-dokter', {
             text: text

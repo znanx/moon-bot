@@ -17,7 +17,7 @@ module.exports = {
             let q = m.quoted ? m.quoted.message[type] : m.msg
             let img = await conn.downloadMediaMessage(q)
             if (/video/.test(type)) {
-               if (q.seconds > 10) return conn.reply(m.chat, Func.texted('bold', `🚩 Maximum video duration is 10 seconds.`), m)
+               if (q.seconds > 10) throw Func.texted('bold', `🚩 Maximum video duration is 10 seconds.`)
                return conn.sendSticker(m.chat, img, m, {
                   packname: setting.sk_pack,
                   author: setting.sk_author
@@ -33,23 +33,23 @@ module.exports = {
             let mime = (q.msg || q).mimetype || ''
             if (/image\/(jpe?g|png)/.test(mime)) {
                let img = await q.download()
-               if (!img) return conn.reply(m.chat, global.status.wrong, m)
+               if (!img) throw global.status.wrong
                return conn.sendSticker(m.chat, img, m, {
                   packname: setting.sk_pack,
                   author: setting.sk_author
                })
             } else if (/video/.test(mime)) {
-               if ((q.msg || q).seconds > 10) return conn.reply(m.chat, Func.texted('bold', `🚩 Maximum video duration is 10 seconds.`), m)
+               if ((q.msg || q).seconds > 10) throw Func.texted('bold', `🚩 Maximum video duration is 10 seconds.`)
                let img = await q.download()
-               if (!img) return conn.reply(m.chat, global.status.wrong, m)
+               if (!img) throw global.status.wrong
                return conn.sendSticker(m.chat, img, m, {
                   packname: setting.sk_pack,
                   author: setting.sk_author
                })
-            } else conn.reply(m.chat, Func.texted('bold', `🚩 Send or reply to the image you want to make into a sticker.`), m)
+            } else throw Func.texted('bold', `🚩 Send or reply to the image you want to make into a sticker.`)
          }
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: false,

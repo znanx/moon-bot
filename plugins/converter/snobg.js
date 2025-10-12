@@ -17,10 +17,10 @@ module.exports = {
             let q = m.quoted ? m.quoted.message[type] : m.msg
             if (/image/.test(type)) {
                conn.sendReact(m.chat, '🕒', m.key)
-               let img = await conn.downloadMediaMessage(q)
-               let image = await (await Scraper.uploader(img)).data.url
+               const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
+               if (!cdn.status) throw Func.jsonFormat(cdn)
                const json = await Api.get('/removebg', {
-                  image: image
+                  image: cdn.data.url
                })
                if (!json.status) throw Func.jsonFormat(json)
                conn.sendSticker(m.chat, json.data.url, m, {

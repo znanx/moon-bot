@@ -38,8 +38,8 @@ module.exports = {
          if (!result) throw result
          m.reply(`*${format}* = _${result}_`)
       } catch (e) {
-         if (e == undefined) return m.reply(`What's inside?`)
-         return m.reply('Incorrect format, only 0-9 and Symbols -, +, *, /, ×, ÷, π, e, (, ) are supported.')
+         if (e == undefined) throw `What's inside?`
+         throw 'Incorrect format, only 0-9 and Symbols -, +, *, /, ×, ÷, π, e, (, ) are supported.'
       }
    },
    limit: true

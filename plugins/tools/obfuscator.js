@@ -11,19 +11,18 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text && !(m.quoted?.text)) return conn.reply(m.chat, Func.example(usedPrefix, command, async function isUrl(url) {
+         if (!text && !(m.quoted?.text)) throw Func.example(usedPrefix, command, async function isUrl(url) {
             return url.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%.+#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%+.#?&/=]*)/, 'gi'))
-         }), m)
+         })
          conn.sendReact(m.chat, '🕒', m.key)
-         let json = await Api.get('/obfuscator', {
+         const json = await Api.get('/obfuscator', {
             code: text || m.quoted.text
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.reply(m.chat, json.data, m)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
-   limit: true,
-   premium: true
+   limit: true
 }

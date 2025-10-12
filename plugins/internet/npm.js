@@ -13,13 +13,13 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return m.reply(Func.example(usedPrefix, command, '@moonr/to-anime'))
+         if (!text) throw Func.example(usedPrefix, command, 'chalk')
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/npm', {
             q: text
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
-         if (json.data.length == 0) return m.reply(Func.texted('bold', '🚩 Package not found.'))
+         if (!json.status) throw Func.jsonFormat(json)
+         if (json.data.length == 0) throw Func.texted('bold', '🚩 Package not found.')
          let txt = `乂 *N P M J S*\n\n`
          json.data.map((v, i) => {
             txt += '*' + (i + 1) + '. ' + v.package.name + '*\n'
@@ -31,7 +31,7 @@ module.exports = {
          })
          conn.reply(m.chat, txt + global.footer, m)
       } catch (e) {
-         conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

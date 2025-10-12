@@ -11,7 +11,7 @@ module.exports = {
       Scraper,
       Func
    }) => {
-      if (!text) return m.reply(Func.example(usedPrefix, command, 'id Love You'))
+      if (!text) throw Func.example(usedPrefix, command, 'id Love You')
       conn.sendReact(m.chat, '🕒', m.key)
       if (text && m.quoted && m.quoted.text) {
          let lang = text.slice(0, 2)
@@ -23,7 +23,7 @@ module.exports = {
             })
             conn.reply(m.chat, result.data.text, m)
          } catch {
-            return m.reply(Func.texted('bold', '🚩 Language codes are not supported.'))
+            throw Func.texted('bold', '🚩 Language codes are not supported.')
          }
       } else if (text) {
          let lang = text.slice(0, 2)
@@ -35,9 +35,9 @@ module.exports = {
             })
             conn.reply(m.chat, result.data.text, m)
          } catch {
-            return m.reply(Func.texted('bold', '🚩 Language codes are not supported.'))
+            throw Func.texted('bold', '🚩 Language codes are not supported.')
          }
       }
    },
-   limit: true,
+   limit: true
 }

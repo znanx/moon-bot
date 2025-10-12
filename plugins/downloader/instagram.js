@@ -11,20 +11,20 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!args || !args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'https://www.instagram.com/p/CK0tLXyAzEI'), m)
-         if (!args[0].match(/(https:\/\/www.instagram.com)/gi)) return conn.reply(m.chat, global.status.invalid, m)
+         if (!args || !args[0]) throw Func.example(usedPrefix, command, 'https://www.instagram.com/p/CK0tLXyAzEI')
+         if (!args[0].match(/(https:\/\/www.instagram.com)/gi)) throw global.status.invalid
          let old = new Date()
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/ig', {
             url: args[0]
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          for (let i of json.data) {
             conn.sendFile(m.chat, i.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
             await Func.delay(1500)
          }
       } catch (e) {
-         conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

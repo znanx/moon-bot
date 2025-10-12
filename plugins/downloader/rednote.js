@@ -10,20 +10,20 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!args || !args[0]) return conn.reply(m.chat, Func.example(usedPrefix, command, 'https://xhslink.com/a/hlM81D1Yoa63'), m)
-         if (!args[0].match('xhslink.com')) return conn.reply(m.chat, global.status.invalid, m)
+         if (!args || !args[0]) throw Func.example(usedPrefix, command, 'https://xhslink.com/a/hlM81D1Yoa63')
+         if (!args[0].match('xhslink.com')) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
          let old = new Date()
          const json = await Api.get('/rednote', {
             url: args[0]
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          json.data.map(async (v, i) => {
             conn.sendFile(m.chat, v.url, '', `🍟 *Process* : ${(new Date() - old) * 1} ms`, m)
             await Func.delay(1500)
          })
       } catch (e) {
-         conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

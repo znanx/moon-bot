@@ -16,33 +16,32 @@ module.exports = {
             if (/video/.test(type)) {
                conn.sendReact(m.chat, '🕒', m.key)
                let old = new Date()
-               let vid = await conn.downloadMediaMessage(q)
-               let result = await Scraper.uploader(vid)
+               const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
+               if (!cdn.status) throw Func.jsonFormat(cdn)
                const json = await Api.get('/remini-video', {
-                  video: result.data.url
+                  video: cdn.data.url
                })
-               if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+               if (!json.status) throw Func.jsonFormat(json)
                conn.sendFile(m.chat, json.data.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
-            } else conn.reply(m.chat, Func.texted('bold', `🚩 Only for video.`), m)
+            } throw Func.texted('bold', `🚩 Only for video.`)
          } else {
             let q = m.quoted ? m.quoted : m
             let mime = (q.msg || q).mimetype || ''
-            if (!mime) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply video.`), m)
-            if (!/video\/(mp4)/.test(mime)) return conn.reply(m.chat, Func.texted('bold', `🚩 Only for video.`), m)
+            if (!mime) throw Func.texted('bold', `🚩 Reply video.`)
+            if (!/video\/(mp4)/.test(mime)) throw Func.texted('bold', `🚩 Only for video.`)
             conn.sendReact(m.chat, '🕒', m.key)
             let old = new Date()
-            let vid = await q.download()
-            let result = await Scraper.uploader(vid)
+            const cdn = await Scraper.uploader(await q.download())
+            if (!cdn.status) throw Func.jsonFormat(cdn)
             const json = await Api.get('/remini-video', {
-               video: result.data.url
+               video: cdn.data.url
             })
-            if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+            if (!json.status) throw Func.jsonFormat(json)
             conn.sendFile(m.chat, json.data.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
          }
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
-   limit: true,
-   premium: true
+   limit: true
 }

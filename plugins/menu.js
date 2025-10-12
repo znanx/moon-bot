@@ -29,9 +29,16 @@ module.exports = {
          }
       }
       let sortedTags = Object.keys(category).sort()
+
       let style = setting.style
+      let pkg = require('../package.json')
       let local_size = fs.existsSync('./' + env.database + '.json') ? await Func.getSize(fs.statSync('./' + env.database + '.json').size) : ''
-      let message = setting.msg.replace('+tag', `@${m.sender.replace(/@.+/g, '')}`).replace('+name', m.name).replace('+limit', users.limit).replace('+premium', Func.switcher(users.premium, '√', '×')).replace('+greeting', Func.greeting()).replace('+db', (/mongo/.test(process.env.DATABASE_URL) ? 'MongoDB' : /postgresql/.test(process.env.DATABASE_URL) ? 'PostgreSQL' : `Local : ${local_size}`))
+      let message = setting.msg
+         .replace('+greeting', Func.greeting())
+         .replace('+tag', `@${m.sender.replace(/@.+/g, '')}`)
+         .replace('+db', (/mongo/.test(process.env.DATABASE_URL) ? 'MongoDB' : /postgre/.test(process.env.DATABASE_URL) ? 'PostgreSQL' : `Local : ${local_size}`))
+         .replace('+library', pkg.dependencies['@whiskeysockets/baileys'].replace(/^\^|~|>|</g, ''))
+         .replace('+version', pkg.version)
       if (style === 1) {
          let txt = `${message}\n\n`
          for (let tag of sortedTags) {
@@ -84,7 +91,6 @@ module.exports = {
          })
          txt += '\n' + global.footer
          conn.sendMessageModify(m.chat, txt, m, {
-            ads: false,
             largeThumb: true,
             thumbnail: Func.isUrl(setting.cover) ? setting.cover : Buffer.from(setting.cover, 'base64'),
             url: setting.link

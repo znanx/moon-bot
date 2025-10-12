@@ -11,12 +11,13 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'Cow'), m)
+         if (!text) throw Func.example(usedPrefix, command, 'Cow')
          conn.sendReact(m.chat, '🕒', m.key)
          if (command == 'google') {
             const json = await Api.get('/google', {
                q: text
             })
+            if (!json.status) throw Func.jsonFormat(json)
             let txt = `乂  *G O O G L E*\n\n`
             json.data.map((v, i) => {
                txt += `*` + (i + 1) + `.* ` + v.title + `\n`
@@ -29,6 +30,7 @@ module.exports = {
             const json = await Api.get('/google-image', {
                q: text
             })
+            if (!json.status) throw Func.jsonFormat(json)
             for (let i = 0; i < 5; i++) {
                let random = Math.floor(json.data.length * Math.random())
                let caption = `乂  *G O O G L E - I M A G E*\n\n`
@@ -40,7 +42,7 @@ module.exports = {
             }
          }
       } catch (e) {
-         conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,
