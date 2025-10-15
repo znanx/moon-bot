@@ -23,6 +23,7 @@ const connect = async () => {
          return /(newsletter|bot)/.test(jid)
       }
    })
+   
    conn.once('connect', async x => {
       /** load db */
       global.db = { users: {}, groups: {}, chats: {}, setting: {}, statistic: {}, sticker: {}, ...(await system.database.fetch() || {}) }

@@ -31,12 +31,16 @@ module.exports = {
          teks += global.footer
          if (command == 'tiktok' || command == 'tt') {
             let result = json.data.find(v => v.type == 'nowatermark')
-            if (!result) {
-               json.data.map(x => {
-                  conn.sendFile(m.chat, x.url, Func.filename('jpg'), teks, m)
-               })
-            } else {
+            if (result) {
                conn.sendFile(m.chat, result.url, Func.filename('mp4'), teks, m)
+            } else {
+               const images = json.data.filter(v => v.type == 'photo')
+               if (images.length > 1) {
+                  const medias = images.map(v => ({ url: v.url }))
+                  conn.sendAlbumMessage(m.chat, medias, m)
+               } else if (images.length == 1) {
+                  conn.sendFile(m.chat, images[0].url, Func.filename('jpg'), teks, m)
+               }
             }
          } else if (command == 'tikwm') return conn.sendFile(m.chat, json.data.find(v => v.type == 'watermark').url, Func.filename('mp4'), teks, m)
          else if (command == 'tikmp3') return conn.sendFile(m.chat, json.music_info.url, Func.filename('mp3'), '', m)

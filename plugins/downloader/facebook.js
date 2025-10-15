@@ -19,18 +19,15 @@ module.exports = {
          })
          if (!json.status) throw Func.jsonFormat(json)
          const result = json.data.find(v => v.quality == 'HD') || json.data.find(v => v.quality == 'SD')
-         if (result) {
+         if (result && json.data.length == 1) {
             conn.sendFile(m.chat, result.url, Func.filename(result.quality === 'jpeg' ? 'jpeg' : 'mp4'), `◦ *Quality* : ${result.quality}`, m)
-         } else {
-            json.data.map(async v => {
-               await conn.sendFile(m.chat, v.url, Func.filename(v.quality === 'jpeg' ? 'jpeg' : 'mp4'), `◦ *Quality* : ${v.quality}`, m)
-               await Func.delay(1500)
-            })
+         } else if (json.data.length > 1) {
+            const album = json.data.map(v => ({ url: v.url }))
+            conn.sendAlbumMessage(m.chat, album, m)
          }
       } catch (e) {
          throw Func.jsonFormat(e)
       }
    },
-   limit: true,
-   error: false
+   limit: true
 }

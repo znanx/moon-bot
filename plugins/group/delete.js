@@ -1,6 +1,6 @@
 module.exports = {
    help: ['delete'],
-   aliases: ['del'],
+   aliases: ['del', 'd'],
    use: 'reply chat',
    tags: 'group',
    run: async (m, {

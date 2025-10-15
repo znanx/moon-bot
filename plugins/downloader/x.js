@@ -19,8 +19,12 @@ module.exports = {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)
-         const url = json.data.find((v) => v.url).url
-         conn.sendFile(m.chat, url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
+         if (json.data.length == 1) {
+            conn.sendFile(m.chat, json.data[0].url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
+         } else {
+            const album = json.data.map(v => ({ url: v.url }))
+            conn.sendAlbumMessage(m.chat, album, m)
+         }
       } catch (e) {
          throw Func.jsonFormat(e)
       }

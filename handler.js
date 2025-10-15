@@ -117,7 +117,7 @@ module.exports = async (conn, ctx, database) => {
             thumbnail: 'https://telegra.ph/file/0b32e0a0bb3b81fef9838.jpg',
             url: setting.link
          }).then(() => chats.lastchat = new Date() * 1)
-         if (!['me', 'owner', 'exec'].includes(name) && users && (users.banned || new Date - users.ban_temporary < env.timeout)) return
+         if (!['me', 'owner'].includes(name) && users && (users.banned || new Date - users.ban_temporary < env.timeout)) return
          if (m.isGroup && !['activation', 'groupinfo'].includes(name) && groupSet.mute) return
 
          if (plugin.error) return conn.reply(m.chat, global.status.errorF, m)

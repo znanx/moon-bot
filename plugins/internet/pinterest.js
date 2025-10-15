@@ -1,6 +1,6 @@
 module.exports = {
-   help: ['pin'],
-   aliases: ['pinterest'],
+   help: ['pinterest'],
+   aliases: ['pin'],
    use: 'query',
    tags: 'internet',
    run: async (m, {
@@ -8,7 +8,6 @@ module.exports = {
       usedPrefix,
       command,
       text,
-      Scraper,
       Func
    }) => {
       try {
@@ -18,18 +17,18 @@ module.exports = {
             q: text
          })
          if (!json.status) throw Func.jsonFormat(json)
-         let medias = []
-         for (let i = 0; i < 5; i++) {
-            var rand = Math.floor(json.data.length * Math.random())
-            medias.push({
-               url: json.data[rand].url
-            })
+         const medias = Array.from({ length: 5 }, () => {
+            const rand = Math.floor(Math.random() * json.data.length)
+            return { url: json.data[rand].url }
+         })
+         if (medias.length === 1) {
+            conn.sendFile(m.chat, medias[0].url, '', '', m)
+         } else {
+            conn.sendAlbumMessage(m.chat, medias, m)
          }
-         conn.sendAlbumMessage(m.chat, medias, m)
       } catch (e) {
          throw Func.jsonFormat(e)
       }
    },
-   limit: true,
-   error: false
+   limit: true
 }

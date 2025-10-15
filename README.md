@@ -9,6 +9,5 @@
 [![License](https://img.shields.io/github/license/znanx/moon-bot?style=flat-square)](./LICENSE)
 [![Issues](https://img.shields.io/github/issues/znanx/moon-bot?style=flat-square)](https://github.com/znanx/moon-bot/issues)
 
-<p align="center">This script is still in development and will continue to be updated, keep an eye on this repository, don't forget to give stars and forks</p>
-
-<p align="center">Adios.....</p>
+> [!NOTE]
+> This script is still in development and will continue to be updated, keep an eye on this repository, don't forget to give stars and forks

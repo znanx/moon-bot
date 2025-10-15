@@ -35,7 +35,7 @@ module.exports = {
       txt += `   ◦  ${Func.switcher(groupSet.welcome, '[ √ ]', '[ × ]')} Welcome Message\n`
       txt += `   ◦  ${Func.switcher(groupSet.left, '[ √ ]', '[ × ]')} Left Message\n\n`
       txt += `乂  *G R O U P - S T A T U S*\n\n`
-      txt += `   ◦  *Muted* : ${Func.switcher(groupSet.mute, '√', '×')}\n`
+      txt += `   ◦  *Mute* : ${Func.switcher(groupSet.mute, '√', '×')}\n`
       txt += `   ◦  *Stay* : ${Func.switcher(groupSet.stay, '√', '×')}\n`
       txt += `   ◦  *Expired* : ${groupSet.expired == 0 ? 'NOT SET' : Func.timeReverse(groupSet.expired - new Date * 1)}\n\n`
       txt += global.footer
