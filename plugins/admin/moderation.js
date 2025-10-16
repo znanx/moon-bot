@@ -1,5 +1,5 @@
 module.exports = {
-   help: ['welcome', 'left', 'autodetect', 'antidelete', 'antilink', 'antivirtex', 'autosticker', 'antisticker', 'antitagsw', 'antiporn', 'antitoxic'],
+   help: ['welcome', 'left', 'autodetect', 'antidelete', 'antilink', 'antivirtex', 'autosticker', 'antisticker', 'antitagsw', 'antiporn', 'antitoxic', 'antibot'],
    use: 'on / off',
    tags: 'admin',
    run: async (m, {
@@ -12,7 +12,7 @@ module.exports = {
    }) => {
       try {
          let type = command.toLowerCase()
-         if (!isBotAdmin && /antilink|antivirtex|antitoxic|antisticker|antitagsw/.test(type)) return conn.reply(m.chat, global.status.botAdmin, m)
+         if (!isBotAdmin && /antilink|antivirtex|antitoxic|antisticker|antitagsw|antibot/.test(type)) return conn.reply(m.chat, global.status.botAdmin, m)
          if (!args || !args[0]) return conn.reply(m.chat, `🚩 *Current status* : [ ${setting[type] ? 'ON' : 'OFF'} ] (Enter *On* or *Off*)`, m)
          let option = args[0].toLowerCase()
          let optionList = ['on', 'off']

@@ -18,7 +18,7 @@ module.exports = {
             })
          }, 60_000)
       } catch (e) {
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         console.error(e)
       }
    },
    error: false

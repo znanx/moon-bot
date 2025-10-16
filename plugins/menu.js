@@ -17,13 +17,13 @@ module.exports = {
       let category = {}
       for (let plugin of plugs) {
          let pluginFileName = path.parse(plugin.filePath).name
-         if (!plugin.tags || plugin.tags === 'main' || setting.error?.includes(pluginFileName) || setting.hidden.includes(plugin.tags)) continue
+         if (!plugin.tags || plugin.tags === 'main' || setting.error?.includes(pluginFileName) || setting.hidden.includes(plugin.tags) || setting.pluginDisable?.includes(pluginFileName)) continue
          if (!category[plugin.tags]) category[plugin.tags] = []
          if (Array.isArray(plugin.help)) {
             for (let command of plugin.help) {
                category[plugin.tags].push({
                   command: command,
-                  use: plugin.use || ''
+                  use: plugin.use || '' 
                })
             }
          }

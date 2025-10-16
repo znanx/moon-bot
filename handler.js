@@ -36,6 +36,12 @@ module.exports = async (conn, ctx, database) => {
       }
       if (!setting.multiprefix) setting.noprefix = false
       if (setting.debug && !m.fromMe && isOwner) conn.reply(m.chat, Func.jsonFormat(m), m)
+      if (!m.fromMe && m.isGroup && groupSet.antibot && !isOwner && isBotAdmin) {
+         if (m.isBot || /interactiveMessage|buttonsMessage/.test(m.mtype)) return conn.reply(m.chat, Func.texted('italic', `⚠ Bot lain tidak diperbolehkan di grup ini..`), m).then(async () => {
+            await Func.delay(15_000)
+            conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
+         })
+      }
       if (m.isGroup) {
          groupSet.activity = new Date() * 1
          groupSet.name = groupMetadata?.subject ?? ''
@@ -182,6 +188,7 @@ module.exports = async (conn, ctx, database) => {
       }
    } catch (e) {
       console.error(e)
+      Func.logFile(e)
    }
    Func.reload(require.resolve(__filename))
 } 
