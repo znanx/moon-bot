@@ -29,6 +29,7 @@ module.exports = {
       txt += `   ◦  ${Func.switcher(groupSet.antisticker, '[ √ ]', '[ × ]')} Anti Sticker\n`
       txt += `   ◦  ${Func.switcher(groupSet.antiporn, '[ √ ]', '[ × ]')} Anti Porn\n`
       txt += `   ◦  ${Func.switcher(groupSet.antitoxic, '[ √ ]', '[ × ]')} Anti Toxic\n`
+      txt += `   ◦  ${Func.switcher(groupSet.antibot, '[ √ ]', '[ × ]')} Anti Bot\n`
       txt += `   ◦  ${Func.switcher(groupSet.antitagsw, '[ √ ]', '[ × ]')} Anti Tag Status\n`
       txt += `   ◦  ${Func.switcher(groupSet.autosticker, '[ √ ]', '[ × ]')} Auto Sticker\n`
       txt += `   ◦  ${Func.switcher(groupSet.autodetect, '[ √ ]', '[ × ]')} Auto Detect\n`
