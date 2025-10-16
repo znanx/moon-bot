@@ -10,8 +10,8 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'moonbot'), m)
-         if (text.length > 10) return conn.reply(m.chat, Func.texted('bold', '🚩 Max 10 character'), m)
+         if (!text) throw Func.example(usedPrefix, command, 'moonbot')
+         if (text.length > 10) throw Func.texted('bold', '🚩 Max 10 character')
          conn.sendReact(m.chat, '🕒', m.key)
          let old = new Date(), link
          /** text pro */
@@ -37,13 +37,13 @@ module.exports = {
          if (/naruto2/.test(command)) link = 'https://photooxy.com/manga-and-anime/make-naruto-banner-online-free-378.html'
          if (/flaming/.test(command)) link = 'https://photooxy.com/logo-and-text-effects/realistic-flaming-text-effect-online-197.html'
          if (/woodblock/.test(command)) link = 'https://photooxy.com/logo-and-text-effects/carved-wood-effect-online-171.html'
-         let json = await Api.get('/textmaker', {
+         const json = await Api.get('/textmaker', {
             url: link, text: text
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.sendFile(m.chat, json.data.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
       } catch (e) {
-         conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
    limit: true,

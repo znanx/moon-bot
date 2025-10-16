@@ -10,9 +10,9 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!text) return conn.reply(m.chat, Func.example(usedPrefix, command, 'moon | bot'), m)
+         if (!text) throw Func.example(usedPrefix, command, 'moon | bot')
          let [text1, text2] = text.split('|')
-         if (text1.length > 10 || text2.length > 10) return conn.reply(m.chat, Func.texted('bold', '🚩 Max 10 character'), m)
+         if (text1.length > 10 || text2.length > 10) throw Func.texted('bold', '🚩 Max 10 character')
          conn.sendReact(m.chat, '🕒', m.key)
          let old = new Date(), link
          /** text pro */
@@ -27,15 +27,14 @@ module.exports = {
          if (/captainamerica/.test(command)) link = 'https://en.ephoto360.com/create-a-cinematic-captain-america-text-effect-online-715.html'
          if (/amongus2/.test(command)) link = 'https://en.ephoto360.com/create-a-banner-game-among-us-with-your-name-763.html'
          if (/latestspace/.test(command)) link = 'https://en.ephoto360.com/latest-space-3d-text-effect-online-559.html'
-         let json = await Api.get('/textmaker2', {
+         const json = await Api.get('/textmaker2', {
             url: link, text1, text2
          })
-         if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
+         if (!json.status) throw Func.jsonFormat(json)
          conn.sendFile(m.chat, json.data.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
       } catch (e) {
-         conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(json)
       }
    },
-   limit: true,
-   error: false
+   limit: true
 }

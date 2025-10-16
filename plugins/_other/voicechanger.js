@@ -12,7 +12,7 @@ module.exports = {
       Func
    }) => {
       try {
-         if (!m.quoted) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply audio to use this command.`), m)
+         if (!m.quoted) throw Func.texted('bold', `🚩 Reply audio to use this command.`)
          let mime = ((m.quoted ? m.quoted : m.msg).mimetype || '')
          let set
          if (/bass/.test(command)) set = '-af equalizer=f=94:width_type=o:width=2:g=30'
@@ -34,7 +34,7 @@ module.exports = {
             let ran = Func.filename('mp3')
             exec(`ffmpeg -i ${parse.file} ${set} ${ran}`, async (err, stderr, stdout) => {
                fs.unlinkSync(parse.file)
-               if (err) return conn.reply(m.chat, Func.texted('bold', `🚩 Conversion failed.`), m)
+               if (err) throw Func.texted('bold', `🚩 Conversion failed.`)
                let buff = fs.readFileSync(ran)
                if (m.quoted.ptt) return conn.sendFile(m.chat, buff, 'audio.mp3', '', m, {
                   ptt: true
@@ -46,13 +46,11 @@ module.exports = {
                })
             })
          } else {
-            conn.reply(m.chat, Func.texted('bold', `🚩 Reply audio to use this command.`), m)
+            throw Func.texted('bold', `🚩 Reply audio to use this command.`)
          }
       } catch (e) {
-         console.log(e)
-         return conn.reply(m.chat, Func.jsonFormat(e), m)
+         throw Func.jsonFormat(e)
       }
    },
-   limit: true,
-   error: false
+   limit: true
 }
