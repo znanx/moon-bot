@@ -31,7 +31,7 @@ module.exports = {
             if (!mime) throw Func.texted('bold', `🚩 Reply photo.`)
             if (!/image\/(jpe?g|png)/.test(mime)) throw Func.texted('bold', `🚩 Only for photo.`)
             conn.sendReact(m.chat, '🕒', m.key)
-            const cdn = await Scraper.uploader(await q.dowload())
+            const cdn = await Scraper.uploader(await q.download())
             if (!cdn.status) throw Func.jsonFormat(cdn)
             const json = await Api.get('/remini', {
                image: cdn.data.url
