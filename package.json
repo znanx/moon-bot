@@ -30,7 +30,7 @@
       "server": "node index.js --server"
    },
    "dependencies": {
-      "@whiskeysockets/baileys": "^6.7.20",
+      "@whiskeysockets/baileys": "^7.0.0-rc.6",
       "@znan/wabot": "^0.0.66",
       "archiver": "^7.0.1",
       "cfonts": "^3.3.0",
