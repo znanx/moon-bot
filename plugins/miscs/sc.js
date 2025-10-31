@@ -6,6 +6,7 @@ module.exports = {
    tags: 'miscs',
    run: async (m, {
       conn,
+      setting,
       Func
    }) => {
       try {
@@ -21,7 +22,8 @@ module.exports = {
          txt += global.footer
          conn.sendMessageModify(m.chat, txt, m, {
             largeThumb: true,
-            url: 'https://github.com/rifnd/moon-bot'
+            thumbnail: Func.isUrl(setting.cover) ? setting.cover : Buffer.from(setting.cover, 'base64'),
+            url: 'https://github.com/rifnd/moon-bot',
          })
       } catch (e) {
          throw Func.jsonFormat(e)

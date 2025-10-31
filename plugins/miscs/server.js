@@ -4,6 +4,7 @@ module.exports = {
    tags: 'miscs',
    run: async (m, {
       conn,
+      setting,
       Func
    }) => {
       try {
@@ -18,7 +19,8 @@ module.exports = {
          caption += `└  ◦  Processor : ${os.cpus()[0].model}\n\n`
          caption += global.footer
          conn.sendMessageModify(m.chat, caption, m, {
-            largeThumb: true
+            largeThumb: true,
+            thumbnail: Func.isUrl(setting.cover) ? setting.cover : Buffer.from(setting.cover, 'base64'),
          })
       } catch (e) {
          console.log(e)

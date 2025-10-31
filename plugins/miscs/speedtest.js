@@ -13,7 +13,7 @@ module.exports = {
       conn.reply(m.chat, Func.texted('bold', 'Testing speed...'), m)
       let o
       try {
-         o = await exec('python speed.py --share --secure')
+         o = await exec('python3 speed.py --share --secure')
       } catch (e) {
          o = e
       } finally {
