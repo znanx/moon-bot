@@ -15,15 +15,19 @@ const connect = async () => {
       online: true,
       presence: true,
       bypass_ephemeral: true,
-      pairing_code: 'MOONXBOT',
-      version: [2, 3000, 1027974396]
+      pairing: {
+         state: true,
+         number: 6283175395970,
+         code: 'MOONXBOT'
+      },
    }, {
       browser: ['Ubuntu', 'Firefox', '20.0.00'],
+      version: [2, 3000, 1027974396],
       shouldIgnoreJid: jid => {
          return /(newsletter|bot)/.test(jid)
       }
    })
-   
+
    conn.once('connect', async x => {
       /** load db */
       global.db = { users: {}, groups: {}, chats: {}, setting: {}, statistic: {}, sticker: {}, ...(await system.database.fetch() || {}) }

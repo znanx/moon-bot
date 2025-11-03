@@ -30,8 +30,8 @@
       "server": "node index.js --server"
    },
    "dependencies": {
-      "@whiskeysockets/baileys": "7.0.0-rc.3",
-      "@znan/wabot": "^0.0.69",
+      "@whiskeysockets/baileys": "6.7.20",
+      "@znan/wabot": "^0.0.70",
       "archiver": "^7.0.1",
       "cfonts": "^3.3.0",
       "express": "^4.21.2",
@@ -40,9 +40,9 @@
       "yt-search": "^2.10.4"
    },
    "overrides": {
-      "jimp": "~0.22.12"
+      "jimp": "0.22.12"
    },
    "resolutions": {
-      "jimp": "~0.22.12"
+      "jimp": "0.22.12"
    }
 }
