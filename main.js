@@ -22,7 +22,7 @@ const connect = async () => {
       },
    }, {
       browser: ['Ubuntu', 'Firefox', '20.0.00'],
-      version: [2, 3000, 1027974396],
+      version: [2, 3000, 1029030078],
       shouldIgnoreJid: jid => {
          return /(newsletter|bot)/.test(jid)
       }
