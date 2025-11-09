@@ -23,7 +23,7 @@ module.exports = {
             for (let command of plugin.help) {
                category[plugin.tags].push({
                   command: command,
-                  use: plugin.use || '' 
+                  use: plugin.use || ''
                })
             }
          }
@@ -94,6 +94,48 @@ module.exports = {
             largeThumb: true,
             thumbnail: Func.isUrl(setting.cover) ? setting.cover : Buffer.from(setting.cover, 'base64'),
             url: setting.link
+         })
+      } else if (style === 3) {
+         let tag = args.join(' ').toLowerCase()
+         if (tag) {
+            let cmdList = category[tag] || []
+            if (cmdList.length === 0) return
+            let commands = cmdList.sort((a, b) => a.command.localeCompare(b.command)).map((cmdObject, i) => {
+               let box = '│'
+               if (cmdList.length === 1) box = '–'
+               else if (i === 0) box = '┌'
+               else if (i === cmdList.length - 1) box = '└'
+               return `${box}  ◦  ${usedPrefix}${cmdObject.command}${cmdObject.use ? ` *${cmdObject.use}*` : ''}`
+            }).join('\n')
+            m.reply(commands)
+            return
+         }
+         let sections = []
+         const label = {
+            highlight_label: 'Many Used'
+         }
+         sortedTags.forEach(tag => {
+            sections.push({
+               ...(/download|conver|tool/.test(tag) ? label : {}),
+               rows: [{
+                  title: Func.ucword(tag),
+                  description: `There are ${category[tag].length} commands`,
+                  id: `${usedPrefix}menu ${tag}`
+               }]
+            })
+         })
+         let buttons = [{
+            name: 'single_select',
+            buttonParamsJson: JSON.stringify({
+               title: 'Tap Here!',
+               sections
+            })
+         }]
+         conn.sendIAMessage(m.chat, buttons, m, {
+            header: '',
+            media: Func.isUrl(setting.cover) ? setting.cover : Buffer.from(setting.cover, 'base64'),
+            content: message,
+            footer: global.footer
          })
       }
    },
