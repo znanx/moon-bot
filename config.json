@@ -20,5 +20,12 @@
       "cooldown": 5
    },
    "blocks": ["994", "221", "263", "212"],
-   "evaluate_chars": ["=>", ">", "$", "~>", "!", "+", "/", "#", "."]
+   "evaluate_chars": ["=>", ">", "$", "~>", "!", "+", "/", "#", "."],
+   "pairing": {
+      "state": true,
+      "number": 6283175395970,
+      "code": "MOONXBOT",
+      "browser": ["Ubuntu", "Firefox", "20.0.00"],
+      "verion": [2, 3000, 1029030078]
+   }
  }

@@ -24,8 +24,8 @@
       "lib": "lib"
    },
    "scripts": {
-      "start": "node index.js --max-old-space-size=8192",
-      "pm2": "pm2 start index.js --name moon-bot --max-memory-restart 8G -- --max-old-space-size=8192",
+      "start": "node index.js --max-old-space-size=1024",
+      "pm2": "pm2 start index.js --name moon-bot --max-memory-restart 1G -- --max-old-space-size=1024",
       "test": "node test.js",
       "server": "node index.js --server"
    },

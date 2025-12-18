@@ -16,13 +16,13 @@ const connect = async () => {
       presence: true,
       bypass_ephemeral: true,
       pairing: {
-         state: true,
-         number: 6283175395970,
-         code: 'MOONXBOT'
+         state: env.pairing.state,
+         number: env.pairing.number,
+         code: env.pairing.number
       },
    }, {
-      browser: ['Ubuntu', 'Firefox', '20.0.00'],
-      version: [2, 3000, 1029030078],
+      browser: env.pairing.browser,
+      version: env.pairing.version,
       shouldIgnoreJid: jid => {
          return /(newsletter|bot)/.test(jid)
       }
