@@ -1,6 +1,7 @@
 const { Connection, Database, Session, Function: Func, Config: env } = require('@znan/wabot')
 require('./lib/system/config'), require('./lib/system/function'), require('./lib/system/scraper')
 const fs = require('fs')
+const config = require('./config.json')
 
 const connect = async () => {
    const url = process?.env?.DATABASE_URL
@@ -15,11 +16,7 @@ const connect = async () => {
       online: true,
       presence: true,
       bypass_ephemeral: true,
-      pairing: {
-         state: env.pairing.state,
-         number: env.pairing.number,
-         code: env.pairing.number
-      },
+      pairing: config.pairing,
    }, {
       browser: env.pairing.browser,
       version: env.pairing.version,
