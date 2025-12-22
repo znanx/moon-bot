@@ -33,6 +33,7 @@ module.exports = {
       txt += `   ◦  ${Func.switcher(groupSet.antitagsw, '[ √ ]', '[ × ]')} Anti Tag Status\n`
       txt += `   ◦  ${Func.switcher(groupSet.autosticker, '[ √ ]', '[ × ]')} Auto Sticker\n`
       txt += `   ◦  ${Func.switcher(groupSet.autodetect, '[ √ ]', '[ × ]')} Auto Detect\n`
+      txt += `   ◦  ${Func.switcher(groupSet.autoclose?.active, '[ √ ]', '[ × ]')} Auto Close | ${groupSet.autoclose?.active ? `${groupSet.autoclose.start}-${groupSet.autoclose.end}` : 'Not Set'}\n`
       txt += `   ◦  ${Func.switcher(groupSet.welcome, '[ √ ]', '[ × ]')} Welcome Message\n`
       txt += `   ◦  ${Func.switcher(groupSet.left, '[ √ ]', '[ × ]')} Left Message\n\n`
       txt += `乂  *G R O U P - S T A T U S*\n\n`
