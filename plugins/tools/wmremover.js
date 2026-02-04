@@ -30,7 +30,7 @@ module.exports = {
             conn.sendReact(m.chat, '🕒', m.key)
             const cdn = await Scraper.uploader(await q.download())
             if (!cdn.status) throw Func.jsonFormat(cdn)
-            const json = await Api.get('/wmremover', {
+            const json = await Api.get('/tools/wmremover', {
                image_url: cdn.data.url
             })
             if (!json.status) throw Func.jsonFormat(json)
