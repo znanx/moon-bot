@@ -16,7 +16,7 @@ module.exports = {
             case 'instagramstalk': {
                if (!text) throw Func.example(usedPrefix, command, 'bulansutena')
                conn.sendReact(m.chat, '🕒', m.key)
-               const json = await Api.get('/igstalk', {
+               const json = await Api.get('/searching/ig/stalk', {
                   username: text
                })
                if (!json.status) throw `🚩 ${json.msg}`
@@ -38,7 +38,7 @@ module.exports = {
             case 'twitterstalk': {
                if (!text) throw Func.example(usedPrefix, command, 'Nando35_')
                conn.sendReact(m.chat, '🕒', m.key)
-               const json = await Api.get('/twitter-stalk', {
+               const json = await Api.get('/searching/x/stalk', {
                   username: text
                })
                if (!json.status) throw `🚩 ${json.msg}`
@@ -59,7 +59,7 @@ module.exports = {
             case 'tiktokstalk': {
                if (!text) throw Func.example(usedPrefix, command, 'znan.store')
                conn.sendReact(m.chat, '🕒', m.key)
-               const json = await Api.get('/tiktok-stalk', {
+               const json = await Api.get('/searching/tiktok/stalk', {
                   username: text
                })
                if (!json.status) throw `🚩 ${json.msg}`
@@ -84,7 +84,7 @@ module.exports = {
                let [game, zone] = text.split(' | ')
                if (!game || !zone) throw Func.example(usedPrefix, command, '99042161 | 2513')
                conn.sendReact(m.chat, '🕒', m.key)
-               const json = await Api.get('/mlstalk', {
+               const json = await Api.get('/searching/mlstalk', {
                   gameid: game, zoneid: zone
                })
                if (!json.status) throw `🚩 ${json.msg}`
@@ -95,7 +95,7 @@ module.exports = {
             case 'ffstalk': {
                if (!text) throw Func.example(usedPrefix, command, '35588677')
                conn.sendReact(m.chat, '🕒', m.key)
-               const json = await Api.get('/ffstalk', {
+               const json = await Api.get('/searching/ffstalk', {
                   id: text
                })
                if (!json.status) throw `🚩 ${json.msg}`

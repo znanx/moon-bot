@@ -20,7 +20,7 @@ module.exports = {
                let old = new Date()
                for (const link of links) {
                   try {
-                     let json = await Api.get('/ig', {
+                     let json = await Api.get('/downloader/ig', {
                         url: link
                      })
                      if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)

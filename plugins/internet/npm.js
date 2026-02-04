@@ -15,7 +15,7 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'chalk')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/npm', {
+         const json = await Api.get('/searching/npmjs', {
             q: text
          })
          if (!json.status) throw Func.jsonFormat(json)

@@ -15,7 +15,7 @@ module.exports = {
          if (!args[0].match('tiktok.com')) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
          let old = new Date()
-         const json = await Api.get('/tiktok', {
+         const json = await Api.get('/downloader/tiktok', {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)

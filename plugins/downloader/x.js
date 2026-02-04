@@ -15,7 +15,7 @@ module.exports = {
          if (!args[0].match(/(https?:\/\/)?(www\.)?(twitter\.com|x\.com)\/([a-zA-Z0-9_]+)\/status\/(\d+)/)) throw global.status.invalid
          let old = new Date()
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/twitter', {
+         const json = await Api.get('/downloader/x', {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)

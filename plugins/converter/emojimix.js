@@ -15,7 +15,7 @@ module.exports = {
          conn.sendReact(m.chat, '🕒', m.key)
          let [emo1, emo2] = text.split` + `
          if (!emo1 || !emo2) throw Func.texted('bold', `🚩 Give 2 emoji to mix.`)
-         const json = await Api.get('/emojimix', {
+         const json = await Api.get('/canvas/emojimix', {
             emo1, emo2
          })
          if (!json.status) throw Func.texted('bold', `🚩 Emoji can't be mixed.`)

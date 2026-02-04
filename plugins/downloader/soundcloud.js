@@ -18,7 +18,7 @@ module.exports = {
             if (isNaN(idx) || !data[idx]) throw '🚩 Invalid Number!'
             const { url } = data[idx]
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/soundcloud-dl', {
+            const json = await Api.get('/downloader/soundcloud', {
                url: url
             })
             if (!json.status) throw Func.jsonFormat(json)
@@ -27,7 +27,7 @@ module.exports = {
             })
          } else if (/https?:\/\/(open\.)?spotify\.com\//i.test(text)) {
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/soundcloud-dl', {
+            const json = await Api.get('/downloader/soundcloud', {
                url: text
             })
             if (!json.status) throw Func.jsonFormat(json)
@@ -37,7 +37,7 @@ module.exports = {
          } else {
             if (!text) throw Func.example(usedPrefix, command, 'demi kau dan si buah hati')
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/spotify', {
+            const json = await Api.get('/searching/soundcloud', {
                q: text
             })
             if (!json.status) throw Func.jsonFormat(json)
@@ -47,7 +47,7 @@ module.exports = {
                   delete conn.soundcloud[m.chat]
                }, 2 * 60 * 1000) // 2 minutes
             }
-            let txt = `乂  *S P O T I F Y*\n\n`
+            let txt = `乂  *S O U N D C L O U D*\n\n`
             json.data.map((v, i) => {
                txt += `*${i + 1}*. ${v.title} - ${v.artist || 'unknown'}\n`
                txt += `◦ *Channel* : ${v.channel || 'Unknown'}\n`

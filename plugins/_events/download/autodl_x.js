@@ -21,7 +21,7 @@ module.exports = {
                let old = new Date()
                for (let link of links) {
                   try {
-                     const json = await Api.get('/twitter', {
+                     const json = await Api.get('/downloader/x', {
                         url: link
                      })
                      console.log(link)

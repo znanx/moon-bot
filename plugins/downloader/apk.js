@@ -19,7 +19,7 @@ module.exports = {
             if (isNaN(idx) || !data[idx]) throw '🚩 Invalid Number!'
             const { url } = data[idx]
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/playstore-get', {
+            const json = await Api.get('/searching/playstore/get', {
                url: url
             })
             if (!json.status) throw Func.jsonFormat(json)
@@ -43,7 +43,7 @@ module.exports = {
          } else {
             if (!text) throw Func.example(usedPrefix, command, 'whatever')
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/playstore', {
+            const json = await Api.get('/searching/playstore', {
                q: text
             })
             if (!json.status) throw Func.jsonFormat(json)

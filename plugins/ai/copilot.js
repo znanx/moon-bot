@@ -12,8 +12,8 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'apa itu kucing')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/ai-copilot', {
-            q: text
+         const json = await Api.get('/ai/copilot', {
+            prompt: text
          })
          if (!json.status) throw Func.jsonFormat(json)
          conn.reply(m.chat, json.data.content, m)

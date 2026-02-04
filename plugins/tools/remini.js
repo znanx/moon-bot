@@ -17,8 +17,8 @@ module.exports = {
                conn.sendReact(m.chat, '🕒', m.key)
                const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
                if (!cdn.status) throw Func.jsonFormat(cdn)
-               const json = await Api.get('/remini', {
-                  image: cdn.data.url
+               const json = await Api.get('/tools/remini', {
+                  image_url: cdn.data.url
                })
                if (!json.status) throw Func.jsonFormat(json)
                conn.sendFile(m.chat, json.data.url, 'Remini - ' + Func.randomString(10) + '.jpg', '', m, {
@@ -33,8 +33,8 @@ module.exports = {
             conn.sendReact(m.chat, '🕒', m.key)
             const cdn = await Scraper.uploader(await q.download())
             if (!cdn.status) throw Func.jsonFormat(cdn)
-            const json = await Api.get('/remini', {
-               image: cdn.data.url
+            const json = await Api.get('/tools/remini', {
+               image_url: cdn.data.url
             })
             if (!json.status) throw Func.jsonFormat(json)
             conn.sendFile(m.chat, json.data.url, 'Remini - ' + Func.randomString(10) + '.jpg', '', m, {

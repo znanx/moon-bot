@@ -1,5 +1,5 @@
 module.exports = {
-   help: ['prompter'],
+   help: ['photoexif'],
    use: 'reply photo',
    tags: 'tools',
    run: async (m, {
@@ -14,31 +14,27 @@ module.exports = {
             let q = m.quoted ? m.quoted.message[type] : m.msg
             if (/image/.test(type)) {
                conn.sendReact(m.chat, '🕒', m.key)
-               let old = new Date()
                const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
                if (!cdn.status) throw Func.jsonFormat(cdn)
-               const json = await Api.get('/prompter', {
-                  image: cdn.data.url
+               const json = await Api.get('/tools/image-exif', {
+                  image_url: cdn.data.url
                })
                if (!json.status) throw Func.jsonFormat(json)
-               let result = json.data[0].content.parts[0].text
-               conn.reply(m.chat, Func.jsonFormat(result), m)
+               conn.reply(m.chat, Func.jsonFormat(json.data), m)
             } else throw Func.texted('bold', `🚩 Only for photo.`)
          } else {
             let q = m.quoted ? m.quoted : m
             let mime = (q.msg || q).mimetype || ''
-            if (!mime) throw Func.texted('bold', `🚩 Reply photo.`)
-            if (!/image\/(jpe?g|png)/.test(mime)) throw Func.texted('bold', `🚩 Only for photo.`)
+            if (!mime) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply photo.`), m)
+            if (!/image\/(jpe?g|png)/.test(mime)) return conn.reply(m.chat, Func.texted('bold', `🚩 Only for photo.`), m)
             conn.sendReact(m.chat, '🕒', m.key)
-            let old = new Date()
-            const cdn = await Scraper.uploader(await q.download())
-            if (!cdn.status) throw Func.jsonFormat(cdn)
-            const json = await Api.get('/prompter', {
-               image: cdn.data.url
+            const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
+            if (!cdn.status) throw Func.jsonFormat(await q.download())
+            const json = await Api.get('/tools/image-exif', {
+               image_url: cdn.data.url
             })
             if (!json.status) throw Func.jsonFormat(json)
-            let result = json.data[0].content.parts[0].text
-            conn.reply(m.chat, Func.jsonFormat(result), m)
+            conn.reply(m.chat, Func.jsonFormat(json.data), m)
          }
       } catch (e) {
          throw Func.jsonFormat(e)

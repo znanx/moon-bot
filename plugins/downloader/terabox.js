@@ -15,7 +15,7 @@ module.exports = {
          if (!args || !args[0]) throw Func.example(usedPrefix, command, 'https://terabox.com/s/1jDTI6wLo066ALCYQ69sDyA')
          if (!args[0].match(/(?:https?:\/\/(www\.)?terabox\.(com|app)\S+)?$/)) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/terabox', {
+         const json = await Api.get('/downloader/terabox', {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)

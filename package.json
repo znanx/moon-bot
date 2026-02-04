@@ -18,7 +18,7 @@
    "author": "znanx",
    "main": "index.js",
    "engines": {
-      "node": ">= 20.x"
+      "node": ">= 22.x"
    },
    "directories": {
       "lib": "lib"
@@ -30,8 +30,8 @@
       "server": "node index.js --server"
    },
    "dependencies": {
-      "@whiskeysockets/baileys": "6.7.21",
-      "@znan/wabot": "^0.0.74",
+      "@whiskeysockets/baileys": "^7.0.0-rc.9",
+      "@znan/wabot": "^0.0.85",
       "archiver": "^7.0.1",
       "cfonts": "^3.3.0",
       "express": "^4.21.2",

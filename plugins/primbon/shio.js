@@ -12,7 +12,7 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'moon')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/shio', {
+         const json = await Api.get('/primbon/shio', {
             q: text
          })
          if (!json.status) throw Func.jsonFormat(json)
@@ -22,5 +22,5 @@ module.exports = {
       }
    },
    limit: true,
-   error: false
+   error: true
 }

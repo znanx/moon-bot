@@ -13,7 +13,7 @@ module.exports = {
          if (!args[0]) throw Func.example(usedPrefix, command, 'https://google.com')
          if (!/^https?:\/\//.test(args[0])) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/web-cloner', {
+         const json = await Api.get('/tools/webcloner', {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)

@@ -15,13 +15,13 @@ module.exports = {
          if (!args[0].match('capcut.com')) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
          if (command == 'capcut') {
-            const json = await Api.get('/capcut-dl', {
+            const json = await Api.get('/downloader/capcut', {
                url: args[0], type: 'nowatermark'
             })
             if (!json.status) throw Func.jsonFormat(json)
             conn.sendFile(m.chat, json.data.url, Func.filename('mp4'), `◦ *Title* : ${json.data.title}\n◦ *Description* : ${json.data.description}`, m)
          } else if (command == 'capcutwm') {
-            const json = await Api.get('/capcut-dl', {
+            const json = await Api.get('/downloader/capcut', {
                url: args[0], type: 'watermark'
             })
             if (!json.status) throw Func.jsonFormat(json)

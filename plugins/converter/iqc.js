@@ -14,7 +14,7 @@ module.exports = {
          if (text.length > 50) throw Func.texted('bold', '🚩 Text is too long, max 50 characters.')
          let old = new Date()
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/iqc', {
+         const json = await Api.get('/canvas/iqc', {
             text: text
          })
          if (!json.status) throw Func.jsonFormat(json)

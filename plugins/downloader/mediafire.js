@@ -16,7 +16,7 @@ module.exports = {
          if (!args || !args[0]) throw Func.example(usedPrefix, command, 'https://www.mediafire.com/file/c2fyjyrfckwgkum/ZETSv1%25282%2529.zip/file')
          if (!args[0].match(/(https:\/\/www.mediafire.com\/)/gi)) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/mediafire', {
+         const json = await Api.get('/downloader/mediafire', {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)

@@ -21,7 +21,7 @@ module.exports = {
                let old = new Date()
                for (const link of links) {
                   try {
-                     let json = await Api.get('/tiktok', {
+                     let json = await Api.get('/downloader/tiktok', {
                         url: link
                      })
                      if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)

@@ -19,7 +19,7 @@ module.exports = {
                conn.sendReact(m.chat, '🕒', m.key)
                for (const link of links) {
                   try {
-                     let json = await Api.get('/fb', { url: link })
+                     let json = await Api.get('/downloader/fb', { url: link })
                      if (!json.status) {
                         conn.reply(m.chat, Func.jsonFormat(json), m)
                         continue

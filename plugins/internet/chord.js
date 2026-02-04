@@ -18,14 +18,14 @@ module.exports = {
             if (isNaN(idx) || !data[idx]) throw '🚩 Invalid Number!'
             const { url } = data[idx]
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/chord-get', {
+            const json = await Api.get('/searching/chord/get', {
                url: url
             })
             conn.reply(m.chat, json.data.chord, m)
          } else {
             if (!text) throw Func.example(usedPrefix, command, 'demi kau dan si buah hati')
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/chord', {
+            const json = await Api.get('/searching/chord', {
                q: text
             })
             if (!json.status) throw Func.jsonFormat(json)

@@ -13,7 +13,7 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'Surabaya')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/jadwalsholat', {
+         const json = await Api.get('/searching/jadwalsalat', {
             q: text
          })
          if (!json.status) throw Func.jsonFormat(json)

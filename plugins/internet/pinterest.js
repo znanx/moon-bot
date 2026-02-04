@@ -13,7 +13,7 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'red moon')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/pinterest', {
+         const json = await Api.get('/searching/pinterest', {
             q: text
          })
          if (!json.status) throw Func.jsonFormat(json)

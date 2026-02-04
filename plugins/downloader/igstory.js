@@ -14,8 +14,8 @@ module.exports = {
          if (!args || !args[0]) throw Func.example(usedPrefix, command, 'https://instagram.com/stories/pandusjahrir/3064777897102858938?igshid=MDJmNzVkMjY=')
          conn.sendReact(m.chat, '🕒', m.key)
          let old = new Date()
-         const json = await Api.get('/igs', {
-            q: args[0]
+         const json = await Api.get('/downloader/ig/story', {
+            input: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)
          const medias = json.data.map(v => ({

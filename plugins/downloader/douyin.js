@@ -14,7 +14,7 @@ module.exports = {
          if (!args[0].match('douyin.com')) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
          let old = new Date()
-         const json = await Api.get('/douyin', {
+         const json = await Api.get('/downloader/douyin', {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)

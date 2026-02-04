@@ -14,7 +14,7 @@ module.exports = {
          if (!text) throw Func.example(usedPrefix, command, 'White cat | black | Text to Image | 1:1 | true')
          conn.sendReact(m.chat, '🕒', m.key)
          let [prompt, negative_prompt, model, ratio, upscale] = text.split` | `, old = new Date()
-         const json = await Api.post('/text2img', {
+         const json = await Api.post('/ai/text2img', {
             prompt, negative_prompt, model, ratio, upscale
          })
          if (!json.status) throw Func.jsonFormat(json)

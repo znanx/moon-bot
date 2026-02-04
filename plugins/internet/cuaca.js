@@ -18,7 +18,7 @@ module.exports = {
             if (isNaN(idx) || !data[idx]) throw '🚩 Invalid Number!'
             let { lon, lat } = data[idx]
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/cuaca-get', {
+            const json = await Api.get('/searching/weather/get', {
                longitude: lon,
                latitude: lat
             })
@@ -34,7 +34,7 @@ module.exports = {
          } else {
             if (!text) throw Func.example(usedPrefix, command, 'Porong')
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/cuaca', {
+            const json = await Api.get('/searching/weather', {
                q: text
             })
             if (!json.status) throw Func.jsonFormat(json)

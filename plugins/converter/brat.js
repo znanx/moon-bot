@@ -18,7 +18,7 @@ module.exports = {
          if (content.length > 100) throw Func.texted('bold', '🚩 Text is too long, max 100 characters.')
          conn.sendReact(m.chat, '🕒', m.key)
          if (mode === 'gif') {
-            const json = await Api.get('/bratgif', {
+            const json = await Api.get('/canvas/bratgif', {
                text: content
             })
             const buffer = Buffer.from(json.data, 'base64')
@@ -27,7 +27,7 @@ module.exports = {
                author: setting.sk_author
             })
          } else {
-            const json = await Api.get('/brat', {
+            const json = await Api.get('/canvas/brat', {
                text: content
             })
             conn.sendSticker(m.chat, json.data.url, m, {

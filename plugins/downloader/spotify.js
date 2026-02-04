@@ -18,7 +18,7 @@ module.exports = {
             if (isNaN(idx) || !data[idx]) throw '🚩 Invalid Number!'
             const { url } = data[idx]
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/spotify-dl', {
+            const json = await Api.get('/downloader/spotify', {
                url: url
             })
             if (!json.status) throw Func.jsonFormat(json)
@@ -39,7 +39,7 @@ module.exports = {
             })
          } else if (/https?:\/\/(open\.)?spotify\.com\//i.test(text)) {
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/spotify-dl', {
+            const json = await Api.get('/downloader/spotify', {
                url: text
             })
             if (!json.status) throw Func.jsonFormat(json)
@@ -61,7 +61,7 @@ module.exports = {
          } else {
             if (!text) throw Func.example(usedPrefix, command, 'demi kau dan si buah hati')
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/spotify', {
+            const json = await Api.get('/searching/spotify', {
                q: text
             })
             if (!json.status) throw Func.jsonFormat(json)

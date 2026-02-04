@@ -18,8 +18,8 @@ module.exports = {
          conn.sendReact(m.chat, '🕒', m.key)
          const cdn = await Scraper.uploader(await q.download())
          if (!cdn.status) throw Func.jsonFormat(cdn)
-         const json = await Api.get('/noise-remover', {
-            audio: cdn.data.url
+         const json = await Api.get('/tools/noise-remover', {
+            audio_url: cdn.data.url
          })
          if (!json.status) throw Func.jsonFormat(json)
          conn.sendFile(m.chat, json.data.url, '', '', m)

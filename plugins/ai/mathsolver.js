@@ -13,8 +13,8 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, '1 + 1')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/ai-mathsolver', {
-            q: text
+         const json = await Api.get('/ai/mathsolver', {
+            prompt: text
          })
          if (!json.status) throw Func.jsonFormat(json)
          conn.reply(m.chat, json.data.answer, m)

@@ -12,7 +12,7 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'sunset')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/wallpaper', {
+         const json = await Api.get('/searching/wallpaper', {
             q: text
          })
          if (!json.status) throw Func.jsonFormat(json)

@@ -14,7 +14,7 @@ module.exports = {
          if (!text) throw Func.example(usedPrefix, command, 'cat')
          conn.sendReact(m.chat, '🕒', m.key)
          let [prompt, model] = text.split` | `, old = new Date()
-         const json = await Api.post('/text2vid', {
+         const json = await Api.post('/ai/text2vid', {
             prompt, model
          })
          if (!json.status) throw Func.jsonFormat(json)

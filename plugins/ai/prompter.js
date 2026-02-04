@@ -1,7 +1,7 @@
 module.exports = {
-   help: ['toanime'],
+   help: ['prompter'],
    use: 'reply photo',
-   tags: 'tools',
+   tags: 'ai',
    run: async (m, {
       conn,
       usedPrefix,
@@ -17,11 +17,12 @@ module.exports = {
                let old = new Date()
                const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
                if (!cdn.status) throw Func.jsonFormat(cdn)
-               const json = await Api.get('/toanime', {
-                  image: cdn.data.url, style: 'anime'
+               const json = await Api.get('/ai/img2prompt', {
+                  image_url: cdn.data.url
                })
                if (!json.status) throw Func.jsonFormat(json)
-               conn.sendFile(m.chat, json.data.url, Func.filename('jpg'), `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
+               let result = json.data[0].content.parts[0].text
+               conn.reply(m.chat, Func.jsonFormat(result), m)
             } else throw Func.texted('bold', `🚩 Only for photo.`)
          } else {
             let q = m.quoted ? m.quoted : m
@@ -32,16 +33,16 @@ module.exports = {
             let old = new Date()
             const cdn = await Scraper.uploader(await q.download())
             if (!cdn.status) throw Func.jsonFormat(cdn)
-            const json = await Api.get('/toanime', {
-               image: cdn.data.url, style: 'anime'
+            const json = await Api.get('/ai/image2prompt', {
+               image_url: cdn.data.url
             })
             if (!json.status) throw Func.jsonFormat(json)
-            conn.sendFile(m.chat, json.data.url, Func.filename('jpg'), `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
+            let result = json.data[0].content.parts[0].text
+            conn.reply(m.chat, Func.jsonFormat(result), m)
          }
       } catch (e) {
          throw Func.jsonFormat(e)
       }
    },
-   limit: true,
-   premium: true
+   premium: true,
 }

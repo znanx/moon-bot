@@ -14,7 +14,7 @@ module.exports = {
          if (!/https?:\/\/(?:www\.)?(threads\.(net|com)|[\w-]+\.com)\/[^\s"]*/i.test(args[0])) throw global.status.invalid
          let old = new Date()
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/threads', {
+         const json = await Api.get('/downloader/threads', {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)

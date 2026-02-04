@@ -16,7 +16,7 @@ module.exports = {
          let old = new Date(), mode = args[0].toLowerCase(), url = args[1]
          if (!['mobile', 'desktop'].includes(mode)) throw Func.texted('bold', '🚩 Use mobile or desktop mode.')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/ssweb', {
+         const json = await Api.get('/tools/screenshot', {
             url: url, mode: mode
          })
          if (!json.status) throw Func.jsonFormat(json)

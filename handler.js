@@ -3,11 +3,11 @@ const path = require('path')
 const cron = require('node-cron')
 
 const isSpam = new Spam({
-   mode: env.spam.mode, /** command || msg || all */
+   mode: env.spam.mode,
    messageLimit: env.spam.limit,
    timeWindowSeconds: env.spam.time_window,
-   cooldownSeconds: env.time_ban,
-   maxBanTimes: env.max_ban,
+   banCooldownSeconds: env.spam.time_ban,
+   maxBanTimes: env.spam.max_ban,
    commandCooldownSeconds: env.spam.cooldown
 })
 
@@ -89,7 +89,7 @@ module.exports = async (conn, ctx, database) => {
       }
       if (setting.antispam && spam) {
          if (spam.status === 'ban_active') return
-         if (spam.status === 'ban_temp') return conn.reply(m.chat, `🚩 [ ${spam.data.ban_times} / ${spam.data.max_ban} ] You are temporarily banned for *${spam.data.cooldown} seconds*.`, m)
+         if (spam.status === 'ban_temp') return conn.reply(m.chat, `🚩 [ ${spam.data.ban_times} / ${spam.data.max_ban} ] You are temporarily banned for *${Func.toTime(spam.data.cooldown * 1000)}*.`, m)
          if (spam.status === 'ban_permanent') return conn.reply(m.chat, `🚩 [ ${spam.data.ban_times} / ${spam.data.max_ban} ] You've been warned many times! *You are permanently banned!*`, m)
          if (spam.status === 'cooldown') return // conn.reply(m.chat, Func.texted('italic', `🚩 Wait *${spam.data.remaining} seconds* before using *${prefix + spam.data.command}* again.`), m)
       }

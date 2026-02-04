@@ -17,8 +17,8 @@ module.exports = {
          conn.sendReact(m.chat, '🕒', m.key)
          const ys = await (await yts(text)).all
          const yt = ys.filter(p => p.type == 'video')
-         const json = await Api.get('/yta', {
-            url: yt[0].url
+         const json = await Api.get('/downloader/youtube', {
+            url: yt[0].url, type: 'mp3'
          })
          if (!json.status) throw Func.jsonFormat(json)
          let caption = `乂  *Y T - P L A Y*\n\n`

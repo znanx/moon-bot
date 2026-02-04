@@ -18,8 +18,8 @@ module.exports = {
                let old = new Date()
                const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
                if (!cdn.status) throw Func.jsonFormat(cdn)
-               const json = await Api.get('/effect', {
-                  image: cdn.data.url, style: command
+               const json = await Api.get('/effect/image', {
+                  image_url: cdn.data.url, style: command
                })
                if (!json.status) throw Func.jsonFormat(json)
                conn.sendFile(m.chat, json.data.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
@@ -33,8 +33,8 @@ module.exports = {
             let old = new Date()
             const cdn = await Scraper.uploader(await q.download())
             if (!cdn.status) throw Func.jsonFormat(cdn)
-            const json = await Api.get('/effect', {
-               image: cdn.data.url, style: command
+            const json = await Api.get('/effect/image', {
+               image_url: cdn.data.url, style: command
             })
             if (!json.status) throw Func.jsonFormat(json)
             conn.sendFile(m.chat, json.data.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)

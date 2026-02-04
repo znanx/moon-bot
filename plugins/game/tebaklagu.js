@@ -13,7 +13,7 @@ module.exports = [{
       let id = m.chat
       if (command == 'tebaklagu') {
          if (id in conn.tebaklagu) return conn.reply(m.chat, 'There are still unanswered questions.', conn.tebaklagu[id][0])
-         let json = await Api.get('/tebaklagu')
+         let json = await Api.get('/game/tebaklagu')
          if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
          let audio = await conn.sendFile(m.chat, json.data.lagu, 'audio.mp3', '', m)
          let txt = `What is the title of this song excerpt?\n\n`

@@ -12,7 +12,7 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'mark itu orang atau alien')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/ai-meta', {
+         const json = await Api.get('/ai/meta', {
             prompt: text
          })
          var media = []

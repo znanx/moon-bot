@@ -15,7 +15,7 @@ module.exports = {
          if (!args || !args[0]) throw Func.example(usedPrefix, command, 'https://drive.google.com/file/d/1SluvqDGhjFqg2f-74RJB8DjobcCZO_rY/view?usp=drive_link')
          if (!args[0].match('drive.google.com')) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/gdrive', {
+         const json = await Api.get('/downloader/gdrive', {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)

@@ -22,7 +22,7 @@ module.exports = {
             if (isNaN(idx) || !data[idx]) throw '🚩 Invalid Number!'
             const { url } = data[idx]
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/apkmod-get', {
+            const json = await Api.get('/searching/apkmod/get', {
                url: url
             })
             if (!json.status) throw Func.jsonFormat(json)
@@ -45,7 +45,7 @@ module.exports = {
          } else {
             if (!text) throw Func.example(usedPrefix, command, 'demi kau dan si buah hati')
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/apkmod', {
+            const json = await Api.get('/searching/apkmod', {
                q: text
             })
             if (!json.status) throw Func.jsonFormat(json)

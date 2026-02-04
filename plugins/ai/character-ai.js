@@ -19,7 +19,7 @@ module.exports = {
          if (action == 'search') {
             if (!content) throw Func.example(usedPrefix, command, 'search naruto')
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/cai-search', {
+            const json = await Api.get('/ai/character/search', {
                q: content
             })
             if (!json.status) throw Func.jsonFormat(json)
@@ -42,7 +42,7 @@ module.exports = {
          } else if (action == 'generate') {
             if (!content) throw Func.example(usedPrefix, command, 'generate (​masterpiece:1.3), (8K, Photorealsitic, Raw photography, Top image quality: 1.4), Japan high school girls、(Random hairstyles:1.2)、cleavage of the breast:1.2、Super Detail Face、Eye of Detail、double eyelid、Bring your chest together、sharp focus:1.2、prety woman:1.4、light brown hair、top-quality、​masterpiece、超A high resolution、(Photorealsitic:1.4)、Highly detailed and professional lighting smile、Loose and light knitwear、Shoulder out、slender、serious facial expression、short-haired、Fatal position)')
             conn.sendReact(m.chat, '🕒', m.key)
-            const json = await Api.get('/cai-image', {
+            const json = await Api.get('/ai/chacracter/image', {
                prompt: content
             })
             if (!json.status) throw Func.jsonFormat(json)
@@ -53,7 +53,7 @@ module.exports = {
             // Default action: chatting with the character
             conn.sendReact(m.chat, '🕒', m.key)
             if (!users.cai) throw Func.texted('bold', `Not found character_id.`)
-            const json = await Api.get('/cai', {
+            const json = await Api.get('/ai/character', {
                chara_id: users.cai,
                msg: text,
                single_reply: true

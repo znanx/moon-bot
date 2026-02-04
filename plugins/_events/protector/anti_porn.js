@@ -9,8 +9,8 @@ module.exports = {
          if (!m.fromMe && groupSet.antiporn && /image/.test(m.mtype) && !isAdmin) {
             const cdn = await Scraper.uploader(await m.download())
             if (!cdn.status) throw new Error(cdn)
-            const json = await Api.get('/detect-porn', {
-               image: cdn.data.url
+            const json = await Api.get('/tools/detect-porn', {
+               input: cdn.data.url
             })
             if (!json.status) throw new Error(json)
             if (json.data.isPorn) return conn.sendMessage(m.chat, {

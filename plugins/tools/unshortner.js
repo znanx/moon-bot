@@ -14,7 +14,7 @@ module.exports = {
       try {
          if (!args[0]) throw Func.example(usedPrefix, command, 'http://gg.gg/1brt6s')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/unshortner', {
+         const json = await Api.get('/tools/unshortner', {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)

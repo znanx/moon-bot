@@ -17,7 +17,7 @@ module.exports = {
          let lang = text.slice(0, 2)
          try {
             let data = m.quoted.text
-            const result = await Api.get('/translate', {
+            const result = await Api.get('/tools/translate', {
                text: data,
                iso: lang
             })
@@ -29,7 +29,7 @@ module.exports = {
          let lang = text.slice(0, 2)
          try {
             let data = text.substring(2).trim()
-            const result = await Api.get('/translate', {
+            const result = await Api.get('/tools/translate', {
                text: data,
                iso: lang
             })

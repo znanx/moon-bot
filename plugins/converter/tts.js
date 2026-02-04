@@ -18,7 +18,7 @@ module.exports = {
             text = args.join(' ')
          }
          if (!text && m.quoted && m.quoted.text) text = m.quoted.text
-         const json = await Api.get('/tts', {
+         const json = await Api.get('/canvas/tts', {
             text: text, iso: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)

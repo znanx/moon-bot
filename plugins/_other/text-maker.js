@@ -37,7 +37,7 @@ module.exports = {
          if (/naruto2/.test(command)) link = 'https://photooxy.com/manga-and-anime/make-naruto-banner-online-free-378.html'
          if (/flaming/.test(command)) link = 'https://photooxy.com/logo-and-text-effects/realistic-flaming-text-effect-online-197.html'
          if (/woodblock/.test(command)) link = 'https://photooxy.com/logo-and-text-effects/carved-wood-effect-online-171.html'
-         const json = await Api.get('/textmaker', {
+         const json = await Api.get('/maker/textpro', {
             url: link, text: text
          })
          if (!json.status) throw Func.jsonFormat(json)

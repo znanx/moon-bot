@@ -14,7 +14,7 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'moon-bot')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/nulis', {
+         const json = await Api.get('/canvas/writing', {
             text
          })
          if (!json.status) throw Func.jsonFormat(json)

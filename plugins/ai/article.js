@@ -13,7 +13,7 @@ module.exports = {
          if (!text) throw Func.example(usedPrefix, command, 'hujan | Indonesian')
          let [teks, iso] = text.split` | `
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/ai-article', {
+         const json = await Api.get('/ai/article', {
             text: teks, lang: iso
          })
          if (!json.status) throw Func.jsonFormat(json)

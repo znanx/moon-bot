@@ -14,7 +14,7 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'moonbot')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/openai', {
+         const json = await Api.get('/ai/openai', {
             prompt: text
          })
          if (!json.status) throw Func.jsonFormat(json)

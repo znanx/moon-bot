@@ -13,7 +13,7 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'Penemu listrik')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/brainly', {
+         const json = await Api.get('/searching/brainly', {
             q: text, lang: 'id'
          })
          if (!json.status) throw Func.jsonFormat(json)

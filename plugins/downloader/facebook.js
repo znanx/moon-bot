@@ -14,7 +14,7 @@ module.exports = {
          if (!args[0]) throw Func.example(usedPrefix, command, 'https://www.facebook.com/share/r/1WCkXg8fsT/')
          if (!args[0].match(/(?:https?:\/\/(web\.|www\.|m\.)?(facebook|fb)\.(com|watch)\S+)?$/)) throw status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/fb', {
+         const json = await Api.get('/downloader/fb', {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)

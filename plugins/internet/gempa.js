@@ -10,7 +10,7 @@ module.exports = {
       Func
    }) => {
       try {
-         const json = await Api.get('/gempa', {})
+         const json = await Api.get('/searching/gempa')
          if (!json.status) throw Func.jsonFormat(json)
          conn.sendReact(m.chat, '🕒', m.key)
          let txt = `乂  *G E M P A*\n\n`

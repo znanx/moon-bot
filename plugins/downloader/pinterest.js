@@ -14,7 +14,7 @@ module.exports = {
          if (!args[0].match(/pin(?:terest)?(?:\.it|\.com)/)) throw global.status.invalid
          let old = new Date()
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/pin-dl', {
+         const json = await Api.get('/downloader/pinterest', {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)
