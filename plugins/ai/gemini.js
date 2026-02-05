@@ -20,8 +20,8 @@ module.exports = {
             if (!cdn.status) throw Func.jsonFormat(cdn)
             const json = await Api.get('/ai/func-chat', {
                model: 'gemini',
-               prompt_url: text,
-               image: cdn.data.url
+               prompt: text,
+               image_url: cdn.data.url
             })
             if (!json.status) throw Func.jsonFormat(json)
             conn.reply(m.chat, json.data.content, m)
