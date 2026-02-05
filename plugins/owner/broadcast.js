@@ -24,7 +24,7 @@ module.exports = {
                   thumbnail: await Func.fetchBuffer('https://i.ibb.co/184N0Zh/image.jpg'),
                   largeThumb: true,
                   url: global.db.setting.link,
-                  mentions: command == 'bcgc' ? await (await conn.groupMetadata(jid)).participants.map(v => v.id) : []
+                  mentions: command == 'bcgc' ? await (await conn.groupMetadata(jid)).participants.map(v => v.phoneNumber) : []
                })
             }
             conn.reply(m.chat, Func.texted('bold', `🚩 Successfully send broadcast message to ${id.length} ${command == 'bc' ? 'chats' : 'groups'}`), m)
@@ -35,7 +35,7 @@ module.exports = {
                await conn.sendSticker(jid, media, null, {
                   packname: global.db.setting.sk_pack,
                   author: global.db.setting.sk_author,
-                  mentions: command == 'bcgc' ? await (await conn.groupMetadata(jid)).participants.map(v => v.id) : []
+                  mentions: command == 'bcgc' ? await (await conn.groupMetadata(jid)).participants.map(v => v.phoneNumber) : []
                })
             }
             conn.reply(m.chat, Func.texted('bold', `🚩 Successfully send broadcast message to ${id.length} ${command == 'bc' ? 'chats' : 'groups'}`), m)
@@ -47,7 +47,7 @@ module.exports = {
                   netral: true
                }, command == 'bcgc' ? {
                   contextInfo: {
-                     mentionedJid: await (await conn.groupMetadata(jid)).participants.map(v => v.id)
+                     mentionedJid: await (await conn.groupMetadata(jid)).participants.map(v => v.phoneNumber)
                   }
                } : {})
             }
@@ -61,7 +61,7 @@ module.exports = {
                }, command == 'bcgc' ? {
                   ptt: q.ptt,
                   contextInfo: {
-                     mentionedJid: await (await conn.groupMetadata(jid)).participants.map(v => v.id)
+                     mentionedJid: await (await conn.groupMetadata(jid)).participants.map(v => v.phoneNumber)
                   }
                } : {})
             }

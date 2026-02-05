@@ -42,7 +42,7 @@ module.exports = {
                await conn.reply(m.chat, Func.texted('bold', `🚩 Joined! Bot will stay for ${option.replace(/d|h|m/, v => v == 'd' ? ' day' : v == 'h' ? ' hour' : ' minute')}.`), m).then(async () => {
                   await Func.delay(5000)
                   conn.reply(id, `Hello👋, I am moon bot. I joined this group because I was hired. I can help everyone in this group with small tasks.\n\nCountdown to the end of the rental period :\n${group.stay ? 'FOREVER' : (group.expired == 0 ? 'NOT SET' : Func.timeReverse(group.expired - new Date() * 1))}`, Func.fake(2, 'Moon Bot WhatsApp - linktr.ee/moonxbot'), {
-                     mentions: groupMeta.participants.map(v => v.id)
+                     mentions: groupMeta.participants.map(v => v.phoneNumber)
                   })
                })
                return
