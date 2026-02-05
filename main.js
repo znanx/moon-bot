@@ -9,7 +9,7 @@ const connect = async () => {
 
    const conn = new Connection({
       plugins_dir: 'plugins',
-      session_dir: system.session ? system.session(url, 'session') : 'session',
+      session_dir: system.session ? system.session : 'session',
       online: true,
       presence: true,
       bypass_ephemeral: true,
