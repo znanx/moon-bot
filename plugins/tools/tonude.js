@@ -17,7 +17,7 @@ module.exports = {
                let old = new Date()
                const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
                if (!cdn.status) throw Func.jsonFormat(cdn)
-               const json = await Api.get('/ai/clothing-removal', {
+               const json = await Api.get('/ai/clothremoval', {
                   image_url: cdn.data.url
                })
                if (!json.status) throw Func.jsonFormat(json)
@@ -32,7 +32,7 @@ module.exports = {
             let old = new Date()
             const cdn = await Scraper.uploader(await q.download())
             if (!cdn.status) throw Func.jsonFormat(cdn)
-            const json = await Api.get('/ai/clothing-removal', {
+            const json = await Api.get('/ai/clothremoval', {
                image_url: cdn.data.url
             })
             if (!json.status) throw Func.jsonFormat(json)

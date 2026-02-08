@@ -17,7 +17,7 @@ module.exports = {
                conn.sendReact(m.chat, '🕒', m.key)
                const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
                if (!cdn.status) throw Func.jsonFormat(cdn)
-               const json = await Api.get('/tools/text-remover', {
+               const json = await Api.get('/tools/textremover', {
                   image_url: cdn.data.url
                })
                if (!json.status) throw Func.jsonFormat(json)
@@ -31,7 +31,7 @@ module.exports = {
             conn.sendReact(m.chat, '🕒', m.key)
             const cdn = await Scraper.uploader(await q.download())
             if (!cdn.status) throw Func.jsonFormat(cdn)
-            const json = await Api.get('/tools/text-remover', {
+            const json = await Api.get('/tools/textremover', {
                image_url: image.data.url
             })
             if (!json.status) throw Func.jsonFormat(json)

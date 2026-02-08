@@ -18,7 +18,7 @@ module.exports = {
          if (/image\/(jpe?g|png)/.test(mime)) {
             const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
             if (!cdn.status) throw Func.jsonFormat(cdn)
-            const json = await Api.get('/ai/func-chat', {
+            const json = await Api.get('/ai/chat/vision', {
                model: 'gemini',
                prompt: text,
                image_url: cdn.data.url

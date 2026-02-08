@@ -13,7 +13,7 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'white cat')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/ai/prompt-generator', {
+         const json = await Api.get('/ai/generator/prompt', {
             prompt: text
          })
          if (!json.status) throw Func.jsonFormat(json)
