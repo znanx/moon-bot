@@ -22,7 +22,7 @@ module.exports = {
             p += `\n\n${global.footer}`
             throw p
          }
-         const json = await Api.get('/canvas/emoji', {
+         const json = await Api.get('/converter/emoji', {
             emo: data
          })
          if (!json.status) throw Func.jsonFormat(json)

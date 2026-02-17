@@ -13,7 +13,7 @@ module.exports = {
       try {
          if (!text) throw Func.example(usedPrefix, command, '😀')
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/canvas/emojito', {
+         const json = await Api.get('/converter/emojito', {
             emoji: text
          })
          if (!json.status) throw Func.jsonFormat(json)
