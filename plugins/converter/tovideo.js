@@ -1,6 +1,6 @@
 module.exports = {
    help: ['tovideo'],
-   aliases: ['togif'],
+   aliases: ['togif', 'tomp4'],
    use: 'reply gif sticker',
    tags: 'converter',
    run: async (m, {
@@ -18,10 +18,12 @@ module.exports = {
          conn.sendReact(m.chat, '🕒', m.key)
          const cdn = await Scraper.uploader(await q.download())
          if (!cdn.status) throw Func.jsonFormat(cdn)
-         const json = await Api.get('/converter/file', {
-            file_url: cdn.data.url, action: 'webp-to-mp4'
+         const json = await Api.post('/converter/file', {
+            file_url: cdn.data.url, output_format: 'gif'
          })
-         conn.sendFile(m.chat, json.data.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
+         conn.sendFile(m.chat, json.data.url, Func.filename('gif'), `🍟 *Process* : ${((new Date - old) * 1)} ms`, m, {
+            gif: true
+         })
       } catch (e) {
          throw Func.jsonFormat(e)
       }

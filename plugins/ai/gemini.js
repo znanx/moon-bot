@@ -1,5 +1,5 @@
 module.exports = {
-   help: ['gemini', 'bard'],
+   help: ['gemini'],
    use: 'query',
    tags: 'ai',
    run: async (m, {

@@ -14,7 +14,7 @@ module.exports = {
          let [teks, iso] = text.split` | `
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/ai/generator/article', {
-            text: teks, lang: iso
+            text: teks, language: iso
          })
          if (!json.status) throw Func.jsonFormat(json)
          conn.reply(m.chat, json.data.content, m)

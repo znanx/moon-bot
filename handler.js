@@ -99,7 +99,7 @@ module.exports = async (conn, ctx, database) => {
          .sort((a, b) => b.accuracy - a.accuracy)
          .slice(0, 3) /** max 3 */
       if (prefix && !commands.includes(command) && matcher.length > 0) {
-         if (!m.isGroup || (m.isGroup && !groupSet.mute)) {
+         if (!m.fromMe && (!m.isGroup || !groupSet.mute)) {
             return conn.reply(m.chat, `🚩 Command you are using is wrong, try the following recommendations :\n\n${matcher.map(v => '➠ *' + (prefix ? prefix : '') + v.string + '* (' + v.accuracy.toFixed(2) + '%)').join('\n')}`, m)
          }
       }

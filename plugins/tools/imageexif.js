@@ -16,7 +16,7 @@ module.exports = {
                conn.sendReact(m.chat, '🕒', m.key)
                const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
                if (!cdn.status) throw Func.jsonFormat(cdn)
-               const json = await Api.get('/tools/image-exif', {
+               const json = await Api.get('/tools/exif/image', {
                   image_url: cdn.data.url
                })
                if (!json.status) throw Func.jsonFormat(json)
@@ -30,7 +30,7 @@ module.exports = {
             conn.sendReact(m.chat, '🕒', m.key)
             const cdn = await Scraper.uploader(await conn.downloadMediaMessage(q))
             if (!cdn.status) throw Func.jsonFormat(await q.download())
-            const json = await Api.get('/tools/image-exif', {
+            const json = await Api.get('/tools/exif/image', {
                image_url: cdn.data.url
             })
             if (!json.status) throw Func.jsonFormat(json)
