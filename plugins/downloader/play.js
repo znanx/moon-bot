@@ -22,9 +22,9 @@ module.exports = {
          })
          if (!json.status) throw Func.jsonFormat(json)
          let caption = `乂  *Y T - P L A Y*\n\n`
-         caption += `   ∘  *Title* : ` + json.title + `\n`
+         caption += `   ∘  *Title* : ` + json.data.title + `\n`
          caption += `   ∘  *Size* : ` + json.data.size + `\n`
-         caption += `   ∘  *Duration* : ` + json.duration + `\n`
+         caption += `   ∘  *Duration* : ` + json.data.duration + `\n`
          caption += `   ∘  *Quality* : ` + json.data.quality + '\n\n'
          caption += global.footer
          const chSize = Func.sizeLimit(json.data.size, users.premium ? env.max_upload : env.max_upload_free)

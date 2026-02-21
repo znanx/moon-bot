@@ -32,5 +32,5 @@ module.exports = {
       }
    },
    limit: true,
-   error: false
+   error: true
 }

@@ -19,9 +19,9 @@ module.exports = {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)
-         const result = json.data.response.formats.filter(v => v.type === 'video').map(v => v.url)
+         const result = json.data.formats.filter(v => v.type === 'video').map(v => v.url)
          if (result.length > 0) {
-            conn.sendFile(m.chat, result[0], '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
+            return conn.sendFile(m.chat, result[0], '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
          } else { }
       } catch (e) {
          throw Func.jsonFormat(e)

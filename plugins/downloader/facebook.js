@@ -18,13 +18,8 @@ module.exports = {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)
-         const result = json.data.find(v => v.quality == 'HD') || json.data.find(v => v.quality == 'SD')
-         if (result && json.data.length == 1) {
-            conn.sendFile(m.chat, result.url, Func.filename(result.quality === 'jpeg' ? 'jpeg' : 'mp4'), `◦ *Quality* : ${result.quality}`, m)
-         } else if (json.data.length > 1) {
-            const album = json.data.map(v => ({ url: v.url }))
-            conn.sendAlbumMessage(m.chat, album, m)
-         }
+         const result = json?.data?.result?.find(v => v.quality === 'HD') ?? json?.data?.result?.find(v => v.quality === 'SD') ?? null
+         return conn.sendFile(m.chat, result.url, Func.filename(result.quality === 'jpeg' ? 'jpeg' : 'mp4'), `◦ *Quality* : ${result.quality}`, m)
       } catch (e) {
          throw Func.jsonFormat(e)
       }

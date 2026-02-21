@@ -22,7 +22,7 @@ module.exports = {
          const chSize = Func.sizeLimit(json.data.size, users.premium ? env.max_upload : env.max_upload_free)
          const isOver = users.premium ? `💀 File size (${json.data.size}) exceeds the maximum limit.` : `⚠️ File size (${json.data.size}), you can only download files with a maximum size of ${env.max_upload_free} MB and for premium users a maximum of ${env.max_upload} MB.`
          if (chSize.oversize) throw isOver
-         conn.sendFile(m.chat, json.data.url, json.data.filename, '', m)
+         conn.sendFile(m.chat, json.data.url, json.data.server_filename, '', m)
       } catch (e) {
          throw Func.jsonFormat(e)
       }

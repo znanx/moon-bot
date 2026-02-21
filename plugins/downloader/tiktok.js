@@ -20,21 +20,21 @@ module.exports = {
          })
          if (!json.status) throw Func.jsonFormat(json)
          let teks = `乂  *T I K T O K*\n\n`
-         teks += `   ∘  *Author* : ${json.author.nickname}\n`
-         teks += `   ∘  *Like* : ${Func.formatNumber(json.stats.likes)}\n`
-         teks += `   ∘  *Share* : ${Func.formatNumber(json.stats.share)}\n`
-         teks += `   ∘  *Comment* : ${Func.formatNumber(json.stats.comment)}\n`
-         teks += `   ∘  *Duration* : ${json.duration}\n`
-         teks += `   ∘  *Sound* : ${json.music_info.title} - ${json.music_info.author}\n`
-         teks += `   ∘  *Caption* : ${json.title}\n`
+         teks += `   ∘  *Author* : ${json.data.author.nickname}\n`
+         teks += `   ∘  *Like* : ${Func.formatNumber(json.data.stats.likes)}\n`
+         teks += `   ∘  *Share* : ${Func.formatNumber(json.data.stats.share)}\n`
+         teks += `   ∘  *Comment* : ${Func.formatNumber(json.data.stats.comment)}\n`
+         teks += `   ∘  *Duration* : ${json.data.duration}\n`
+         teks += `   ∘  *Sound* : ${json.data.music_info.title} - ${json.data.music_info.author}\n`
+         teks += `   ∘  *Caption* : ${json.data.title}\n`
          teks += `   ∘  *Fetching* : ${((new Date - old) * 1)} ms\n\n`
          teks += global.footer
          if (command == 'tiktok' || command == 'tt') {
-            let result = json.data.find(v => v.type == 'nowatermark')
+            let result = json.data.result.find(v => v.type == 'nowatermark')
             if (result) {
                conn.sendFile(m.chat, result.url, Func.filename('mp4'), teks, m)
             } else {
-               const images = json.data.filter(v => v.type == 'photo')
+               const images = json.data.result.filter(v => v.type == 'photo')
                if (images.length > 1) {
                   const medias = images.map(v => ({ url: v.url }))
                   conn.sendAlbumMessage(m.chat, medias, m)
@@ -42,8 +42,8 @@ module.exports = {
                   conn.sendFile(m.chat, images[0].url, Func.filename('jpg'), teks, m)
                }
             }
-         } else if (command == 'tikwm') return conn.sendFile(m.chat, json.data.find(v => v.type == 'watermark').url, Func.filename('mp4'), teks, m)
-         else if (command == 'tikmp3') return conn.sendFile(m.chat, json.music_info.url, Func.filename('mp3'), '', m)
+         } else if (command == 'tikwm') return conn.sendFile(m.chat, json.data.result.find(v => v.type == 'watermark').url, Func.filename('mp4'), teks, m)
+         else if (command == 'tikmp3') return conn.sendFile(m.chat, json.data.music_info.url, Func.filename('mp3'), '', m)
       } catch (e) {
          throw Func.jsonFormat(e)
       }

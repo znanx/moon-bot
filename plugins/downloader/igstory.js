@@ -18,16 +18,16 @@ module.exports = {
             input: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)
-         const medias = json.data.map(v => ({
+         const medias = json.data.result.map(v => ({
             url: v.url,
             type: v.type
          }))
          if (medias.length === 1) {
             const file = medias[0]
-            conn.sendFile(m.chat, file.url, file.type === 'video' ? Func.filename('mp4') : Func.filename('jpg'), `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
+            return conn.sendFile(m.chat, file.url, file.type === 'video' ? Func.filename('mp4') : Func.filename('jpg'), `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
          } else {
             const album = medias.map(v => ({ url: v.url }))
-            conn.sendAlbumMessage(m.chat, album, m)
+            return conn.sendAlbumMessage(m.chat, album, m)
          }
       } catch (e) {
          throw Func.jsonFormat(e)
