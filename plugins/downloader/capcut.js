@@ -14,7 +14,7 @@ module.exports = {
          if (!args[0].match('capcut.com')) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/downloader/capcut', {
-            url: args[0], type: 'nowatermark'
+            url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)
          conn.sendFile(m.chat, json.data.url, Func.filename('mp4'), `◦ *Title* : ${json.data.title}\n◦ *Description* : ${json.data.description}`, m)

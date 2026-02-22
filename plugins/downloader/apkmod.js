@@ -50,13 +50,13 @@ module.exports = {
             })
             if (!json.status) throw Func.jsonFormat(json)
             conn.apkmod[m.chat] = {
-               list: json.data.map(v => ({ url: v.url })),
+               list: json.data.result.map(v => ({ url: v.url })),
                timer: setTimeout(() => {
                   delete conn.apkmod[m.chat]
                }, 2 * 60 * 1000) // 2 minutes
             }
             let txt = `乂  *A P K M O D*\n\n`
-            json.data.slice(0, 10).map((v, i) => {
+            json.data.result.slice(0, 10).map((v, i) => {
                txt += `*${i + 1}.* ${v.name}\n`
                txt += `◦ *Size* : ${v.size}\n`
                txt += `◦ *Version* : ${v.version}\n`

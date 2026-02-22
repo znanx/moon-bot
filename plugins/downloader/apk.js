@@ -48,13 +48,13 @@ module.exports = {
             })
             if (!json.status) throw Func.jsonFormat(json)
             conn.apk[m.chat] = {
-               list: json.data.map(v => ({ url: v.url })),
+               list: json.data.result.map(v => ({ url: v.url })),
                timer: setTimeout(() => {
                   delete conn.apk[m.chat]
                }, 2 * 60 * 1000) // 2 minutes
             }
             let txt = `乂  *A P K*\n\n`
-            json.data.slice(0, 10).map((v, i) => {
+            json.data.result.slice(0, 10).map((v, i) => {
                txt += `*${i + 1}.* ${v.title}\n`
                txt += `◦ *Rating* : ${v.rating}\n`
                txt += `◦ *Developer* : ${v.developer}\n\n`

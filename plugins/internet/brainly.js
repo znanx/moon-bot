@@ -18,7 +18,7 @@ module.exports = {
          })
          if (!json.status) throw Func.jsonFormat(json)
          let txt = `乂  *B R A I N L Y*\n\n`
-         json.data.map((v, i) => {
+         json.data.result.map((v, i) => {
             txt += `*${(i + 1)}*. ${v.question}\n`
             txt += `◦  *Answer* : \n${v.answers}\n\n`
          })
