@@ -16,7 +16,7 @@ module.exports = {
          if (!args[0]) throw Func.example(usedPrefix, command, 'https://youtu.be/zaRFmdtLhQ8')
          if (!/^(?:https?:\/\/)?(?:www\.|m\.|music\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?/.test(args[0])) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
-         const json = await Api.get('/youtube', {
+         const json = await Api.get('/downloader/youtube', {
             url: args[0], type: 'mp4'
          })
          if (!json.status) throw Func.jsonFormat(json)
