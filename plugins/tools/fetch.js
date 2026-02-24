@@ -13,21 +13,24 @@ module.exports = {
       Func
    }) => {
       if (!/^https?:\/\//.test(text)) throw Func.example(usedPrefix, command, 'https://google.com')
-      let url = text
-      let res = await fetch(url)
-      if (res.headers.get('content-length') > 100 * 1024 * 1024 * 1024) {
-         res = ''
-         return m.reply(`Content-Length: ${res.headers.get('content-length')}`)
-      }
-      if (!/text|json/.test(res.headers.get('content-type'))) return conn.sendFile(m.chat, url, '', text, m)
-      let txt = await res.buffer()
+
+      const res = await fetch(text)
+      const length = Number(res.headers.get('content-length') || 0)
+      if (length > 100 * 1024 * 1024) throw `Content is too large: ${length} bytes`
+
+      const type = res.headers.get('content-type') || ''
+
+      if (!/text|json/.test(type)) return conn.sendFile(m.chat, text, '', text, m)
+      let txt
+      const raw = await res.text()
+
       try {
-         txt = util.format(JSON.parse(txt + ''))
-      } catch (e) {
-         txt = txt + ''
-      } finally {
-         m.reply(txt.slice(0, 65536) + '')
+         txt = util.format(JSON.parse(raw))
+      } catch {
+         txt = raw
       }
+
+      m.reply(txt.slice(0, 65536))
    },
    limit: true
 }

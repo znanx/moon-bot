@@ -14,7 +14,7 @@ module.exports = {
          if (!text) throw Func.example(usedPrefix, command, 'Penemu listrik')
          conn.sendReact(m.chat, '🕒', m.key)
          const json = await Api.get('/searching/brainly', {
-            q: text, lang: 'id'
+            q: text, language: 'id'
          })
          if (!json.status) throw Func.jsonFormat(json)
          let txt = `乂  *B R A I N L Y*\n\n`
