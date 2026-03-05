@@ -1,5 +1,5 @@
 module.exports = {
-   help: ['welcome', 'left', 'autodetect', 'antidelete', 'antilink', 'antivirtex', 'autosticker', 'antisticker', 'antitagsw', 'antiporn', 'antitoxic', 'antibot', 'autoclose'],
+   help: ['welcome', 'left', 'adminonly', 'autodetect', 'antidelete', 'antilink', 'antivirtex', 'autosticker', 'antisticker', 'antitagsw', 'antiporn', 'antitoxic', 'antibot', 'autoclose'],
    use: 'on / off',
    tags: 'admin',
    run: async (m, {

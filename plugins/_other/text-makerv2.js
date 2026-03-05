@@ -27,8 +27,9 @@ module.exports = {
          if (/captainamerica/.test(command)) link = 'https://en.ephoto360.com/create-a-cinematic-captain-america-text-effect-online-715.html'
          if (/amongus2/.test(command)) link = 'https://en.ephoto360.com/create-a-banner-game-among-us-with-your-name-763.html'
          if (/latestspace/.test(command)) link = 'https://en.ephoto360.com/latest-space-3d-text-effect-online-559.html'
-         const json = await Api.get('/maker/textpro2', {
-            url: link, text1, text2
+         const json = await Api.post('/maker/text/effect', {
+            style_url: link,
+            text: [text1, text2]
          })
          if (!json.status) throw Func.jsonFormat(json)
          conn.sendFile(m.chat, json.data.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
