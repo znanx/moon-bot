@@ -28,7 +28,7 @@ module.exports = {
                "avatar": true,
                "from": {
                   "id": 1,
-                  "name": m.quoted ? m.quoted.name : m.name,
+                  "name": m.quoted ? global.db.users[m.quoted.sender].name : m.pushName,
                   "photo": {
                      "url": pic
                   }
@@ -37,7 +37,7 @@ module.exports = {
                "replyMessage": {}
             }]
          }
-         const response = await axios.post('https://bot.lyo.su/quote/generate', json, {
+         const response = await axios.post('https://znanstore-quotly.hf.space/quote/generate', json, {
             headers: {
                'Content-Type': 'application/json'
             }

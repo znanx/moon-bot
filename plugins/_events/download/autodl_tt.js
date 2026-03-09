@@ -25,13 +25,17 @@ module.exports = {
                         url: link
                      })
                      if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
-                     let result = json.data.find(v => v.type == 'nowatermark')
-                     if (!result) {
-                        json.data.map(x => {
-                           conn.sendFile(m.chat, x.url, Func.filename('jpg'), `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
-                        })
+                     let result = json.data.result.find(v => v.type == 'nowatermark')
+                     if (result) {
+                        conn.sendFile(m.chat, result.url, Func.filename('mp4'), teks, m)
                      } else {
-                        conn.sendFile(m.chat, result.url, Func.filename('mp4'), `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
+                        const images = json.data.result.filter(v => v.type == 'photo')
+                        if (images.length > 1) {
+                           const medias = images.map(v => ({ url: v.url }))
+                           conn.sendAlbumMessage(m.chat, medias, m)
+                        } else if (images.length == 1) {
+                           conn.sendFile(m.chat, images[0].url, Func.filename('jpg'), teks, m)
+                        }
                      }
                   } catch (e) {
                      conn.reply(m.chat, Func.jsonFormat(e), m)

@@ -13,8 +13,8 @@
    "timeout": 1800000,
    "spam": {
       "mode": "command",
-      "limit": 5,
-      "time_window": 1,
+      "limit": 4,
+      "time_window": 5,
       "time_ban": 1800,
       "max_ban": 3,
       "cooldown": 5

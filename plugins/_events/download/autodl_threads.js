@@ -25,8 +25,11 @@ module.exports = {
                         url: link
                      })
                      if (!json.status) return conn.reply(m.chat, Func.jsonFormat(json), m)
-                     for (let i of json.data) {
-                        conn.sendFile(m.chat, i.url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
+                     if (json.data.result.length == 1) {
+                        return conn.sendFile(m.chat, json.data.result[0].url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
+                     } else {
+                        const album = json.data.result.map(v => ({ url: v.url }))
+                        return conn.sendAlbumMessage(m.chat, album, m)
                      }
                   } catch (e) {
                      conn.reply(m.chat, Func.jsonFormat(e), m)

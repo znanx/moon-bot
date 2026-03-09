@@ -1,15 +1,7 @@
-const { Function: Func, Scraper, Spam, Config: env } = require('@znan/wabot')
+const { Function: Func, Scraper, Config: env } = require('@znan/wabot')
 const path = require('path')
 const cron = require('node-cron')
-
-const isSpam = new Spam({
-   mode: env.spam.mode,
-   messageLimit: env.spam.limit,
-   timeWindowSeconds: env.spam.time_window,
-   banCooldownSeconds: env.spam.time_ban,
-   maxBanTimes: env.spam.max_ban,
-   commandCooldownSeconds: env.spam.cooldown
-})
+const isSpam = require('./lib/system/antispam')
 
 module.exports = async (conn, ctx, database) => {
    var { store, m, body, prefix, plugins, loadCmd, loadEvt, commands, args, command, text, prefixes, core, isCommand } = ctx
