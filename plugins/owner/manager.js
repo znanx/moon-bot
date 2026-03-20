@@ -44,7 +44,7 @@ module.exports = {
          } else if (command == 'ban') { // banned user
             let is_user = global.db.users
             let is_owner = [conn.decodeJid(conn.user.id).split`@`[0], env.owner, ...global.db.setting.owners].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(jid)
-            if (!is_user.some(v => v.jid == jid)) return conn.reply(m.chat, Func.texted('bold', `🚩 User data not found.`), m)
+            if (typeof is_user[jid] == 'undefined') return conn.reply(m.chat, Func.texted('bold', `🚩 User data not found.`), m)
             if (is_owner) return conn.reply(m.chat, Func.texted('bold', `🚩 Can't banned owner number.`), m)
             if (jid == conn.decodeJid(conn.user.id)) return conn.reply(m.chat, Func.texted('bold', `🚩 ??`), m)
             if (is_user[jid].banned) return conn.reply(m.chat, Func.texted('bold', `🚩 Target already banned.`), m)
