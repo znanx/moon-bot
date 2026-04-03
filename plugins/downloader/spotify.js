@@ -25,8 +25,7 @@ module.exports = {
             let txt = `乂  *S P O T I F Y*\n\n`
             txt += `   ◦  *Title* : ${json.data.title}\n`
             txt += `   ◦  *Artist* : ${json.data.artist}\n`
-            txt += `   ◦  *Duration* : ${json.data.duration}\n`
-            txt += `   ◦  *Publish* : ${json.data.publish}\n\n`
+            txt += `   ◦  *Duration* : ${json.data.duration}\n\n`
             txt += global.footer
             conn.sendMessageModify(m.chat, txt, m, {
                largeThumb: true,
@@ -46,8 +45,7 @@ module.exports = {
             let txt = `乂  *S P O T I F Y*\n\n`
             txt += `   ◦  *Title* : ${json.data.title}\n`
             txt += `   ◦  *Artist* : ${json.data.artist}\n`
-            txt += `   ◦  *Duration* : ${json.data.duration}\n`
-            txt += `   ◦  *Publish* : ${json.data.publish}\n\n`
+            txt += `   ◦  *Duration* : ${json.data.duration}\n\n`
             txt += global.footer
             conn.sendMessageModify(m.chat, txt, m, {
                largeThumb: true,
@@ -72,11 +70,12 @@ module.exports = {
                }, 2 * 60 * 1000) // 2 minutes
             }
             let txt = `乂  *S P O T I F Y*\n\n`
-            json.data.map((v, i) => {
-               txt += `*${i + 1}.* ${v.title}\n`
-               txt += `◦ *Publish* : ${v.release_date}\n`
-               txt += `◦ *Duration* : ${v.duration}\n`
-               txt += `◦ *Popularity* : ${v.popularity}\n`
+            txt += json.data.map((item, i) => {
+               const detail = Object.entries(item)
+                  .filter(([key]) => key !== 'title')
+                  .map(([key, value]) => `◦ *${key}* : ${value}`)
+                  .join('\n')
+               return `*${i + 1}.* ${item.title}\n${detail}`
             }).join('\n\n')
             txt += `Type a number ( 1 - 10 ) to see details.`
             conn.reply(m.chat, txt, m)

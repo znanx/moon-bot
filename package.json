@@ -30,8 +30,8 @@
       "server": "node index.js --server"
    },
    "dependencies": {
-      "@whiskeysockets/baileys": "^7.0.0-rc.9",
-      "@znan/wabot": "^0.0.86",
+      "@whiskeysockets/baileys": "git+https://github.com/whiskeysockets/baileys.git",
+      "@znan/wabot": "^0.0.90",
       "archiver": "^7.0.1",
       "cfonts": "^3.3.0",
       "express": "^4.21.2",

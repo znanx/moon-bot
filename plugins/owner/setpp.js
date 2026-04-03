@@ -1,4 +1,3 @@
-const { S_WHATSAPP_NET } = require('@whiskeysockets/baileys')
 const Jimp = require('jimp')
 
 module.exports = {
@@ -11,6 +10,7 @@ module.exports = {
       command,
       Func
    }) => {
+      const { S_WHATSAPP_NET } = await import('@whiskeysockets/baileys')
       try {
          let q = m.quoted ? m.quoted : m
          let mime = ((m.quoted ? m.quoted : m.msg).mimetype || '')

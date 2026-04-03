@@ -18,12 +18,12 @@ module.exports = {
             url: args[0]
          })
          if (!json.status) throw Func.jsonFormat(json)
-         if (json.data.result.length == 1) {
-            return conn.sendFile(m.chat, json.data.result[0].url, '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
-         } else {
-            const album = json.data.result.map(v => ({ url: v.url }))
-            return conn.sendAlbumMessage(m.chat, album, m)
+         const urls = json.data.result.map(v => v.url)
+         if (urls.length === 1) {
+            return conn.sendFile(m.chat, urls[0], '', `🍟 *Process* : ${((new Date - old) * 1)} ms`, m)
          }
+         const album = urls.map(url => ({ url }))
+         return conn.sendAlbumMessage(m.chat, album, m)
       } catch (e) {
          throw Func.jsonFormat(e)
       }
