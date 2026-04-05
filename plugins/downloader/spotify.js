@@ -77,7 +77,7 @@ module.exports = {
                   .join('\n')
                return `*${i + 1}.* ${item.title}\n${detail}`
             }).join('\n\n')
-            txt += `Type a number ( 1 - 10 ) to see details.`
+            txt += '\n\n' + `Type a number ( 1 - 10 ) to see details.`
             conn.reply(m.chat, txt, m)
          }
       } catch (e) {

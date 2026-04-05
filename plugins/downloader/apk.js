@@ -35,11 +35,11 @@ module.exports = {
             txt += `   ◦  *Developer* : ${apk.developer?.name || 'N/A'}\n\n`
             txt += global.footer
 
-            const fileSize = apk.size || apk.file?.filesize || 0
+            const fileSize = Func.formatSize(apk.size || apk.file?.filesize || 0)
             const chSize = Func.sizeLimit(fileSize, isPrem ? env.max_upload : env.max_upload_free)
             const isOver = isPrem
-               ? `💀 File size (${Func.formatSize ? Func.formatSize(fileSize) : fileSize}) exceeds the maximum limit, download it by yourself via this link : ${await Scraper.shorten(apk.path)}`
-               : `⚠️ File size (${Func.formatSize ? Func.formatSize(fileSize) : fileSize}), you can only download files with a maximum size of ${env.max_upload_free} MB and for premium users a maximum of ${env.max_upload} MB.`
+               ? `💀 File size (${fileSize}) exceeds the maximum limit, download it by yourself via this link : ${await Scraper.shorten(apk.path)}`
+               : `⚠️ File size (${fileSize}), you can only download files with a maximum size of ${env.max_upload_free} MB and for premium users a maximum of ${env.max_upload} MB.`
 
             if (chSize.oversize) throw isOver
 
@@ -57,7 +57,6 @@ module.exports = {
             const json = await Api.get('/searching/playstore', {
                q: text
             })
-
             if (!json.status) throw Func.jsonFormat(json)
 
             const list = json.data?.datalist?.list || []
