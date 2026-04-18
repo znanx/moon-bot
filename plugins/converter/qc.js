@@ -14,7 +14,12 @@ module.exports = {
    }) => {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'Hi!')
-         let pic = await conn.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender, 'image').catch(() => 'https://archio.qzz.io/1770100074980-default.jpg')
+         let pic
+         try {
+            pic = await conn.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender, 'image')
+         } catch {
+            pic = 'https://archio.qzz.io/1770100074980-default.jpg'
+         }
          conn.sendReact(m.chat, '🕒', m.key)
          const json = {
             "type": "quote",
@@ -37,12 +42,12 @@ module.exports = {
                "replyMessage": {}
             }]
          }
-         const response = await axios.post('https://znanstore-quotly.hf.space/quote/generate', json, {
+         const { data } = await axios.post('https://znanstore-quotly.hf.space/generate', json, {
             headers: {
                'Content-Type': 'application/json'
             }
          })
-         const buffer = Buffer.from(response.data.result.image, 'base64')
+         const buffer = Buffer.from(data.result.image, 'base64')
          conn.sendSticker(m.chat, buffer, m, {
             packname: setting.sk_pack,
             author: setting.sk_author
