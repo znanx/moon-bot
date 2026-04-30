@@ -25,6 +25,10 @@ Unofficial WhatsApp bot with modular plugins, built on top of Baileys and `@znan
 - WhatsApp account number
 - API key for Alya API (required by API-based features)
 
+## Community & Discussions
+- [WhatsApp Group](https://s.id/12eiZ)
+- [Telegram Group](https://s.id/nDpNX)
+
 ## Quick Start
 ```bash
 git clone https://github.com/znanx/moon-bot.git
