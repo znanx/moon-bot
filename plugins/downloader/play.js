@@ -32,7 +32,7 @@ module.exports = {
          if (chSize.oversize) throw isOver
          conn.sendMessageModify(m.chat, caption, m, {
             largeThumb: true,
-            thumbnail: json.thumbnail,
+            thumbnail: json.data.thumbnail,
          }).then(async () => {
             conn.sendFile(m.chat, json.data.url, json.data.filename, '', m, {
                document: false,
