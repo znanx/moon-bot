@@ -33,10 +33,7 @@ module.exports = {
                }
 
                if (text) {
-                  await conn.sendMessageModify(jid, text, null, {
-                     thumbnail: await Func.fetchBuffer('https://i.ibb.co/184N0Zh/image.jpg'),
-                     largeThumb: true,
-                     url: global.db.setting.link,
+                  conn.reply(jid, text, null, {
                      mentions: mentions
                   })
                } else if (/image\/(webp)/.test(mime)) {

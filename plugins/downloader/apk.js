@@ -43,9 +43,9 @@ module.exports = {
 
             if (chSize.oversize) throw isOver
 
-            conn.sendMessageModify(m.chat, txt, m, {
-               largeThumb: true,
-               thumbnail: apk.icon
+            conn.sendLinkPreview(m.chat, txt, m, {
+               ratio: 'potrait', // landscape (default), potrait, square */
+               thumbnail: apk.icon,
             }).then(async () => {
                await conn.sendFile(m.chat, apk.path, `${apk.uname || apk.package}.apk`, '', m)
             })

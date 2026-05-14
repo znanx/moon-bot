@@ -32,9 +32,9 @@ module.exports = {
             hitstat: sum.total('hitstat') != 0 ? sum.total('hitstat') : 0,
             uptime: Func.toTime(process.uptime() * 1000),
          }
-         conn.sendMessageModify(m.chat, statistic(Func, stats, setting), m, {
-            largeThumb: true,
-            thumbnail: Func.isUrl(setting.cover) ? setting.cover : Buffer.from(setting.cover, 'base64')
+         conn.sendLinkPreview(m.chat, statistic(Func, stats, setting), m, {
+            ratio: 'potrait', // landscape (default), potrait, square */
+            thumbnail: setting.cover,
          })
       } catch (e) {
          conn.reply(m.chat, Func.jsonFormat(e), m)

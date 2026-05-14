@@ -37,9 +37,9 @@ module.exports = {
                group,
                admin
             }
-            if (!useOpt) return conn.sendMessageModify(m.chat, steal(Func, data) + '\n\n' + global.footer, m, {
-               largeThumb: true,
-               thumbnail: pic
+            if (!useOpt) return conn.sendLinkPreview(m.chat, steal(Func, data) + '\n\n' + global.footer, m, {
+               ratio: 'potrait', // landscape (default), potrait, square */
+               thumbnail: pic,
             })
             if (option == 'open') {
                if (!admin) return conn.reply(m.chat, Func.texted('bold', `🚩 Can't open ${groupName} group link because the bot is not an admin.`), m)

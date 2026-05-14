@@ -110,8 +110,8 @@ module.exports = async (conn, ctx, database) => {
          if ((m.fromMe && m.isBot) || /broadcast|newsletter/.test(m.chat) || /Edit/.test(m.mtype)) return
          if (setting.self && !isOwner && !m.fromMe) return
          if (m.isGroup && groupSet && groupSet.adminonly && !isAdmin && !['groupinfo', 'link', 'me'].includes(name)) return
-         if (!m.isGroup && !['owner', 'anonymous', 'anonymous-send_contact'].includes(name) && chats && !isPrem && !isOwner && !users.banned && setting.groupmode) return conn.sendMessageModify(m.chat, `⚠️ The bot is currently in group mode. To use it in private chats, please join the group first or upgrade to the premium package by sending *${prefixes[0]}premium.*`, m, {
-            largeThumb: true,
+         if (!m.isGroup && !['owner', 'anonymous', 'anonymous-send_contact'].includes(name) && chats && !isPrem && !isOwner && !users.banned && setting.groupmode) return conn.sendLinkPreview(m.chat, `⚠️ The bot is currently in group mode. To use it in private chats, please join the group first or upgrade to the premium package by sending *${prefixes[0]}premium.*`, m, {
+            ratio: 'landscape', // landscape (default), potrait, square */
             thumbnail: 'https://telegra.ph/file/0b32e0a0bb3b81fef9838.jpg',
             url: setting.link
          }).then(() => chats.lastchat = new Date() * 1)
@@ -156,8 +156,8 @@ module.exports = async (conn, ctx, database) => {
             if (setting.self && !['anti_link', 'anti_porn', 'anti_sticker', 'anti_tagsw', 'anti_toxic', 'anti_viewonce', 'anti_virtex'].includes(name) && !isOwner && !m.fromMe) continue
             if (!['anti_link', 'anti_porn', 'anti_sticker', 'anti_tagsw', 'anti_toxic', 'anti_viewonce', 'anti_virtex'].includes(name) && users && (users.banned || new Date - users.ban_temporary < env.timeout)) continue
             if (!['anti_link', 'anti_porn', 'anti_sticker', 'anti_tagsw', 'anti_toxic', 'anti_viewonce', 'anti_virtex'].includes(name) && groupSet && groupSet.mute) continue
-            if (!m.isGroup && setting.groupmode && !['anonymous_chat', 'chatbot'].includes(name) && !isPrem) return conn.sendMessageModify(m.chat, `⚠️ The bot is currently in group mode. To use it in private chats, please join the group first or upgrade to the premium package by sending *${prefixes[0]}premium.*`, m, {
-               largeThumb: true,
+            if (!m.isGroup && setting.groupmode && !['anonymous_chat', 'chatbot'].includes(name) && !isPrem) return conn.sendLinkPreview(m.chat, `⚠️ The bot is currently in group mode. To use it in private chats, please join the group first or upgrade to the premium package by sending *${prefixes[0]}premium.*`, m, {
+               ration: 'landscape', // landscape (default), potrait, square */
                thumbnail: 'https://telegra.ph/file/0b32e0a0bb3b81fef9838.jpg',
                url: setting.link
             }).then(() => chats.lastchat = new Date() * 1)

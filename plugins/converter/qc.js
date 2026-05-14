@@ -14,12 +14,12 @@ module.exports = {
    }) => {
       try {
          if (!text) throw Func.example(usedPrefix, command, 'Hi!')
-         let pic
-         try {
-            pic = await conn.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender, 'image')
-         } catch {
-            pic = 'https://archio.qzz.io/1770100074980-default.jpg'
-         }
+
+         const pic = await Promise.race([
+            conn.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender, 'image'),
+            new Promise(resolve => setTimeout(() => resolve(null), 3000))
+         ]).catch(() => null) || 'https://archio.qzz.io/1770100074980-default.jpg'
+         
          conn.sendReact(m.chat, '🕒', m.key)
          const json = {
             "type": "quote",

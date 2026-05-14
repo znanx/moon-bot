@@ -41,9 +41,9 @@ module.exports = {
       txt += `   ◦  *Stay* : ${Func.switcher(groupSet.stay, '√', '×')}\n`
       txt += `   ◦  *Expired* : ${groupSet.expired == 0 ? 'NOT SET' : Func.timeReverse(groupSet.expired - new Date * 1)}\n\n`
       txt += global.footer
-      conn.sendMessageModify(m.chat, txt, m, {
-         largeThumb: true,
-         thumbnail: pic
+      conn.sendLinkPreview(m.chat, txt, m, {
+         ratio: 'potrait', // landscape (default), potrait, square */
+         thumbnail: pic,
       })
    },
    group: true

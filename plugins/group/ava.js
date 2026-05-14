@@ -30,13 +30,17 @@ module.exports = {
                return conn.reply(m.chat, `🚩 Cannot find user in group.`, m)
             }
          }
-         var pic = false
-         try {
-            var pic = await conn.profilePictureUrl(user, 'image')
-         } catch { } finally {
-            if (!pic) return conn.reply(m.chat, `🚩 He/She didn't put a profile picture.`, m)
-            conn.sendFile(m.chat, pic, '', '', m)
+
+         const pic = await Promise.race([
+            conn.profilePictureUrl(user, 'image'),
+            new Promise(resolve => setTimeout(() => resolve(null), 1200))
+         ]).catch(() => null)
+
+         if (!pic) {
+            return conn.reply(m.chat, `🚩 He/She didn't put a profile picture.`, m)
          }
+
+         conn.sendFile(m.chat, pic, '', '', m)
       } catch (e) {
          return conn.reply(m.chat, Func.jsonFormat(e), m)
       }

@@ -10,7 +10,16 @@ module.exports = {
       const blockList = typeof await (await conn.fetchBlocklist()) != 'undefined' ? await (await conn.fetchBlocklist()) : []
       let user = global.db.users[m.sender]
       let _own = [...new Set([env.owner, ...global.db.setting.owners])]
-      let pic = await conn.profilePictureUrl(m.sender, 'image').catch(async () => await Func.fetchBuffer('./src/image/default.jpg'))
+
+      let pic = await Promise.race([
+         conn.profilePictureUrl(m.sender, 'image'),
+         new Promise(resolve => setTimeout(() => resolve(null), 1200))
+      ]).catch(() => null)
+
+      if (!pic || typeof pic !== 'string') {
+         pic = await Func.fetchBuffer('./src/image/default.jpg')
+      }
+
       let blocked = blockList.includes(m.sender) ? true : false
       let now = new Date() * 1
       let lastseen = (user.lastseen == 0) ? 'Never' : Func.toDate(now - user.lastseen)
@@ -30,9 +39,9 @@ module.exports = {
       txt += `   ◦  *Expired* : ${user.expired == 0 ? '-' : Func.timeReverse(user.expired - new Date() * 1)}\n`
       txt += `   ◦  *Registered* : ${(user.registered ? '√' : '×')}\n\n`
       txt += global.footer
-      conn.sendMessageModify(m.chat, txt, m, {
-         largeThumb: true,
-         thumbnail: pic
+      conn.sendLinkPreview(m.chat, txt, m, {
+         ratio: 'potrait', // landscape (default), potrait, square */
+         thumbnail: pic,
       })
    },
    error: false

@@ -58,9 +58,9 @@ module.exports = {
             txt += `\n`
          }
          txt += global.footer
-         conn.sendMessageModify(m.chat, txt, m, {
-            largeThumb: true,
-            thumbnail: Func.isUrl(setting.cover) ? setting.cover : Buffer.from(setting.cover, 'base64'),
+         conn.sendLinkPreview(m.chat, txt, m, {
+            ratio: 'potrait', // landscape (default), potrait, square */
+            thumbnail: setting.cover,
             url: setting.link
          })
       } else if (style === 2) {
@@ -90,10 +90,9 @@ module.exports = {
             txt += `${box}  ◦  ${usedPrefix}menu ${tag}\n`
          })
          txt += '\n' + global.footer
-         conn.sendMessageModify(m.chat, txt, m, {
-            largeThumb: true,
-            thumbnail: Func.isUrl(setting.cover) ? setting.cover : Buffer.from(setting.cover, 'base64'),
-            url: setting.link
+         conn.sendLinkPreview(m.chat, txt, m, {
+            ratio: 'potrait', // landscape (default), potrait, square */
+            thumbnail: setting.cover,
          })
       } else if (style === 3) {
          let tag = args.join(' ').toLowerCase()

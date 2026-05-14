@@ -20,10 +20,10 @@ module.exports = {
          txt += `   ∘  *Stars* : ${json.stargazers_count}\n`
          txt += `   ∘  *Issues* : ${json.open_issues_count}\n\n`
          txt += global.footer
-         conn.sendMessageModify(m.chat, txt, m, {
-            largeThumb: true,
-            thumbnail: Func.isUrl(setting.cover) ? setting.cover : Buffer.from(setting.cover, 'base64'),
-            url: 'https://github.com/rifnd/moon-bot',
+         conn.sendLinkPreview(m.chat, txt, m, {
+            ratio: 'potrait', // landscape (default), potrait, square */
+            thumbnail: setting.cover,
+            url: 'https://github.com/znanx/moon-bot'
          })
       } catch (e) {
          throw Func.jsonFormat(e)

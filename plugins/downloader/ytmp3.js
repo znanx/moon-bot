@@ -29,9 +29,9 @@ module.exports = {
          const chSize = Func.sizeLimit(json.data.size, users.premium ? env.max_upload : env.max_upload_free)
          const isOver = users.premium ? `💀 File size (${json.data.size}) exceeds the maximum limit.` : `⚠️ File size (${json.data.size}), you can only download files with a maximum size of ${env.max_upload_free} MB and for premium users a maximum of ${env.max_upload} MB.`
          if (chSize.oversize) throw isOver
-         conn.sendMessageModify(m.chat, txt, m, {
-            largeThumb: true,
-            thumbnail: json.data.thumbnail
+         conn.sendLinkPreview(m.chat, txt, m, {
+            ratio: 'potrait', // landscape (default), potrait, square */
+            thumbnail: json.data.thumbnail,
          }).then(async () => {
             conn.sendFile(m.chat, json.data.url, json.data.filename, '', m, {
                document: true,

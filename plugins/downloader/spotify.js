@@ -27,9 +27,9 @@ module.exports = {
             txt += `   ◦  *Artist* : ${json.data.artist}\n`
             txt += `   ◦  *Duration* : ${json.data.duration}\n\n`
             txt += global.footer
-            conn.sendMessageModify(m.chat, txt, m, {
-               largeThumb: true,
-               thumbnail: json.data.thumbnail
+            conn.sendLinkPreview(m.chat, txt, m, {
+               ratio: 'potrait', // landscape (default), potrait, square */
+               thumbnail: json.data.thumbnail,
             }).then(async () => {
                conn.sendFile(m.chat, json.data.url, json.data.title + ' - ' + json.data.artist + '.mp3', '', m, {
                   document: true,
@@ -47,9 +47,9 @@ module.exports = {
             txt += `   ◦  *Artist* : ${json.data.artist}\n`
             txt += `   ◦  *Duration* : ${json.data.duration}\n\n`
             txt += global.footer
-            conn.sendMessageModify(m.chat, txt, m, {
-               largeThumb: true,
-               thumbnail: json.data.thumbnail
+            conn.sendLinkPreview(m.chat, txt, m, {
+               ratio: 'potrait', // landscape (default), potrait, square */
+               thumbnail: json.data.thumbnail,
             }).then(async () => {
                conn.sendFile(m.chat, json.data.url, json.data.title + ' - ' + json.data.artist + '.mp3', '', m, {
                   document: true,
