@@ -1,19 +1,21 @@
-FROM node:lts-buster
+FROM node:22-bookworm-slim
+
+WORKDIR /app
 
 RUN apt-get update && \
-  apt-get install -y \
-  ffmpeg \
-  imagemagick \
-  webp && \
-  apt-get upgrade -y && \
-  rm -rf /var/lib/apt/lists/*
+    apt-get install -y \
+    ffmpeg \
+    imagemagick \
+    webp && \
+    apt-get upgrade -y && \
+    rm -rf /var/lib/apt/lists/*
 
-COPY package.json .
+COPY package.json package-lock.json* ./
 
-RUN npm install
+RUN npm install --production
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 8080
 
-CMD ["node", "index.js"]
+CMD ["node", "index.js", "--max-old-space-size=1024"]

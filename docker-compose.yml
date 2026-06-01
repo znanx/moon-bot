@@ -1,0 +1,13 @@
+services:
+  moon-bot:
+    build: .
+    container_name: moon-bot
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    mem_limit: 1g
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
