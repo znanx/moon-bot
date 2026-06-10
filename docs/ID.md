@@ -22,7 +22,7 @@ Dokumen ini menjelaskan setup, konfigurasi, dan pengembangan plugin untuk Moon B
 ```bash
 git clone https://github.com/znanx/moon-bot.git
 cd moon-bot
-npm install
+npm install --ignore-scripts
 ```
 
 Buat file `.env` di root project:
@@ -72,6 +72,7 @@ Field penting:
 - `database`: nama file database lokal.
 - `pairing.state`: aktif/nonaktif pairing mode.
 - `pairing.number`: nomor WhatsApp untuk login.
+- `pairing.version`: contoh array versi client WhatsApp (misal `[2, 3000, 1041168064]`). Lihat [wppconnect WhatsApp versions](https://wppconnect.io/whatsapp-versions) untuk nilai yang kompatibel.
 - `spam.*`: aturan anti-spam.
 
 ### 2) `lib/system/config.js`

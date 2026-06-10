@@ -33,7 +33,7 @@ Unofficial WhatsApp bot with modular plugins, built on top of Baileys and `@znan
 ```bash
 git clone https://github.com/znanx/moon-bot.git
 cd moon-bot
-npm install
+npm install --ignore-scripts
 ```
 
 Create `.env` in the project root:
@@ -49,6 +49,7 @@ Update [`config.json`](./config.json):
 - `owner` and `owner_name`
 - `pairing.number` (your WhatsApp number)
 - `pairing.state` (`true` to use pairing mode)
+- `pairing.version`: Example WhatsApp client version array (e.g. `[2, 3000, 1041168064]`). See [wppconnect WhatsApp versions](https://wppconnect.io/whatsapp-versions) for compatible values.
 
 Run the bot:
 
