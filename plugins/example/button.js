@@ -1,7 +1,7 @@
 const fs = require('fs')
 
 module.exports = {
-   help: ['button1', 'button2', 'button3', 'button4', 'button5', 'button6'],
+   help: ['button1', 'button2', 'button3', 'button4', 'button5'],
    tags: 'example',
    run: async (m, {
       conn,
@@ -133,26 +133,6 @@ module.exports = {
                })
             break
 
-            case 'button6': // Button 6 (Message Modify)
-               conn.sendButton(m.chat, [{
-                  text: 'Runtime',
-                  command: '.runtime'
-               }, {
-                  text: 'Statistic',
-                  command: '.stat'
-               }], m, {
-                  text: 'Hi @0',
-                  footer: global.footer,
-                  docs: {
-                     name: 'オートメーション',
-                     pages: 20,
-                     size: '1GB',
-                     extension: 'ppt'
-                  },
-                  body: 'WhatsApp Automation',
-                  thumbnail: Func.isUrl(setting.cover) ? setting.cover : Buffer.from(setting.cover, 'base64')
-               })
-            break
          }
       } catch (e) {
          conn.reply(m.chat, Func.jsonFormat(e), m)
