@@ -1,10 +1,13 @@
 # MOON BOT
 Unofficial WhatsApp bot with modular plugins, built on top of Baileys and `@znan/wabot`.
 
+[![Powered by DartNode](https://dartnode.com/_branding/white_color_full.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
+
 [![Forks](https://img.shields.io/github/forks/znanx/moon-bot?style=flat-square)](https://github.com/znanx/moon-bot/network/members)
 [![Stars](https://img.shields.io/github/stars/znanx/moon-bot?style=flat-square)](https://github.com/znanx/moon-bot/stargazers)
 [![License](https://img.shields.io/github/license/znanx/moon-bot?style=flat-square)](./LICENSE)
 [![Issues](https://img.shields.io/github/issues/znanx/moon-bot?style=flat-square)](https://github.com/znanx/moon-bot/issues)
+
 
 ## Documentation
 - Bahasa Indonesia: [`docs/ID.md`](./docs/ID.md)
