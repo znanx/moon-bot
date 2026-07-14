@@ -1,5 +1,5 @@
 module.exports = {
-   help: ['ephemeral', 'customid', 'stcai', 'stcprem'],
+   help: ['ephemeral', 'customid', 'stcai', 'stcprem', 'stclock'],
    tags: 'example',
    run: async (m, {
       conn,
@@ -27,8 +27,8 @@ module.exports = {
 
          case 'stcai': {
             conn.sendSticker(m.chat, 'https://i.pinimg.com/1200x/4d/9e/29/4d9e29361d4dcdc6eabf5a0a035c900d.jpg', m, {
-               packname: global.db.setting.packname,
-               author: global.db.setting.author,
+               packname: global.db.setting.sk_pack,
+               author: global.db.setting.sk_author,
                mode: 'ai'
             })
          }
@@ -36,9 +36,18 @@ module.exports = {
 
          case 'stcprem': {
             conn.sendSticker(m.chat, 'https://i.pinimg.com/1200x/4d/9e/29/4d9e29361d4dcdc6eabf5a0a035c900d.jpg', m, {
-               packname: global.db.setting.packname,
-               author: global.db.setting.author,
+               packname: global.db.setting.sk_pack,
+               author: global.db.setting.sk_author,
                mode: 'premium'
+            })
+         }
+         break
+
+         case 'stclock': {
+            conn.sendSticker(m.chat, 'https://i.pinimg.com/1200x/4d/9e/29/4d9e29361d4dcdc6eabf5a0a035c900d.jpg', m, {
+               packname: global.db.setting.sk_pack,
+               author: global.db.setting.sk_author,
+               mode: 'lock'
             })
          }
          break

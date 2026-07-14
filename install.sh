@@ -7,5 +7,5 @@ nvm install v22.20.0
 nvm alias default v22.20.0
 nvm use default
 npm install -g pm2
-yarn
-pm2 start pm2.config.cjs && pm2 logs moon-bot
+npm install --ignore-scripts
+pm2 start pm2.config.js && pm2 logs moon-bot

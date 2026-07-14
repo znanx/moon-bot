@@ -1,11 +1,13 @@
-const { Connection, Database, Function: Func, Config: env } = require('@znan/wabot')
-require('./lib/system/config'), require('./lib/system/function'), require('./lib/system/scraper')
+const { Connection, Database, Function: Func, Config } = require('@znan/wabot')
 const fs = require('fs')
-const config = require('./config.json')
+
+require('./lib/system/config')
+require('./lib/system/function')
+require('./lib/system/scraper')
 
 const connect = async () => {
    const url = process?.env?.DATABASE_URL
-   const system = Database.create(url, env.database)
+   const system = Database.create(url, Config.database)
 
    const conn = new Connection({
       plugins_dir: 'plugins',
@@ -13,22 +15,28 @@ const connect = async () => {
       online: true,
       presence: true,
       bypass_ephemeral: true,
-      pairing: config.pairing,
+      pairing: Config.pairing,
+      bot: id => id && (id.startsWith('BAE') || /[-]/.test(id)),
+      custom_id: 'moonx'
    }, {
-      browser: env.pairing.browser,
-      version: env.pairing.version,
+      browser: Config.pairing.browser,
+      version: Config.pairing.version,
       shouldIgnoreJid: jid => {
          return /(newsletter|bot)/.test(jid)
       }
    })
 
+   let dbLoaded = false
    conn.once('connect', async x => {
-      /** load db */
-      global.db = { users: {}, groups: {}, chats: {}, setting: {}, statistic: {}, sticker: {}, ...(await system.database.fetch() || {}) }
-      /** save db */
-      await system.database.save(global.db)
       /** write log */
       if (x && typeof x === 'object' && x.message) console.log(x.display, x.message)
+      /** load db */
+      if (!dbLoaded) {
+         dbLoaded = true
+         global.db = { users: {}, groups: {}, chats: {}, setting: {}, statistic: {}, sticker: {}, ...(await system.database.fetch() || {}) }
+         /** save db */
+         await system.database.save(global.db)
+      }
    })
 
    conn.on('error', err => {
@@ -44,24 +52,11 @@ const connect = async () => {
       /* auto restart if ram usage is over */
       const ramCheck = setInterval(() => {
          var ramUsage = process.memoryUsage().rss
-         if (ramUsage >= require('bytes')(env.ram_limit)) {
+         if (ramUsage >= require('bytes')(Config.ram_limit)) {
             clearInterval(ramCheck)
             process.send('reset')
          }
       }, 60 * 1000)
-
-      /* create temp directory if doesn't exists */
-      if (!fs.existsSync('./tmp')) fs.mkdirSync('./tmp')
-
-      /* clear temp folder every 12 hour */
-      setInterval(async () => {
-         try {
-            const tmpFiles = fs.readdirSync('./tmp')
-            if (tmpFiles.length > 0) {
-               tmpFiles.filter(v => !v.endsWith('.file')).map(v => fs.unlinkSync('./tmp/' + v))
-            }
-         } catch { }
-      }, 12 * 60 * 60 * 1000)
 
       /** save database every 2 min */
       setInterval(async () => {
@@ -72,8 +67,8 @@ const connect = async () => {
       setInterval(async () => {
          if (global?.db?.setting?.autobackup) {
             await system.database.save(global.db)
-            fs.writeFileSync(env.database + '.json', JSON.stringify(global.db, null, null), 'utf-8')
-            await conn.sock.sendFile(env.owner + '@s.whatsapp.net', fs.readFileSync('./' + env.database + '.json'), env.database + '.json', '', null)
+            fs.writeFileSync(Config.database + '.json', JSON.stringify(global.db, null, null), 'utf-8')
+            await conn.sock.sendFile(Config.owner + '@s.whatsapp.net', fs.readFileSync('./' + Config.database + '.json'), Config.database + '.json', '', null)
          }
       }, 2 * 60 * 60 * 1000)
 
