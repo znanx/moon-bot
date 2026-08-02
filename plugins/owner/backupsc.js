@@ -5,7 +5,7 @@ const archiver = require('archiver')
 const ignore = require('ignore')
 
 module.exports = {
-   help: ['backsupsc'],
+   help: ['backupsc'],
    tags: 'owner',
    run: async (m, {
       conn,

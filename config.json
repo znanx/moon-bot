@@ -22,10 +22,10 @@
    "blocks": ["994", "221", "263", "212"],
    "evaluate_chars": ["=>", ">", "$", "~>", "!", "+", "/", "#", "."],
    "pairing": {
-      "state": true,
+      "state": false,
       "number": 6283175395970,
       "code": "MOONXBOT",
       "browser": ["Ubuntu", "Firefox", "20.0.00"],
-      "version": [2, 3000, 1043038830]
+      "version": [2, 3000, 1044308861]
    }
 }

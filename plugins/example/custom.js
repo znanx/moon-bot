@@ -1,5 +1,5 @@
 module.exports = {
-   help: ['ephemeral', 'customid', 'stcai', 'stcprem', 'stclock'],
+   help: ['ephemeral', 'stcai', 'stcprem', 'stclock'],
    tags: 'example',
    run: async (m, {
       conn,
@@ -7,7 +7,7 @@ module.exports = {
    }) => {
       switch (command) {
          case 'ephemeral': {
-            /** 
+            /**
              * 1 * 24 * 60 * 60 ~> 1 Day
              * 7 * 24 * 60 * 60 ~> 7 Day
              * 90 * 24 * 60 * 60 ~> 90 Day
@@ -16,14 +16,7 @@ module.exports = {
                ephemeral: 7 * 24 * 60 * 60 // 7days
             })
          }
-         break
-         
-         case 'customid': {
-            conn.reply(m.chat, 'Hi!', null, {}, {
-               isAI: true
-            })
-         }
-         break
+            break
 
          case 'stcai': {
             conn.sendSticker(m.chat, 'https://i.pinimg.com/1200x/4d/9e/29/4d9e29361d4dcdc6eabf5a0a035c900d.jpg', m, {
@@ -32,7 +25,7 @@ module.exports = {
                mode: 'ai'
             })
          }
-         break
+            break
 
          case 'stcprem': {
             conn.sendSticker(m.chat, 'https://i.pinimg.com/1200x/4d/9e/29/4d9e29361d4dcdc6eabf5a0a035c900d.jpg', m, {
@@ -41,7 +34,7 @@ module.exports = {
                mode: 'premium'
             })
          }
-         break
+            break
 
          case 'stclock': {
             conn.sendSticker(m.chat, 'https://i.pinimg.com/1200x/4d/9e/29/4d9e29361d4dcdc6eabf5a0a035c900d.jpg', m, {
@@ -50,7 +43,7 @@ module.exports = {
                mode: 'lock'
             })
          }
-         break
+            break
       }
    },
    error: false
