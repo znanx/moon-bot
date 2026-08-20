@@ -16,7 +16,7 @@ module.exports = {
          let media = await q.download()
          //let isMedia = /image\/(png|jpe?g|gif)|video\/mp4\/webp/.test(mime)
          //let json = await (isMedia ? Scraper.imgbb : Scraper.uploader)(media)
-         let json = await Scraper.tmpfiles(media)
+         let json = await Scraper.uploader(media)
          conn.reply(m.chat, json.data.url, m)
       } catch (e) {
          throw Func.jsonFormat(e)
