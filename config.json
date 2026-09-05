@@ -1,5 +1,5 @@
 {
-   "owner": "6283191036249",
+   "owner": "919932792118",
    "owner_name": "Contact Support",
    "database": "data",
    "limit": 10,
@@ -23,7 +23,7 @@
    "evaluate_chars": ["=>", ">", "$", "~>", "!", "+", "/", "#", "."],
    "pairing": {
       "state": false,
-      "number": 6283175395970,
+      "number": 918536916280,
       "code": "MOONXBOT",
       "browser": ["Ubuntu", "Firefox", "20.0.00"],
       "version": [2, 3000, 1044308861]
