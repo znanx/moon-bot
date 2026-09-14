@@ -1,5 +1,3 @@
-const Jimp = require('jimp')
-
 module.exports = {
    help: ['setpp'],
    use: 'reply photo',
@@ -43,13 +41,36 @@ module.exports = {
    error: false
 }
 
+const sharp = require('sharp')
+
 async function generate(media) {
-   const jimp = await Jimp.read(media)
-   const min = jimp.getWidth()
-   const max = jimp.getHeight()
-   const cropped = jimp.crop(0, 0, min, max)
+   const image = sharp(media)
+   const { width, height } = await image.metadata()
+
+   if (!width || !height) {
+      throw new Error('Invalid image dimensions')
+   }
+
+   const size = Math.min(width, height)
+
+   const cropped = image.extract({
+      left: 0,
+      top: 0,
+      width: size,
+      height: size
+   })
+
    return {
-      img: await cropped.scaleToFit(720, 720).getBufferAsync(Jimp.MIME_JPEG),
-      preview: await cropped.normalize().getBufferAsync(Jimp.MIME_JPEG)
+      img: await cropped
+         .clone()
+         .resize(720, 720)
+         .jpeg({ quality: 100 })
+         .toBuffer(),
+
+      preview: await cropped
+         .clone()
+         .normalise()
+         .jpeg({ quality: 100 })
+         .toBuffer()
    }
 }

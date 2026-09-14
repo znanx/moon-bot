@@ -23,21 +23,28 @@ module.exports = {
    owner: true
 }
 
-const Jimp = require('jimp')
+const sharp = require('sharp')
+
 /**
  * Crops an image buffer to a specified landscape aspect ratio.
  * @param {Buffer} inputBuffer - The input image buffer.
  * @param {number} aspectRatio - The desired aspect ratio (default is 16:9).
- * @param {Buffer} quality - Image quality. (default is 50)
+ * @param {number} quality - Image quality (default is 50).
  * @returns {Promise<Buffer>} - The cropped image buffer.
  */
 const cropToLandscapeBuffer = async (inputBuffer, aspectRatio = 16 / 9, quality = 50) => {
    try {
-      const image = await Jimp.read(inputBuffer)
-      const { width, height } = image.bitmap
+      const image = sharp(inputBuffer)
+      const { width, height } = await image.metadata()
+
+      if (!width || !height) {
+         throw new Error('Invalid image dimensions')
+      }
+
       const currentAspectRatio = width / height
 
-      let cropWidth, cropHeight
+      let cropWidth
+      let cropHeight
 
       if (currentAspectRatio > aspectRatio) {
          cropWidth = Math.floor(height * aspectRatio)
@@ -47,16 +54,18 @@ const cropToLandscapeBuffer = async (inputBuffer, aspectRatio = 16 / 9, quality 
          cropHeight = Math.floor(width / aspectRatio)
       }
 
-      const x = Math.floor((width - cropWidth) / 2)
-      const y = Math.floor((height - cropHeight) / 2)
+      const left = Math.floor((width - cropWidth) / 2)
+      const top = Math.floor((height - cropHeight) / 2)
 
-      image.crop(x, y, cropWidth, cropHeight)
-
-      // Tambahkan kompresi JPEG (semakin kecil, semakin terkompres)
-      image.quality(quality) // default: 100
-
-      const outputBuffer = await image.getBufferAsync(Jimp.MIME_JPEG)
-      return outputBuffer
+      return await image
+         .extract({
+            left,
+            top,
+            width: cropWidth,
+            height: cropHeight
+         })
+         .jpeg({ quality })
+         .toBuffer()
    } catch (error) {
       console.error('Error cropping image:', error.message)
       throw error
