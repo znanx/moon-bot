@@ -18,9 +18,9 @@ module.exports = {
          who = m.mentionedJid[0]
 
          if (who.includes('@lid')) {
-            const participant = participants.find(p => p.lid === who)
-            if (participant && participant.id) {
-               who = participant.id
+            const participant = participants.find(p => p.id === who)
+            if (participant && participant.phoneNumber) {
+               who = participant.phoneNumber
             } else {
                return conn.reply(m.chat, Func.texted('bold', '🚩 Cannot find user in group'), m)
             }

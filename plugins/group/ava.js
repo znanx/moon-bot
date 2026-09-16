@@ -23,9 +23,9 @@ module.exports = {
          }
          if (!user) return conn.reply(m.chat, `🚩 Cannot detect user.`, m)
          if (user.includes('@lid')) {
-            const participant = participants.find(p => p.lid === user)
-            if (participant && participant.id) {
-               user = participant.id
+            const participant = participants.find(p => p.id === user)
+            if (participant && participant.phoneNumber) {
+               user = participant.phoneNumber
             } else {
                return conn.reply(m.chat, `🚩 Cannot find user in group.`, m)
             }

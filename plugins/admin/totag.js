@@ -10,7 +10,7 @@ module.exports = {
       if (!m.quoted) return conn.reply(m.chat, Func.texted('bold', '🚩 Reply chat'), m)
       conn.sendMessage(m.chat, {
          forward: m.quoted.fakeObj,
-         mentions: participants.map(v => v.id).filter(v => v !== conn.user.id)
+         mentions: participants.filter(v => v && v.phoneNumber).map(v => v.phoneNumber).filter(phoneNumber => phoneNumber !== conn.decodeJid(conn.user.id))
       })
    },
    group: true,

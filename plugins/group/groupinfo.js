@@ -11,16 +11,15 @@ module.exports = {
       groupSet,
       Func
    }) => {
-      const meta = groupMetadata
-      const creator = (meta?.owner?.endsWith('lid') ? meta?.ownerPn || meta.ownerJid : meta.owner)?.replace(/@.+/, '')
-      const admin = await conn.getAdmin(participants)
-      const member = participants.map(v => v.id)
+      const creator = (groupMetadata?.subjectOwnerPn || groupMetadata?.ownerPn || groupMetadata?.descOwnerPn)?.replace(/@.+/, '')
+      const admin = participants?.filter(i => i.admin === 'admin' || i.admin === 'superadmin')?.map(v => v.phoneNumber) || []
+      const member = participants.filter(i => i && i.phoneNumber).map(v => v.phoneNumber)
       let pic = await conn.profilePictureUrl(m.chat, 'image').catch(async () => await Func.fetchBuffer('./src/image/default.jpg'))
       let txt = `乂  *G R O U P - I N F O*\n\n`
-      txt += `   ◦  *Name* : ${meta.subject}\n`
+      txt += `   ◦  *Name* : ${groupMetadata.subject}\n`
       txt += `   ◦  *Member* : ${member.length}\n`
       txt += `   ◦  *Admin* : ${admin.length}\n`
-      txt += `   ◦  *Created* : ${moment(meta.creation * 1000).format('DD/MM/YY HH:mm:ss')}\n`
+      txt += `   ◦  *Created* : ${moment(groupMetadata.creation * 1000).format('DD/MM/YY HH:mm:ss')}\n`
       txt += `   ◦  *Owner* : ${creator ? '@' + creator : '-'}\n\n`
       txt += `乂  *M O D E R A T I O N*\n\n`
       txt += `   ◦  ${Func.switcher(groupSet.antidelete, '[ √ ]', '[ × ]')} Anti Delete\n`

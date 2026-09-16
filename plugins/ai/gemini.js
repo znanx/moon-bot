@@ -1,6 +1,6 @@
 module.exports = {
    help: ['gemini'],
-   use: 'query',
+   use: 'prompt',
    tags: 'ai',
    run: async (m, {
       conn,

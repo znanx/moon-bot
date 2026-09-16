@@ -11,7 +11,7 @@ module.exports = {
       Func
    }) => {
       conn.reply(m.chat, m.quoted ? m.quoted.text : text, null, {
-         mentions: participants.map(v => v.id)
+         mentions: participants.filter(v => v && v.phoneNumber).map(v => v.phoneNumber).filter(phoneNumber => phoneNumber !== conn.decodeJid(conn.user.id))
       })
    },
    group: true,

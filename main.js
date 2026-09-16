@@ -52,7 +52,7 @@ const connect = async () => {
       /* auto restart if ram usage is over */
       const ramCheck = setInterval(() => {
          var ramUsage = process.memoryUsage().rss
-         if (ramUsage >= require('bytes')(Config.ram_limit)) {
+         if (ramUsage >= Func.toBytes(Config.ram_limit)) {
             clearInterval(ramCheck)
             process.send('reset')
          }

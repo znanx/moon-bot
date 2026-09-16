@@ -11,7 +11,7 @@ module.exports = {
       Func
    }) => {
       try {
-         let member = participants.filter(v => !v.admin).map(v => v.jid || v.id).filter(v => !v.startsWith('62') && v != conn.decodeJid(conn.user.id))
+         let member = participants.filter(v => !v.admin).map(v => v.phoneNumber).filter(v => !v.startsWith('62') && v != conn.decodeJid(conn.user.id))
          if (!args || !args[0]) {
             if (member.length == 0) return conn.reply(m.chat, Func.texted('bold', `🚩 This group is clean from outsiders.`), m)
             let teks = `✅ *${member.length}* outsiders found, send *${usedPrefix + command} -y* to remove them.\n\n`

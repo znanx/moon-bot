@@ -7,7 +7,7 @@ module.exports = {
       conn,
       participants
    }) => {
-      let member = participants.map(u => u.id)
+      let member = participants.filter(v => v && v.phoneNumber).map(v => v.phoneNumber).filter(phoneNumber => phoneNumber !== conn.decodeJid(conn.user.id))
       let now = new Date * 1
       var tag1 = member[Math.floor(member.length * Math.random())]
       var tag2 = member[Math.floor(member.length * Math.random())]

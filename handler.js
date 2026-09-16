@@ -14,10 +14,10 @@ module.exports = async (conn, ctx, database) => {
       let isOwner = [conn.decodeJid(conn.user.id).replace(/@.+/, ''), env.owner, ...setting.owners].map(v => v + '@s.whatsapp.net').includes(m.sender)
       let isPrem = users && users.premium || isOwner
       let groupMetadata = m.isGroup ? await conn.getGroupMetadata(m.chat) : {}
-      let participants = m.isGroup ? groupMetadata ? conn.resolveLid(groupMetadata.participants) : [] : [] || []
-      let adminList = m.isGroup ? participants?.filter(i => i.admin === 'admin' || i.admin === 'superadmin')?.map(i => i.id) || [] : []
+      let participants = m.isGroup ? groupMetadata ? groupMetadata.participants : [] : [] || []
+      let adminList = m.isGroup ? participants?.filter(i => i.admin === 'admin' || i.admin === 'superadmin')?.map(i => i.phoneNumber) || [] : []
       let isAdmin = m.isGroup ? adminList.includes(m.sender) : false
-      let isBotAdmin = m.isGroup ? adminList.includes((conn.user.id.split`:`[0]) + '@s.whatsapp.net') : false
+      let isBotAdmin = m.isGroup ? adminList.includes(conn.decodeJid(conn.user.id)) : false
 
       const spam = isSpam.check(conn, m, users, isCommand, command, setting)
 
@@ -65,18 +65,16 @@ module.exports = async (conn, ctx, database) => {
          timezone: process.env.TZ
       })
       if (m.isGroup && !m.fromMe) {
-         let now = new Date() * 1
-         const { lid } = await conn.getUserId(m.sender)
          if (!groupSet.member[m.sender]) {
             groupSet.member[m.sender] = {
-               lid: lid,
+               lid: m.key?.participant ?? null,
                chat: 1,
-               lastseen: now,
+               lastseen: new Date() * 1,
                warning: 0
             }
          } else {
-            groupSet.member[m.sender].lastseen = now
-            groupSet.member[m.sender].lid = lid
+            groupSet.member[m.sender].lastseen = new Date() * 1
+            groupSet.member[m.sender].lid = m.key?.participant ?? null
          }
       }
       if (setting.antispam && spam) {
@@ -183,4 +181,4 @@ module.exports = async (conn, ctx, database) => {
       Func.logFile(e)
    }
    Func.reload(require.resolve(__filename))
-} 
+}

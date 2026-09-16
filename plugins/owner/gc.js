@@ -21,14 +21,14 @@ module.exports = {
             const jid = ((m.quoted.text).split('💳* :')[select].split`\n`[0] + '@g.us').trim()
             const group = groups[jid]
             if (!group) return m.reply(Func.texted('bold', `🚩 Data group does not exist in the database.`))
-            const groupMetadata = await (await conn.groupMetadata(jid))
+            const groupMetadata = await (await conn.getGroupMetadata(jid))
             const groupName = groupMetadata ? groupMetadata.subject : ''
-            const adminList = conn.getAdmin(conn.resolveLid(groupMetadata.participants))
+            const adminList = groupMetadata.participants?.filter(i => i.admin === 'admin' || i.admin === 'superadmin')?.map(v => v.phoneNumber) || []
             const admin = adminList.includes(conn.decodeJid(conn.user.id))
             const useOpt = (args && args[1]) ? true : false
             const option = useOpt ? (args[1]).toLowerCase() : false
             const time = group.stay ? 'FOREVER' : (group.expired == 0 ? 'NOT SET' : Func.timeReverse(group.expired - new Date() * 1))
-            const member = groupMetadata.participants.map(u => u.id).length
+            const member = groupMetadata.participants.map(v => v.phoneNumber).length
             const pic = await conn.profilePictureUrl(jid, 'image').catch(async () => await Func.fetchBuffer('./src/image/default.jpg'))
             let data = {
                name: groupName,

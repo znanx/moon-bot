@@ -12,7 +12,7 @@ module.exports = {
       Func
    }) => {
       try {
-         const member = participants.filter(v => !v.admin).map(v => v.id)
+         const member = participants.filter(v => !v.admin).map(v => v.phoneNumber)
          const day = 86400000 * 7
          const now = new Date() * 1
          let sider1 = [], sider2 = []

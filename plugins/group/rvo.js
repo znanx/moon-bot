@@ -15,6 +15,7 @@ module.exports = {
          if (!m.quoted) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply viewonce message to use this command.`), m)
          await conn.sendReact(m.chat, '🕒', m.key)
          const type = m.quoted?.message ? Object.keys(m.quoted.message)?.[0] : m.quoted?.mimetype
+         if (!/(image|video|audio)/.test(type || '')) return conn.reply(m.chat, Func.texted('bold', `🚩 Reply viewonce message to use this command.`), m)
          if (m.quoted && m.quoted?.message) {
             let q = m.quoted?.message?.[type] || m.quoted
             let buffer = await conn.downloadMediaMessage(q)

@@ -10,22 +10,61 @@ module.exports = {
       participants,
       Func
    }) => {
+      const findParticipantByLid = (value) => {
+         if (!value || !Array.isArray(participants)) return null
+         return participants.find(p => (p?.id || '').trim() === value.trim()) || null
+      }
+
+      const findParticipantByPhone = (value) => {
+         if (!value || !Array.isArray(participants)) return null
+         const target = value.trim()
+         return participants.find(p => (p?.phoneNumber || '').trim() === target) || null
+      }
+
+      const resolveTarget = async (rawInput) => {
+         const input = (rawInput || '').trim()
+         if (!input) return { jid: '', participant: null }
+
+         if (input.includes('@lid')) {
+            const participant = findParticipantByLid(input)
+            if (!participant) return { jid: '', participant: null }
+            return {
+               jid: (participant.phoneNumber || participant.id || '').trim(),
+               participant
+            }
+         }
+
+         if (input.includes('@s.whatsapp.net')) {
+            const jid = conn.decodeJid(input)
+            return {
+               jid,
+               participant: findParticipantByPhone(jid)
+            }
+         }
+
+         const wa = await conn.onWhatsApp(input)
+         if (!wa || !wa.length) return { jid: '', participant: null }
+
+         const jid = conn.decodeJid(wa[0].jid)
+         return {
+            jid,
+            participant: findParticipantByPhone(jid)
+         }
+      }
+
       let input = m?.mentionedJid?.[0] || m?.quoted?.sender || text
       if (!input) return conn.reply(m.chat, Func.texted('bold', `🚩 Mention or reply chat target.`), m)
 
-      let jid = input
-      if (input.includes('@lid')) {
-         const p = participants.find(p => p.lid === input)
-         if (!p) return conn.reply(m.chat, Func.texted('bold', `🚩 Cannot find user in group.`), m)
-         jid = p.id
-      } else if (!input.includes('@s.whatsapp.net')) {
-         const wa = await conn.onWhatsApp(input.trim())
-         if (!wa.length) return conn.reply(m.chat, Func.texted('bold', `🚩 Invalid number.`), m)
-         jid = conn.decodeJid(wa[0].jid)
+      const resolved = await resolveTarget(input)
+      if (!resolved.jid) {
+         if (input.includes('@lid')) return conn.reply(m.chat, Func.texted('bold', `🚩 Cannot find user in group.`), m)
+         return conn.reply(m.chat, Func.texted('bold', `🚩 Invalid number.`), m)
       }
 
+      const jid = resolved.jid
+      const participant = resolved.participant
       const number = jid.split('@')[0]
-      const member = participants.find(p => p.id === jid)
+      const member = participant
 
       if (command === 'kick') {
          if (!member) return conn.reply(m.chat, Func.texted('bold', `🚩 @${number} already left or does not exist in this group.`), m)

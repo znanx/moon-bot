@@ -25,10 +25,6 @@ Unofficial WhatsApp bot with modular plugins, built on top of Baileys and `@znan
 - WhatsApp account number
 - API key for Alya API (required by API-based features)
 
-## Community & Discussions
-- [WhatsApp Group](https://s.id/12eiZ)
-- [Telegram Group](https://s.id/nDpNX)
-
 ## Quick Start
 ```bash
 git clone https://github.com/znanx/moon-bot.git
@@ -75,3 +71,6 @@ Please read [`SECURITY.md`](./SECURITY.md) before deploying to production.
 ## Notes
 - This project is still actively developed.
 - This is an unofficial WhatsApp automation project; use it responsibly and at your own risk.
+- If you hit an error, report it quickly and include the relevant logs, reproduction steps, and expected vs actual behavior.
+- If you find the root cause and have a fix, open a pull request directly without waiting for permission.
+- Prefer small, focused fixes and clear commit messages so the issue can be reviewed and merged quickly.

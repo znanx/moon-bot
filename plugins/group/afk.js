@@ -9,7 +9,6 @@ module.exports = {
       Func
    }) => {
       try {
-         if (users.afk || users.afkReason || users.afkObj || m.isBot) return
          users.afk = +new Date
          users.afkReason = text
          users.afkObj = m
