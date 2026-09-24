@@ -1,6 +1,6 @@
 module.exports = {
-   help: ['profile'],
-   use: 'mention or reply',
+   help: ['profile', 'me'],
+   use: '[mention/reply/number] (optional)',
    tags: 'user',
    run: async (m, {
       conn,
@@ -10,17 +10,20 @@ module.exports = {
       Func
    }) => {
       let input = m?.mentionedJid?.[0] || m?.quoted?.sender || text
-      if (!input) return conn.reply(m.chat, Func.texted('bold', `🚩 Mention or Reply chat target.`), m)
 
-      let user = input
-      if (input.includes('@lid')) {
-         const participant = participants.find(p => p.lid === input)
-         if (!participant) return conn.reply(m.chat, Func.texted('bold', `🚩 Cannot find user in group.`), m)
-         user = participant.id
-      } else if (!input.includes('@s.whatsapp.net')) {
-         const wa = await conn.onWhatsApp(input.trim())
-         if (!wa.length) return conn.reply(m.chat, Func.texted('bold', `🚩 Invalid number.`), m)
-         user = conn.decodeJid(wa[0].jid)
+      // default: own profile when no target given
+      let user = m.sender
+      if (input) {
+         user = input
+         if (input.includes('@lid')) {
+            const participant = participants.find(p => p.lid === input)
+            if (!participant) return conn.reply(m.chat, Func.texted('bold', `🚩 Cannot find user in group.`), m)
+            user = participant.id
+         } else if (!input.includes('@s.whatsapp.net')) {
+            const wa = await conn.onWhatsApp(input.trim())
+            if (!wa.length) return conn.reply(m.chat, Func.texted('bold', `🚩 Invalid number.`), m)
+            user = conn.decodeJid(wa[0].jid)
+         }
       }
 
       let blockList = []
@@ -43,7 +46,8 @@ module.exports = {
       const now = Date.now()
 
       let txt = `乂  *U S E R - P R O F I L E*\n\n`
-      txt += `   ◦  *Name* : ${target.name}\n`
+      txt += `   ◦  *Name* : ${target.name || (user === m.sender ? m.pushName : '-')}
+`
       txt += `   ◦  *Exp* : ${Func.formatNumber(target.exp)}\n`
       txt += `   ◦  *Limit* : ${Func.formatNumber(target.limit)}\n`
       txt += `   ◦  *Age* : ${target.age}\n`

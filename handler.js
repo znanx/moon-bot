@@ -107,13 +107,13 @@ module.exports = async (conn, ctx, database) => {
          if (setting.error?.includes(command)) return conn.reply(m.chat, Func.texted('bold', `🚩 Command _${(prefix ? prefix : '') + command}_ disabled.`), m)
          if ((m.fromMe && m.isBot) || /broadcast|newsletter/.test(m.chat) || /Edit/.test(m.mtype)) return
          if (setting.self && !isOwner && !m.fromMe) return
-         if (m.isGroup && groupSet && groupSet.adminonly && !isAdmin && !['groupinfo', 'link', 'me'].includes(name)) return
+         if (m.isGroup && groupSet && groupSet.adminonly && !isAdmin && !['groupinfo', 'link'].includes(name) && command !== 'me') return
          if (!m.isGroup && !['owner', 'anonymous', 'anonymous-send_contact'].includes(name) && chats && !isPrem && !isOwner && !users.banned && setting.groupmode) return conn.sendLinkPreview(m.chat, `⚠️ The bot is currently in group mode. To use it in private chats, please join the group first or upgrade to the premium package by sending *${prefixes[0]}premium.*`, m, {
             ratio: 'landscape', // landscape (default), potrait, square */
             thumbnail: 'https://telegra.ph/file/0b32e0a0bb3b81fef9838.jpg',
             url: setting.link
          }).then(() => chats.lastchat = new Date() * 1)
-         if (!['me', 'owner'].includes(name) && users && (users.banned || new Date - users.ban_temporary < env.timeout)) return
+         if (!['owner'].includes(name) && command !== 'me' && users && (users.banned || new Date - users.ban_temporary < env.timeout)) return
          if (m.isGroup && !['activation', 'groupinfo'].includes(name) && groupSet.mute) return
 
          if (plugin.error) return conn.reply(m.chat, global.status.errorF, m)
