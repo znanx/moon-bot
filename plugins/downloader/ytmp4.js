@@ -37,9 +37,8 @@ module.exports = {
 
          const { data } = response
 
-         const format = data.formats?.find(
-            item => item.quality === '480p'
-         )
+         const format = data.formats?.find(v => v.quality === '480p')
+            || data.formats?.find(v => v.quality === '360p')
 
          if (!format?.task_token) {
             throw 'MP4 format is unavailable.'
