@@ -26,7 +26,8 @@
    "scripts": {
       "start": "node index.js --max-old-space-size=1024",
       "pm2": "pm2 start index.js --name moon-bot --max-memory-restart 1G -- --max-old-space-size=1024",
-      "server": "node index.js --server"
+      "server": "node index.js --server",
+      "postinstall": "node --input-type=module -e \"import fs from 'node:fs';const p='node_modules/@whiskeysockets/baileys/lib/Socket/messages-send.js';let s=fs.readFileSync(p,'utf8');const a='const mediaType = getMediaType(message);',b='const mediaType = getMediaType(normalizeMessageContent(message)||message);';if(s.includes(a)){fs.writeFileSync(p,s.replace(a,b));console.log('patch ok')}else{console.log('skip')}\""
    },
    "dependencies": {
       "@whiskeysockets/baileys": "v7.0.0-rc14",
