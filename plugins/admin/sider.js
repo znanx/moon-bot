@@ -12,7 +12,7 @@ module.exports = {
       Func
    }) => {
       try {
-         const member = participants.filter(v => !v.admin).map(v => v.phoneNumber)
+         const member = participants.filter(v => v && !v.admin).map(v => v.phoneNumber || (v.id.endsWith('@s.whatsapp.net') ? v.id : null)).filter(Boolean)
          const day = 86400000 * 7
          const now = new Date() * 1
          let sider1 = [], sider2 = []

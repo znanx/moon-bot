@@ -1,7 +1,7 @@
 module.exports = {
    help: ['toanime'],
    use: 'reply photo',
-   tags: 'ai',
+   tags: 'tools',
    run: async (m, {
       conn,
       usedPrefix,

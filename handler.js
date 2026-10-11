@@ -148,7 +148,7 @@ module.exports = async (conn, ctx, database) => {
       } else {
          for (const event of loadEvt) {
             const name = path.parse(event.filePath).name
-            if ((m.fromMe && m.isBot) || /broadcast|newsletter/.test(m.chat) || /pollUpdate/.test(m.mtype)) continue
+            if ((m.fromMe && m.isBot) || /broadcast|newsletter/.test(m.chat) || /pollUpdate/.test(m.mtype) && name !== 'vote') continue
             if (!m.isGroup && env.blocks.some(no => m.sender.startsWith(no))) return conn.updateBlockStatus(m.sender, 'block')
             if (m.isGroup && groupSet && groupSet.adminonly && !isAdmin && !['anti_link', 'anti_porn', 'anti_sticker', 'anti_tagsw', 'anti_toxic', 'anti_viewonce', 'anti_virtex'].includes(name)) continue
             if (setting.self && !['anti_link', 'anti_porn', 'anti_sticker', 'anti_tagsw', 'anti_toxic', 'anti_viewonce', 'anti_virtex'].includes(name) && !isOwner && !m.fromMe) continue

@@ -8,46 +8,35 @@ module.exports = {
       participants,
       Func
    }) => {
-      if (!text) return
-      let cm = copy(m)
-      let who
+      try {
+         if (!text) return conn.reply(m.chat, Func.texted('bold', '🚩 Tag the person you want to slander'), m)
+         let who
 
-      if (text.includes('@0')) {
-         who = '0@s.whatsapp.net'
-      } else if (m.isGroup && m.mentionedJid && m.mentionedJid[0]) {
-         who = m.mentionedJid[0]
-
-         if (who.includes('@lid')) {
-            const participant = participants.find(p => p.id === who)
-            if (participant && participant.phoneNumber) {
-               who = participant.phoneNumber
-            } else {
-               return conn.reply(m.chat, Func.texted('bold', '🚩 Cannot find user in group'), m)
+         if (text.includes('@0')) {
+            who = '0@s.whatsapp.net'
+         } else if (m.mentionedJid && m.mentionedJid[0]) {
+            who = m.mentionedJid[0]
+            if (who.includes('@lid')) {
+               const participant = participants.find(p => p.id === who)
+               if (!participant) return conn.reply(m.chat, Func.texted('bold', '🚩 Cannot find user in group'), m)
             }
+         } else {
+            return conn.reply(m.chat, Func.texted('bold', '🚩 Tag the person you want to slander'), m)
          }
-         cm.participant = who
-      } else {
-         who = m.chat
+
+         let sp = '@' + who.split`@`[0]
+         let [fake, ...real] = text.split(sp)
+         let content = real.join(sp)
+
+         return await conn.fakeReply(m.chat, content.trimStart(), who, fake.trimEnd(), m.chat, {
+            contextInfo: {
+               mentionedJid: Func.mention(content.trim())
+            }
+         })
+      } catch (e) {
+         return conn.reply(m.chat, Func.jsonFormat(e), m)
       }
-
-      if (!who) return conn.reply(m.chat, Func.texted('bold', '🚩 Tag the person you want to slander'), m)
-
-      cm.key.fromMe = false
-      cm.message[m.mtype] = copy(m.msg)
-
-      let sp = '@' + who.split`@`[0]
-      let [fake, ...real] = text.split(sp)
-
-      conn.fakeReply(m.chat, real.join(sp).trimStart(), who, fake.trimEnd(), m.isGroup ? m.chat : false, {
-         contextInfo: {
-            mentionedJid: Func.mention(real.join(sp).trim())
-         }
-      })
    },
    group: true,
    error: false
-}
-
-function copy(obj) {
-   return JSON.parse(JSON.stringify(obj))
 }

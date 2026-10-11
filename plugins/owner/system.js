@@ -1,5 +1,5 @@
 module.exports = {
-   help: ['autobackup', 'autodownload', 'antispam', 'debug', 'groupmode', 'privatemode', 'multiprefix', 'noprefix', 'online', 'self', 'anticall', 'notifier', 'game'],
+   help: ['autobackup', 'autodownload', 'antispam', 'debug', 'groupmode', 'privatemode', 'multiprefix', 'noprefix', 'online', 'self', 'anticall', 'notifier', 'game', 'chatbot'],
    use: 'on / off',
    tags: 'owner',
    run: async (m, {

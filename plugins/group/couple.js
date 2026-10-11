@@ -7,7 +7,8 @@ module.exports = {
       conn,
       participants
    }) => {
-      let member = participants.filter(v => v && v.phoneNumber).map(v => v.phoneNumber).filter(phoneNumber => phoneNumber !== conn.decodeJid(conn.user.id))
+      let member = participants.filter(v => v).map(v => v.phoneNumber || (v.id.endsWith('@s.whatsapp.net') ? v.id : null)).filter(v => v && v !== conn.decodeJid(conn.user.id))
+      if (member.length < 2) return conn.reply(m.chat, `🚩 Not enough members to play couple.`, m)
       let now = new Date * 1
       var tag1 = member[Math.floor(member.length * Math.random())]
       var tag2 = member[Math.floor(member.length * Math.random())]
