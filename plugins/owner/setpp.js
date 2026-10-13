@@ -42,35 +42,26 @@ module.exports = {
 }
 
 const sharp = require('sharp')
+sharp.cache(false)
+sharp.concurrency(Math.max(1, Math.min(2, Number(process.env.SHARP_CONCURRENCY || 2))))
 
-async function generate(media) {
-   const image = sharp(media)
-   const { width, height } = await image.metadata()
+async function generate (media) {
+   try {
+      const base = sharp(media)
 
-   if (!width || !height) {
-      throw new Error('Invalid image dimensions')
-   }
+      const [img, preview] = await Promise.all([
+         base.clone().resize(720, 720, { fit: 'inside' }).jpeg().toBuffer(),
+         base.clone().normalise().jpeg().toBuffer()
+      ])
 
-   const size = Math.min(width, height)
-
-   const cropped = image.extract({
-      left: 0,
-      top: 0,
-      width: size,
-      height: size
-   })
-
-   return {
-      img: await cropped
-         .clone()
-         .resize(720, 720)
-         .jpeg({ quality: 100 })
-         .toBuffer(),
-
-      preview: await cropped
-         .clone()
-         .normalise()
-         .jpeg({ quality: 100 })
-         .toBuffer()
+      return {
+         img,
+         preview
+      }
+   } catch (e) {
+      return {
+         img: media,
+         preview: media
+      }
    }
 }

@@ -12,7 +12,7 @@ module.exports = {
    }) => {
       try {
          if (!args[0]) throw Func.example(usedPrefix, command, 'https://www.tiktok.com/@cikaseiska/video/7379107227363200261?is_from_webapp=1&sender_device=pc&web_id=7330639260519974418')
-         if (!args[0].match('tiktok.com')) throw global.status.invalid
+         if (!/^(https?:\/\/)?((www|m|vm|vt)\.)?(tiktok\.com|tt\.site)\/.+/i.test(args[0].trim())) throw global.status.invalid
          conn.sendReact(m.chat, '🕒', m.key)
          let old = new Date()
          const json = await Api.get('/downloader/tiktok', {

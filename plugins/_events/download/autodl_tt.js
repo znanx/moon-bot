@@ -9,7 +9,7 @@ module.exports = {
    }) => {
       try {
          if (setting.autodownload && isPrem) {
-            const regex = /^(?:https?:\/\/)?(?:www\.|vt\.|vm\.|t\.)?(?:tiktok\.com\/)(?:\S+)?$/;
+            const regex = /^(?:https?:\/\/)?(?:(?:www|m|vm|vt|t)\.)?(?:tiktok\.com|tt\.site)\/\S+$/i
             const links = body.match(regex)
             if (links && links.length > 0) {
                const limitCost = 1
