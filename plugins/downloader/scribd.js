@@ -37,15 +37,13 @@ module.exports = {
                timer: setTimeout(() => delete conn.scribd[m.chat], 2 * 60 * 1000)
             }
 
-            let text = '乂  *S C R I B D*\n\n'
+            let text = 'To download, send .scribd 1-10 in the order of the results\n\n'
             docs.slice(0, 10).forEach((v, i) => {
                text += `*${i + 1}.* ${v.title}\n`
                text += `◦ Author : ${v.author?.name || '-'}\n`
                text += `◦ Pages  : ${v.pageCount}\n`
                text += `◦ Views  : ${v.views}\n\n`
             })
-
-            text += 'Reply with a number (1–10) to download'
             return conn.reply(m.chat, text, m)
          }
 
@@ -55,19 +53,13 @@ module.exports = {
          const json = await Api.get('/downloader/scribd', {
             url: args[0]
          })
-
          if (!json.status) throw Func.jsonFormat(json)
 
-         const media = json?.data?.images ?? []
-         if (!media.length) throw 'No media found'
+         let download = json?.data?.download?.data?.url
+         let capt = `◦ *Title* : ${json.data.documentInfo[0].doc.title}\n`
+         capt += `◦ *Publisher* : ${json.data.documentInfo[0].doc.publisher.name} - ${json.data.documentInfo[0].doc.publisher.username}`
 
-         if (media.length === 1) {
-            return conn.sendFile(m.chat, media[0].url, Func.filename('jpg'), `◦ *Title* : ${json.data.title}`, m)
-         }
-
-         const album = media.map(v => ({ url: v.url }))
-         return conn.sendAlbumMessage(m.chat, album, m)
-
+         return conn.sendFile(m.chat, download, '', capt, m)
       } catch (e) {
          throw Func.jsonFormat(e)
       }
