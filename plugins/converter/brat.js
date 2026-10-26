@@ -21,8 +21,8 @@ module.exports = {
             const json = await Api.get('/canvas/bratgif', {
                text: content
             })
-            const buffer = Buffer.from(json.data, 'base64')
-            conn.sendSticker(m.chat, buffer, m, {
+            // const buffer = Buffer.from(json.data, 'base64')
+            conn.sendSticker(m.chat, json.data.url, m, {
                packname: setting.sk_pack,
                author: setting.sk_author
             })

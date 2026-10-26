@@ -3,8 +3,8 @@ apt install git ffmpeg imagemagick webp curl
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 source ~/.bashrc
-nvm install v22.20.0
-nvm alias default v22.20.0
+nvm install v22.23.4
+nvm alias default v22.23.4
 nvm use default
 npm install -g pm2
 npm install --ignore-scripts

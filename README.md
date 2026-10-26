@@ -18,7 +18,7 @@ Unofficial WhatsApp bot with modular plugins, built on top of Baileys and `@znan
 - Optional HTTP health server (`npm run server`) for hosting environments.
 
 ## Requirements
-- Node.js `>= 22.x`
+- Node.js `>= 22.23.4`
 - FFmpeg
 - ImageMagick
 - WebP tools
